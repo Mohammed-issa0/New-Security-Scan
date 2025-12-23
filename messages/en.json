@@ -15,7 +15,8 @@
       "getStarted": "Get Started",
       "close": "Close",
       "copy": "Copy Payload",
-      "copied": "Copied!"
+      "copied": "Copied!",
+      "add": "Add"
     }
   },
   "landing": {
@@ -144,7 +145,7 @@
       "targets": { "label": "Target URLs", "placeholder": "https://example.com\nhttps://api.example.com/v1", "hint": "Enter one URL per line. Each target will be processed separately." },
       "notes": { "label": "Internal Notes", "placeholder": "Internal references or context for this scan..." },
       "userAgent": { "label": "User-Agent", "placeholder": "Mozilla/5.0...", "hint": "Custom browser identifier for the scanner." },
-      "authToken": { "label": "Auth Token", "placeholder": "eyJh...", "hint": "Used as Authorization: Bearer <token>" },
+      "authToken": { "label": "Auth Token", "placeholder": "eyJh...", "hint": "Used as Authorization: Bearer '<token>'" },
       "headers": { "title": "Custom Headers", "placeholderKey": "X-API-Key", "placeholderValue": "secret-123", "tooltip": "Additional HTTP headers sent with every request." },
       "cookies": { "title": "Session Cookies", "placeholderKey": "sessionid", "placeholderValue": "abc123xyz", "tooltip": "Use session cookies to scan authenticated areas of the application." },
       "zap": {

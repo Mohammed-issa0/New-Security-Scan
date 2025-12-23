@@ -1,7 +1,7 @@
 import ScanForm from '@/components/scans/ScanForm';
 import { checkCredits } from '@/lib/scans/api';
 import { Coins, Shield } from 'lucide-react';
-import { getTranslations } from 'next-intl/server';
+import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { LanguageSwitcher } from '@/components/layout/LanguageSwitcher';
 import Link from 'next/link';
 
@@ -13,6 +13,7 @@ export async function generateMetadata({ params: { locale } }: { params: { local
 }
 
 export default async function NewScanPage({ params: { locale } }: { params: { locale: string } }) {
+  setRequestLocale(locale);
   const credits = await checkCredits();
   const t = await getTranslations({ locale, namespace: 'scanForm' });
   const isSharedMode = process.env.NEXT_PUBLIC_SCAN_SUBMIT_MODE === 'shared';
@@ -55,4 +56,3 @@ export default async function NewScanPage({ params: { locale } }: { params: { lo
     </main>
   );
 }
-

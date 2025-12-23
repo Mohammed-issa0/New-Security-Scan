@@ -129,7 +129,7 @@ export const Badge = ({ children, className = "", variant = 'default' }: { child
   return <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border ${variants[variant]} ${className}`}>{children}</span>
 }
 
-export const Alert = ({ children, variant = 'info', title }: { children: React.ReactNode, variant?: 'info' | 'warning' | 'error' | 'success', title?: string }) => {
+export const Alert = ({ children, variant = 'info', title }: { children?: React.ReactNode, variant?: 'info' | 'warning' | 'error' | 'success', title?: string }) => {
   const styles = {
     info: "bg-blue-50 text-blue-800 border-blue-200",
     warning: "bg-amber-50 text-amber-800 border-amber-200",
@@ -143,7 +143,7 @@ export const Alert = ({ children, variant = 'info', title }: { children: React.R
       className={`p-4 rounded-xl border ${styles[variant]} space-y-1`}
     >
       {title && <h4 className="font-bold text-sm">{title}</h4>}
-      <div className="text-sm leading-relaxed">{children}</div>
+      {children && <div className="text-sm leading-relaxed">{children}</div>}
     </motion.div>
   )
 }

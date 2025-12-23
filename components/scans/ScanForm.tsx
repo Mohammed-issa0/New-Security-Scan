@@ -415,11 +415,9 @@ export default function ScanForm() {
           </CardContent>
         </Card>
 
-       {submissionSuccess && (
-  <Alert variant="success" title="Scan submitted">
-    Your scan has been submitted successfully.
-  </Alert>
-)}
+        {submissionSuccess && (
+          <Alert variant="success" title={t('messages.success')} />
+        )}
 
         {submissionError && (
           <Alert variant="error" title={t('messages.error')}>
@@ -436,5 +434,4 @@ export default function ScanForm() {
     </motion.div>
   );
 }
-
 

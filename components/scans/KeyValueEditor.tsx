@@ -55,7 +55,7 @@ export function KeyValueEditor({
           onClick={() => append({ name: "", value: "" })}
           className="h-8 gap-1.5 text-xs font-bold border-blue-100 text-blue-600 hover:bg-blue-50"
         >
-          <Plus size={14} /> {t('copy') === 'نسخ البيانات' ? 'إضافة' : 'Add'}
+          <Plus size={14} /> {t('add')}
         </Button>
       </div>
 

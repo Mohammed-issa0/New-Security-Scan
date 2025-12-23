@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Inter, Cairo } from "next/font/google";
 import "../globals.css";
 import { NextIntlClientProvider } from 'next-intl';
-import { getMessages } from 'next-intl/server';
+import { getMessages, setRequestLocale } from 'next-intl/server';
 
 const inter = Inter({ subsets: ["latin"], variable: '--font-inter' });
 const cairo = Cairo({ subsets: ["arabic"], variable: '--font-cairo' });
@@ -23,6 +23,9 @@ export default async function RootLayout({
   children: React.ReactNode;
   params: { locale: string };
 }>) {
+  // Enable static rendering
+  setRequestLocale(locale);
+  
   const messages = await getMessages();
   const isRtl = locale === 'ar';
 

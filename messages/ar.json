@@ -15,7 +15,8 @@
       "getStarted": "ابدأ الآن",
       "close": "إغلاق",
       "copy": "نسخ البيانات",
-      "copied": "تم النسخ!"
+      "copied": "تم النسخ!",
+      "add": "إضافة"
     }
   },
   "landing": {
@@ -144,7 +145,7 @@
       "targets": { "label": "روابط الأهداف", "placeholder": "https://example.com\nhttps://api.example.com/v1", "hint": "أدخل رابطاً واحداً في كل سطر. سيتم معالجة كل هدف بشكل منفصل." },
       "notes": { "label": "ملاحظات داخلية", "placeholder": "مراجع داخلية أو سياق لهذا الفحص..." },
       "userAgent": { "label": "وكيل المستخدم", "placeholder": "Mozilla/5.0...", "hint": "معرف المتصفح المخصص للماسح." },
-      "authToken": { "label": "رمز المصادقة", "placeholder": "eyJh...", "hint": "يستخدم كـ Authorization: Bearer <token>" },
+      "authToken": { "label": "رمز المصادقة", "placeholder": "eyJh...", "hint": "يستخدم كـ Authorization: Bearer '<token>'" },
       "headers": { "title": "الرؤوس المخصصة", "placeholderKey": "X-API-Key", "placeholderValue": "secret-123", "tooltip": "رؤوس HTTP إضافية ترسل مع كل طلب." },
       "cookies": { "title": "ملفات تعريف ارتباط الجلسة", "placeholderKey": "sessionid", "placeholderValue": "abc123xyz", "tooltip": "استخدم ملفات تعريف ارتباط الجلسة لفحص المناطق المحمية في التطبيق." },
       "zap": {
