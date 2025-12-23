@@ -1,0 +1,187 @@
+{
+  "common": {
+    "title": "SecurityScan",
+    "nav": {
+      "features": "Features",
+      "tools": "Tools",
+      "howItWorks": "How it works",
+      "startScanning": "Start Scanning"
+    },
+    "buttons": {
+      "startNow": "Start Scanning Now",
+      "viewHow": "View How It Works",
+      "createAccount": "Create Free Account",
+      "startFirstScan": "Start First Scan",
+      "getStarted": "Get Started",
+      "close": "Close",
+      "copy": "Copy Payload",
+      "copied": "Copied!"
+    }
+  },
+  "landing": {
+    "hero": {
+      "badge": "v2.0 is now live with Distributed Scanning",
+      "headlinePrefix": "Automated Security",
+      "headlineGradient": "Scanning for Web Apps",
+      "subheadline": "Scan websites, APIs, and modern applications using industry-proven tools like ZAP and FFUF — all from one unified, cloud-based platform."
+    },
+    "features": {
+      "title": "Built for Modern Security Teams",
+      "subtitle": "Stop wasting time on local tool setup. Our cloud platform provides a unified interface for the world's most powerful security engines.",
+      "discovery": {
+        "title": "Deep Discovery",
+        "desc": "Find hidden endpoints and directories with high-speed fuzzing engines. Built-in support for multiple wordlists."
+      },
+      "analysis": {
+        "title": "Real-time Analysis",
+        "desc": "Get structured findings from OWASP ZAP as the scan progresses. No need to wait for multi-hour jobs to complete."
+      },
+      "distributed": {
+        "title": "Distributed Execution",
+        "desc": "Your scans run on our secure, scalable infrastructure. Launch hundreds of concurrent jobs without slowing down."
+      }
+    },
+    "tools": {
+      "title": "Powerful Engines Under the Hood",
+      "subtitle": "We've normalized the output and configuration of industry-proven tools into a single, cohesive workflow.",
+      "viewAll": "See Tool Options",
+      "integrated": "Integrated",
+      "comingSoon": "Coming Soon",
+      "items": {
+        "zap": "Industry-standard Web & API security scanning.",
+        "ffuf": "Fast Fuzzing Utility for directory and endpoint discovery.",
+        "nmap": "Comprehensive network discovery and security auditing.",
+        "wpscan": "Specialized WordPress vulnerability scanning engine.",
+        "sqlmap": "Advanced SQL injection detection and testing.",
+        "custom": "Support for proprietary and custom security tools."
+      }
+    },
+    "howItWorks": {
+      "title": "Built for Continuous Security",
+      "subtitle": "Scanning your application shouldn't be a project. Our 4-step workflow makes it a routine.",
+      "step1": { "title": "Configure Scope", "desc": "Define targets, choose your tool, and set scanning options." },
+      "step2": { "title": "Authenticate", "desc": "Provide session cookies or tokens for deeper authenticated scans." },
+      "step3": { "title": "Queue & Run", "desc": "Jobs are dispatched to our secure cloud cluster automatically." },
+      "step4": { "title": "Analyze Results", "desc": "View normalized reports and actionable security findings." }
+    },
+    "auth": {
+      "title": "Scan Behind the Login Screen.",
+      "subtitle": "Automated scanners often miss the most critical parts of your app — the areas protected by authentication. Our platform makes it easy to provide credentials securely.",
+      "items": [
+        "Full support for Bearer Tokens & API Keys",
+        "Inject session cookies for stateful scanning",
+        "Custom headers for specific environments",
+        "Scan admin panels and private API routes"
+      ]
+    },
+    "trust": {
+      "title": "Transparency & Limitations",
+      "subtitle": "We believe in a professional, no-nonsense approach to security tools.",
+      "captcha": {
+        "title": "CAPTCHA Handling",
+        "desc": "Automated solvers for CAPTCHA are currently not supported. We recommend using authenticated session cookies to bypass protections that are designed to block automated traffic."
+      },
+      "credits": {
+        "title": "Credits System",
+        "desc": "To ensure fair usage and prevent platform abuse, each scan consumes credits. This allow us to maintain a high-quality, distributed infrastructure for all users."
+      }
+    },
+    "cta": {
+      "title": "Ready to Secure Your Applications?",
+      "subtitle": "No local setup. No complex manual commands. Just select your tool, enter your target, and get results.",
+      "joined": "Join 500+ security teams already using our platform."
+    },
+    "personas": {
+      "title": "Who is this for?",
+      "subtitle": "Built by security pros, for the modern tech stack.",
+      "items": [
+        { "title": "Security Engineers", "benefit": "Automate repetitive tasks and focus on deep manual penetration testing." },
+        { "title": "Backend Developers", "benefit": "Ensure your APIs are secure before they hit production environments." },
+        { "title": "DevOps Teams", "benefit": "Integrate security scanning into your CI/CD pipelines effortlessly." },
+        { "title": "Consultants", "benefit": "Provide high-quality security audits for clients with professional reports." }
+      ]
+    }
+  },
+  "scanForm": {
+    "title": "New Security Scan",
+    "subtitle": "Configure and launch a security scan in minutes.",
+    "sections": {
+      "general": {
+        "title": "General Scan Configuration",
+        "desc": "Define the target and basic scope of your security assessment."
+      },
+      "connection": {
+        "title": "Target Connection Settings",
+        "desc": "Configure headers, user-agents, and authentication tokens."
+      },
+      "toolConfig": {
+        "title": "Tool Configuration: {tool}",
+        "desc": "Adjust settings specific to the {tool} engine."
+      },
+      "advanced": {
+        "title": "Advanced Settings",
+        "desc": "Raw engine flags — use with caution",
+        "dangerZone": "Danger Zone: Advanced options are passed directly to the tool. Incorrect flags may cause the scan to crash or produce invalid results."
+      },
+      "captcha": {
+        "title": "Target uses CAPTCHA protections",
+        "desc": "Enable this if the target site blocks automated traffic with challenges.",
+        "warning": {
+          "title": "CAPTCHA Solving Not Supported",
+          "desc": "The scanner currently does not support automated CAPTCHA solving.",
+          "workaround": "Recommended Workaround:",
+          "steps": [
+            "Solve the CAPTCHA manually in your browser.",
+            "Extract the session cookies.",
+            "Add them to the Session Cookies area above."
+          ]
+        }
+      }
+    },
+    "fields": {
+      "name": { "label": "Scan Name", "placeholder": "e.g. My Website Audit", "hint": "Unique identifier for this scan job." },
+      "tool": { "label": "Scanning Tool" },
+      "targets": { "label": "Target URLs", "placeholder": "https://example.com\nhttps://api.example.com/v1", "hint": "Enter one URL per line. Each target will be processed separately." },
+      "notes": { "label": "Internal Notes", "placeholder": "Internal references or context for this scan..." },
+      "userAgent": { "label": "User-Agent", "placeholder": "Mozilla/5.0...", "hint": "Custom browser identifier for the scanner." },
+      "authToken": { "label": "Auth Token", "placeholder": "eyJh...", "hint": "Used as Authorization: Bearer <token>" },
+      "headers": { "title": "Custom Headers", "placeholderKey": "X-API-Key", "placeholderValue": "secret-123", "tooltip": "Additional HTTP headers sent with every request." },
+      "cookies": { "title": "Session Cookies", "placeholderKey": "sessionid", "placeholderValue": "abc123xyz", "tooltip": "Use session cookies to scan authenticated areas of the application." },
+      "zap": {
+        "scanType": { "label": "Scan Type", "baseline": "Baseline (Passive Scan)", "full": "Full (Active Scan)", "api": "API (OpenAPI/GraphQL)", "apiHint": "Designed for scanning API endpoints." },
+        "ajax": { "label": "Enable AJAX Spider", "hint": "Use for Single Page Apps (React/Vue/etc.)" }
+      },
+      "ffuf": {
+        "wordlist": { "label": "Wordlist", "common": "common.txt (Standard)", "big": "big.txt (Deep Fuzz)" },
+        "recursion": { "label": "Enable Recursion", "hint": "Fuzz directories recursively" },
+        "mc": { "label": "Match Codes (mc)", "placeholder": "200,301,403" },
+        "fc": { "label": "Filter Codes (fc)", "placeholder": "404,500" },
+        "proTip": "Pro Tip: Remember to include FUZZ in the URL, e.g. https://example.com/FUZZ"
+      },
+      "extraArgs": { "label": "Extra Arguments", "placeholder": "e.g. -v --debug-log" }
+    },
+    "summary": {
+      "title": "Scan Preview",
+      "scanName": "Scan Name",
+      "untitled": "Untitled Scan",
+      "targetsCount": "{count} Target{count, plural, one {} other {s}} detected",
+      "auth": "Authentication",
+      "noAuth": "No auth configured",
+      "zapConfig": "ZAP Config",
+      "ffufConfig": "ffuf Config",
+      "credits": "{count, plural, one {Unlimited} other {# Credits}}",
+      "startScan": "Start Security Scan",
+      "starting": "Starting Scan...",
+      "previewJson": "Preview JSON Payload",
+      "upgrade": "Upgrade Plan",
+      "creditsError": "Action Required",
+      "creditsDesc": "You have 0 credits remaining.",
+      "captchaWarning": "CAPTCHA detected. Automated scans will likely fail unless you use session cookies."
+    },
+    "messages": {
+      "success": "Scan started successfully!",
+      "error": "Submission Failed"
+    }
+  }
+}
+
