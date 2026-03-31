@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import { Navbar } from '@/components/landing/Navbar';
 import { Hero, Features, Tools } from '@/components/landing/MainSections';
 import { HowItWorks, AuthHighlight, TrustSection } from '@/components/landing/SecondarySections';
@@ -31,3 +32,31 @@ export default function LandingPage({ params: { locale } }: { params: { locale: 
     </main>
   );
 }
+=======
+import { Navbar } from '@/components/landing/Navbar';
+import { Hero, Features, Tools } from '@/components/landing/MainSections';
+import { HowItWorks, AuthHighlight, TrustSection } from '@/components/landing/SecondarySections';
+import { Personas, FinalCTA, Footer } from '@/components/landing/FinalSections';
+import { setRequestLocale } from 'next-intl/server';
+
+export default function LandingPage({ params: { locale } }: { params: { locale: string } }) {
+  setRequestLocale(locale);
+
+  return (
+    <main className="bg-white min-h-screen selection:bg-blue-100 selection:text-blue-700 overflow-x-hidden">
+      <Navbar />
+      <Hero />
+      <div className="space-y-0">
+        <Features />
+        <Tools />
+        <HowItWorks />
+        <AuthHighlight />
+        <TrustSection />
+        <Personas />
+        <FinalCTA />
+      </div>
+      <Footer />
+    </main>
+  );
+}
+>>>>>>> f20558da0e9739abef83058bed2216a60f039e2e

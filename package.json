@@ -6,10 +6,14 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
+<<<<<<< HEAD
     "lint": "next lint",
     "test:e2e": "playwright test",
     "test:e2e:headed": "playwright test --headed",
     "test:e2e:ui": "playwright test --ui"
+=======
+    "lint": "next lint"
+>>>>>>> f20558da0e9739abef83058bed2216a60f039e2e
   },
   "dependencies": {
     "@hookform/resolvers": "^3.9.1",
@@ -25,7 +29,10 @@
     "zod": "^3.23.8"
   },
   "devDependencies": {
+<<<<<<< HEAD
     "@playwright/test": "^1.53.2",
+=======
+>>>>>>> f20558da0e9739abef83058bed2216a60f039e2e
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
