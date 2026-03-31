@@ -1,0 +1,1459 @@
+{
+  "common": {
+    "title": "SecurityScan",
+    "states": {
+      "loading": "Loading...",
+      "empty": "No data available.",
+      "error": "Something went wrong.",
+      "retry": "Retry"
+    },
+    "confirmation": {
+      "cancel": "Cancel",
+      "processing": "Processing..."
+    },
+    "nav": {
+      "features": "Features",
+      "tools": "Tools",
+      "plans": "Plans",
+      "billing": "Billing",
+      "profile": "Profile",
+      "howItWorks": "How it works",
+      "startScanning": "Start Scanning"
+    },
+    "buttons": {
+      "startNow": "Start Scanning Now",
+      "viewHow": "View How It Works",
+      "viewPlans": "View Plans",
+      "createAccount": "Create Free Account",
+      "startFirstScan": "Start First Scan",
+      "getStarted": "Get Started",
+      "close": "Close",
+      "copy": "Copy Payload",
+      "copied": "Copied!",
+      "add": "Add"
+    }
+  },
+  "landing": {
+    "hero": {
+      "badge": "Unified scanning platform",
+      "headlinePrefix": "Continuous Security",
+      "headlineGradient": "for Web & API Teams",
+      "subheadline": "Run ZAP, FFUF, Nmap, WPScan, and SQLMap from one cloud workspace with queued execution, plan-based limits, and audit-ready reports."
+    },
+    "features": {
+      "title": "Everything you need to operationalize scans",
+      "subtitle": "From target setup to PDF exports, the platform turns raw scanner output into structured, shareable results.",
+      "discovery": {
+        "title": "Unified Orchestration",
+        "desc": "Launch scans, track queue position, and monitor tool status in one timeline."
+      },
+      "analysis": {
+        "title": "Plan-Aware Governance",
+        "desc": "Credits, runtime limits, and tool access are enforced automatically per plan."
+      },
+      "distributed": {
+        "title": "Actionable Reports",
+        "desc": "Export PDF reports, summarize vulnerabilities, and push tickets to Jira when you need them."
+      }
+    },
+    "tools": {
+      "title": "The scanners you already trust",
+      "subtitle": "Use the same industry tools with normalized output, predictable limits, and consistent results.",
+      "viewAll": "See Tool Options",
+      "integrated": "Integrated",
+      "comingSoon": "Coming Soon",
+      "items": {
+        "zap": "Industry-standard web and API scanning with structured findings.",
+        "ffuf": "High-speed endpoint discovery with queue-aware execution.",
+        "nmap": "Network discovery and service fingerprinting at scale.",
+        "wpscan": "Targeted WordPress vulnerability intelligence.",
+        "sqlmap": "Automated SQL injection testing with curated configs.",
+        "custom": "AI summaries, PDF exports, and Jira ticket creation."
+      }
+    },
+    "howItWorks": {
+      "title": "From target to report in four steps",
+      "subtitle": "Start fast, stay compliant, and scale without changing your workflow.",
+      "step1": { "title": "Select Plan & Scope", "desc": "Pick a plan, define targets, and choose the scan tool." },
+      "step2": { "title": "Add Authentication", "desc": "Pass tokens, cookies, or headers for authenticated scanning." },
+      "step3": { "title": "Queue & Execute", "desc": "Scans run on the VPS queue with status and ETA visibility." },
+      "step4": { "title": "Report & Share", "desc": "Export PDF, track findings, and create Jira tickets." }
+    },
+    "auth": {
+      "title": "Authenticate once. Scan everywhere.",
+      "subtitle": "Pass secure auth tokens, headers, or cookies so scans cover the real, protected surface area of your app.",
+      "items": [
+        "Bearer tokens, API keys, and session cookies",
+        "Custom headers and user-agent control",
+        "Safer scans for admin panels and private APIs",
+        "Auth settings stored per target"
+      ]
+    },
+    "trust": {
+      "title": "Clear limits, predictable usage",
+      "subtitle": "Plans enforce credits, runtime, and tooling so teams can budget scans confidently.",
+      "captcha": {
+        "title": "CAPTCHA Handling",
+        "desc": "CAPTCHA solvers are not supported. Use authenticated sessions to scan protected areas." 
+      },
+      "credits": {
+        "title": "Credits & Runtime",
+        "desc": "Each scan consumes credits and follows plan runtime limits for fair usage."
+      }
+    },
+    "cta": {
+      "title": "Launch your first scan in minutes",
+      "subtitle": "Choose a plan, pick a tool, and get structured results with export-ready reporting.",
+      "joined": "Trusted by security teams and platform engineers."
+    },
+    "personas": {
+      "title": "Built for teams who ship safely",
+      "subtitle": "Security, engineering, and operations work together in one workflow.",
+      "items": [
+        { "title": "Security Engineers", "benefit": "Standardize scans and export PDF reports for audits." },
+        { "title": "Backend Developers", "benefit": "Validate API security with predictable plan limits." },
+        { "title": "Platform & DevOps", "benefit": "Queue scans and track execution without slowing releases." },
+        { "title": "Consultants", "benefit": "Deliver consistent results and Jira-ready findings." }
+      ]
+    },
+    "footer": {
+      "tagline": "Unified scanning for web apps, APIs, and infrastructure — from setup to PDF export.",
+      "productTitle": "Product",
+      "legalTitle": "Legal",
+      "privacy": "Privacy Policy",
+      "terms": "Terms of Service",
+      "rights": "All rights reserved."
+    },
+    "login": {
+      "title": "Welcome Back",
+      "subtitle": "Sign in to your account to manage your scans.",
+      "email": "Email Address",
+      "password": "Password",
+      "submit": "Sign In",
+      "noAccount": "Don't have an account?",
+      "register": "Register here"
+    },
+    "register": {
+      "title": "Create Account",
+      "subtitle": "Join our platform to start securing your applications.",
+      "fullName": "Full Name",
+      "email": "Email Address",
+      "password": "Password",
+      "confirmPassword": "Confirm Password",
+      "submit": "Create Account",
+      "hasAccount": "Already have an account?",
+      "login": "Sign in here",
+      "confirmPasswordMismatch": "Passwords don't match",
+      "passwordRules": {
+        "minLength": "Password must be at least 8 characters.",
+        "uppercase": "Password must contain at least one uppercase letter.",
+        "lowercase": "Password must contain at least one lowercase letter.",
+        "special": "Password must contain at least one special character.",
+        "hint": "Use at least 8 characters, including upper, lower, and a symbol."
+      }
+    },
+    "targets": {
+      "title": "Targets",
+      "subtitle": "Manage your scan targets.",
+      "add": "Add Target",
+      "create": "Create target",
+      "creating": "Creating...",
+      "url": "URL",
+      "createdAt": "Created At",
+      "actions": "Actions",
+      "view": "View",
+      "delete": "Delete",
+      "deleting": "Deleting...",
+      "cancel": "Cancel",
+      "close": "Close",
+      "confirmDelete": "Are you sure you want to delete this target?",
+      "noTargets": "No targets found.",
+      "placeholder": "https://example.com",
+      "previous": "Previous",
+      "next": "Next",
+      "page": "Page",
+      "of": "of",
+      "createModal": {
+        "eyebrow": "Targets management",
+        "title": "Add a new target",
+        "description": "Create a website target and attach it to your scanning workspace.",
+        "helper": "Only valid HTTP and HTTPS URLs are accepted. The new target will appear in the list immediately after creation."
+      },
+      "deleteModal": {
+        "title": "Delete target",
+        "description": "This action removes the target from your list. It will not be deleted unless you confirm it here."
+      },
+      "details": {
+        "eyebrow": "Target details",
+        "title": "Target overview",
+        "description": "Review the target metadata currently available in your workspace.",
+        "id": "Target ID",
+        "updatedAt": "Updated At",
+        "copyUrl": "Copy URL",
+        "copied": "Copied",
+        "notAvailable": "Not available"
+      },
+      "browserAuth": {
+        "eyebrow": "Browser authentication",
+        "title": "Configure browser authentication",
+        "description": "Provide login details for authenticated scanning flows. Credentials are masked in the UI and stored encrypted by the backend.",
+        "helper": "Use the login URL for the sign-in page and the target URL for the protected area you want the scanner to reach after authentication.",
+        "cardTitle": "Authenticated scanning",
+        "cardDescription": "Save browser-based login details for this target to allow scans to reach protected pages.",
+        "configure": "Configure browser auth",
+        "statusLabel": "Browser auth",
+        "statusConfigured": "Configured",
+        "statusNotConfigured": "Not configured",
+        "loginUrl": "Login URL",
+        "targetUrl": "Target URL",
+        "username": "Username",
+        "password": "Password",
+        "mfa": "MFA required",
+        "mfaDescription": "Enable this if logging in requires a multi-factor step.",
+        "usernamePlaceholder": "jane.doe@example.com",
+        "passwordPlaceholder": "Enter password",
+        "showPassword": "Show password",
+        "hidePassword": "Hide password",
+        "save": "Save configuration",
+        "saving": "Saving...",
+        "delete": "Delete configuration",
+        "deleting": "Deleting...",
+        "validation": {
+          "usernameRequired": "Username is required.",
+          "passwordRequired": "Password is required."
+        },
+        "feedback": {
+          "saveSuccess": "Browser authentication saved successfully.",
+          "saveError": "Failed to save browser authentication.",
+          "deleteSuccess": "Browser authentication removed successfully.",
+          "deleteError": "Failed to remove browser authentication."
+        }
+      },
+      "validation": {
+        "required": "Target URL is required.",
+        "invalid": "Enter a valid URL.",
+        "httpOnly": "Only HTTP and HTTPS links are allowed."
+      },
+      "feedback": {
+        "createSuccess": "Target added successfully.",
+        "createError": "Failed to add target.",
+        "deleteSuccess": "Target deleted successfully.",
+        "deleteError": "Failed to delete target.",
+        "loadError": "Failed to load targets."
+      }
+    },
+    "jiraProjects": {
+      "title": "Jira Projects",
+      "subtitle": "Manage linked Jira project configurations.",
+      "empty": "No Jira projects found.",
+      "table": {
+        "name": "Name",
+        "url": "URL",
+        "projectKey": "Project Key",
+        "linkedTargets": "Linked Targets",
+        "updatedAt": "Updated At",
+        "actions": "Actions"
+      },
+      "actions": {
+        "view": "View",
+        "edit": "Edit",
+        "create": "Create Jira Project",
+        "linkTarget": "Link Target",
+        "unlinkTarget": "Unlink Target",
+        "delete": "Delete",
+        "test": "Test",
+        "testing": "Testing...",
+        "linking": "Linking...",
+        "unlinking": "Unlinking...",
+        "close": "Close",
+        "cancel": "Cancel",
+        "save": "Save",
+        "saving": "Saving...",
+        "creating": "Creating...",
+        "deleting": "Deleting..."
+      },
+      "createDialog": {
+        "title": "Create Jira Project Configuration",
+        "description": "Add a new Jira integration for ticket automation.",
+        "user": "User",
+        "token": "Token",
+        "tokenPlaceholder": "Enter Jira API token",
+        "showToken": "Show",
+        "hideToken": "Hide",
+        "issueType": "Issue Type",
+        "teamRoles": "Team Roles",
+        "addRole": "Add Role",
+        "rolePlaceholder": "Role (e.g. DevOps)",
+        "accountIdPlaceholder": "Jira Account ID",
+        "labels": "Labels",
+        "labelPlaceholder": "Type label and press Enter",
+        "addLabel": "Add Label"
+      },
+      "pagination": {
+        "page": "Page",
+        "of": "of",
+        "previous": "Previous",
+        "next": "Next"
+      },
+      "viewDialog": {
+        "title": "Project Details",
+        "userEmail": "User Email",
+        "issueType": "Issue Type",
+        "apiToken": "API Token"
+      },
+      "editDialog": {
+        "title": "Edit Jira Project",
+        "user": "User",
+        "token": "Token",
+        "tokenPlaceholder": "Leave empty to keep current token",
+        "showToken": "Show",
+        "hideToken": "Hide",
+        "issueType": "Issue Type",
+        "customLabels": "Custom Labels",
+        "customLabelsPlaceholder": "security, critical, backend"
+      },
+      "linkDialog": {
+        "title": "Link Target",
+        "description": "Select a target to link with \"{name}\".",
+        "target": "Target",
+        "targetPlaceholder": "Select a target"
+      },
+      "unlinkDialog": {
+        "title": "Unlink Target",
+        "description": "Select a target to unlink from Jira mapping.",
+        "target": "Target",
+        "targetPlaceholder": "Select a target"
+      },
+      "deleteDialog": {
+        "title": "Delete Jira Project",
+        "description": "Are you sure you want to delete \"{name}\"?",
+        "confirmNameHint": "Type \"{name}\" to confirm deletion.",
+        "confirmNamePlaceholder": "Project name"
+      },
+      "messages": {
+        "loadError": "Failed to load Jira projects.",
+        "requiredFields": "Name, URL, user, token, project key, and issue type are required.",
+        "createSuccess": "Jira project created successfully.",
+        "createError": "Failed to create Jira project.",
+        "targetRequired": "Please select a target first.",
+        "testSuccess": "Connection test succeeded.",
+        "testError": "Connection test failed.",
+        "linkSuccess": "Target linked successfully.",
+        "linkError": "Failed to link target.",
+        "unlinkSuccess": "Target unlinked successfully.",
+        "unlinkError": "Failed to unlink target.",
+        "updateSuccess": "Jira project updated successfully.",
+        "updateError": "Failed to update Jira project.",
+        "deleteSuccess": "Jira project deleted successfully.",
+        "deleteError": "Failed to delete Jira project."
+      }
+    },
+    "scans": {
+      "title": "Scans",
+      "subtitle": "View and manage your security scans.",
+      "target": "Target",
+      "status": "Status",
+      "requested": "Requested",
+      "started": "Started",
+      "finished": "Finished",
+      "actions": "Actions",
+      "view": "View Details",
+      "cancel": "Cancel",
+      "noScans": "No scans found.",
+      "previous": "Previous",
+      "next": "Next",
+      "page": "Page",
+      "of": "of",
+      "filters": {
+        "label": "Filter by status",
+        "all": "All",
+        "toolLabel": "Filter by tool",
+        "allTools": "All tools"
+      },
+      "details": {
+        "eyebrow": "Scan workspace",
+        "title": "Scan #{id}",
+        "summary": "Summary",
+        "tools": "Tools",
+        "vulnerabilities": "Vulnerabilities",
+        "report": "Report",
+        "eta": {
+          "title": "Live Tool Timeline",
+          "subtitle": "Queue position and ETA are refreshed automatically.",
+          "activeTools": "Active tools",
+          "jobsAhead": "Jobs ahead",
+          "nextEta": "Next ETA",
+          "queuePosition": "Queue position",
+          "estimatedFinishAt": "Estimated finish",
+          "unavailable": "ETA unavailable",
+          "empty": "No ETA data is available yet for active tools."
+        },
+        "pdf": {
+          "exportButton": "Export PDF",
+          "exporting": "Exporting...",
+          "exportSuccess": "PDF report downloaded.",
+          "exportError": "Failed to export PDF report."
+        },
+        "jira": {
+          "createButton": "Create Jira Tickets",
+          "creating": "Creating tickets...",
+          "availableWhenCompleted": "Jira tickets can be created after scan completion.",
+          "summaryTitle": "Jira Ticket Creation Summary",
+          "created": "Created",
+          "skipped": "Skipped",
+          "failed": "Failed",
+          "references": "Ticket references",
+          "openTicket": "Open ticket",
+          "ticketFallback": "Jira ticket",
+          "errorsTitle": "Creation errors",
+          "toastError": "Failed to create Jira tickets.",
+          "toastSuccess": "Jira tickets processed: {created} created, {skipped} skipped, {failed} failed."
+        },
+        "aiReport": {
+          "title": "AI Post-Scan Report",
+          "verbosityLabel": "Verbosity",
+          "verbosity": {
+            "brief": "Brief",
+            "detailed": "Detailed",
+            "comprehensive": "Comprehensive"
+          },
+          "createJiraLabel": "Create Jira tickets from AI report",
+          "generateButton": "Generate AI report",
+          "generating": "Generating AI report...",
+          "availableWhenCompleted": "AI report is available only after scan completion.",
+          "outputLabel": "AI report output",
+          "emptyOutput": "No AI text output received.",
+          "rawResponseLabel": "Raw AI response",
+          "tokenUsage": {
+            "prompt": "Prompt tokens",
+            "completion": "Completion tokens",
+            "total": "Total tokens",
+            "model": "Model",
+            "duration": "Duration"
+          },
+          "toastSuccess": "AI post-scan report generated successfully.",
+          "notEnabled": "AI post-scan report is currently disabled on the server.",
+          "toastError": "Failed to generate AI post-scan report."
+        },
+        "tabs": {
+          "overview": "Overview",
+          "tools": "Tools",
+          "vulnerabilities": "Vulnerabilities",
+          "report": "Report"
+        },
+        "cancelButton": "Cancel scan",
+        "cancelConfirm": "Are you sure you want to cancel this scan?",
+        "cancelRequested": "Scan cancellation requested.",
+        "cancelError": "Failed to cancel scan.",
+        "canceling": "Canceling...",
+        "cancelNotAllowed": "Only pending or running scans can be canceled.",
+        "cancelModal": {
+          "title": "Cancel this scan?",
+          "description": "The running or pending scan will be stopped as soon as possible.",
+          "confirm": "Yes, cancel",
+          "cancel": "Keep running",
+          "close": "Close dialog"
+        },
+        "notFound": "Scan not found.",
+        "statusLabel": "Status",
+        "status": {
+          "pending": "Pending",
+          "running": "Running",
+          "completed": "Completed",
+          "failed": "Failed",
+          "canceled": "Canceled",
+          "unknown": "Unknown"
+        },
+        "requestedAt": "Requested {date}",
+        "requestedAtLabel": "Requested",
+        "durationLabel": "Duration",
+        "durationValue": "{seconds}s",
+        "running": "Running...",
+        "timestampsTitle": "Timestamps",
+        "scanIdLabel": "Scan ID",
+        "targetIdLabel": "Target ID",
+        "toolsCountLabel": "Tools count",
+        "startedAtLabel": "Started",
+        "finishedAtLabel": "Finished",
+        "loadingTools": "Loading tools...",
+        "failureDetailsTitle": "Failure details",
+        "terminationDetailsTitle": "Termination details",
+        "failureDetailsEmpty": "No additional details are available.",
+        "vulnerabilitiesCountLabel": "Vulnerabilities",
+        "riskScoreLabel": "Risk score",
+        "toolsEmpty": "No tools found for this scan.",
+        "toolPending": "Pending",
+        "vulnerabilityFallback": "Unnamed vulnerability",
+        "noVulnerabilities": "No vulnerabilities found.",
+        "scanInProgress": "Scan in progress...",
+        "reportUnavailable": "Report is not available for this scan.",
+        "reportPending": "Report will appear when the scan is completed.",
+        "openReportPage": "Open standalone report",
+        "reportGeneratedAt": "Generated at {date}"
+      },
+      "reportPage": {
+        "eyebrow": "Standalone report view",
+        "title": "Report for scan #{id}",
+        "subtitle": "Review the generated findings summary in a dedicated view.",
+        "backToScan": "Back to scan details",
+        "reportMeta": "Generated {date}",
+        "nav": {
+          "summary": "Summary",
+          "charts": "Charts",
+          "vulnerabilities": "Vulnerabilities"
+        },
+        "export": {
+          "button": "Export report",
+          "exporting": "Exporting report...",
+          "success": "Report exported successfully.",
+          "error": "Failed to export report."
+        },
+        "cards": {
+          "totalVulnerabilities": "Total vulnerabilities",
+          "riskScore": "Overall risk score",
+          "generatedAt": "Generated at",
+          "scanStatus": "Scan status"
+        },
+        "severityTitle": "Severity distribution",
+        "severitySubtitle": "Counts across all severities for this generated report.",
+        "summaryTitle": "Report summary",
+        "highlightsTitle": "Quick highlights",
+        "highlights": {
+          "criticalHigh": "Critical + High",
+          "mediumLow": "Medium + Low",
+          "informational": "Informational",
+          "toolsUsed": "Tools used"
+        },
+        "charts": {
+          "severityTitle": "Severity chart",
+          "severitySubtitle": "Visual distribution of findings across severity levels.",
+          "totalIssues": "{count} total issues",
+          "centerLabel": "Findings",
+          "riskTitle": "Risk summary",
+          "riskSubtitle": "Overall score and exposure level rendered responsively.",
+          "riskScore": "Risk score",
+          "criticalExposure": "Critical findings",
+          "highExposure": "High findings",
+          "riskBands": {
+            "critical": "Critical risk",
+            "high": "High risk",
+            "medium": "Medium risk",
+            "low": "Low risk"
+          }
+        },
+        "vulnerabilities": {
+          "title": "Vulnerabilities",
+          "subtitle": "Search, filter, sort, and inspect individual findings.",
+          "search": "Search",
+          "searchPlaceholder": "Search by name, description, tool, or resource",
+          "filter": "Severity filter",
+          "allSeverities": "All severities",
+          "sort": "Sort",
+          "sortOptions": {
+            "severityDesc": "Severity: highest first",
+            "severityAsc": "Severity: lowest first",
+            "nameAsc": "Name: A to Z",
+            "nameDesc": "Name: Z to A",
+            "toolAsc": "Tool: A to Z"
+          },
+          "columns": {
+            "name": "Name",
+            "severity": "Severity",
+            "tool": "Tool",
+            "resource": "Affected resource",
+            "actions": "Actions"
+          },
+          "viewDetails": "View details",
+          "loading": "Loading vulnerabilities...",
+          "empty": "No vulnerabilities match the current filters.",
+          "drawerSubtitle": "Detailed vulnerability information",
+          "closeDrawer": "Close details drawer",
+          "sections": {
+            "description": "Description",
+            "resource": "Affected resource",
+            "identifier": "Vulnerability ID",
+            "recommendation": "Recommendation",
+            "evidence": "Evidence"
+          }
+        }
+      }
+    }
+  },
+  "scanForm": {
+    "title": "New Security Scan",
+    "subtitle": "Configure and launch a security scan in minutes.",
+    "sections": {
+      "aiAssistant": {
+        "title": "AI Scan Assistant",
+        "desc": "Ask AI to suggest a scan configuration based on your plan, target type, and time budget.",
+        "recommendedToolsTitle": "Recommended tools",
+        "rawResponse": "Raw AI response"
+      },
+      "general": {
+        "title": "General Scan Configuration",
+        "desc": "Define the target and basic scope of your security assessment.",
+        "restrictionsTitle": "Plan restrictions",
+        "restrictions": {
+          "tools": "Allowed tools: {tools}",
+          "runtime": "Maximum timeout by plan: {max} minutes",
+          "auth": "Auth scanning: {state}",
+          "bruteforce": "Bruteforce scanning: {state}",
+          "allowed": "Allowed",
+          "blocked": "Blocked"
+        }
+      },
+      "connection": {
+        "title": "Target Connection Settings",
+        "desc": "Configure headers, user-agents, and authentication tokens."
+      },
+      "toolConfig": {
+        "title": "Tool Configuration: {tool}",
+        "desc": "Adjust settings specific to the {tool} engine."
+      },
+      "advanced": {
+        "title": "Advanced Settings",
+        "desc": "Raw engine flags — use with caution",
+        "dangerZone": "Danger Zone: Advanced options are passed directly to the tool. Incorrect flags may cause the scan to crash or produce invalid results."
+      },
+      "captcha": {
+        "title": "Target uses CAPTCHA protections",
+        "desc": "Enable this if the target site blocks automated traffic with challenges.",
+        "warning": {
+          "title": "CAPTCHA Solving Not Supported",
+          "desc": "The scanner currently does not support automated CAPTCHA solving.",
+          "workaround": "Recommended Workaround:",
+          "steps": [
+            "Solve the CAPTCHA manually in your browser.",
+            "Extract the session cookies.",
+            "Add them to the Session Cookies area above."
+          ]
+        }
+      }
+    },
+    "fields": {
+      "ai": {
+        "planId": {
+          "label": "Plan ID",
+          "placeholder": "e.g. 8f3b2db0-3f9f-42c3-a3a0-8db92b2ebca3"
+        },
+        "userPrompt": {
+          "label": "Prompt",
+          "placeholder": "Describe what you want to scan and what matters most (risk depth, speed, auth, etc.)."
+        },
+        "targetUrl": {
+          "label": "Target URL",
+          "placeholder": "https://example.com"
+        },
+        "targetType": {
+          "label": "Target type",
+          "options": {
+            "web": "Web application",
+            "api": "API",
+            "network": "Network"
+          }
+        },
+        "timeBudget": {
+          "label": "Time budget (minutes)",
+          "placeholder": "e.g. 60"
+        }
+      },
+      "name": { "label": "Scan Name", "placeholder": "e.g. My Website Audit", "hint": "Unique identifier for this scan job." },
+      "tool": {
+        "label": "Scanning Tool",
+        "notAllowedSuffix": "Not allowed",
+        "allowedHint": "Your current plan allows: {tools}"
+      },
+      "target": {
+        "label": "Target",
+        "placeholder": "Select target",
+        "loading": "Loading targets...",
+        "hint": "Choose one existing target for this scan."
+      },
+      "scopeSigned": {
+        "label": "Scope Approval",
+        "hint": "I confirm this target is in approved scope."
+      },
+      "timeoutMinutes": {
+        "label": "Timeout (minutes)",
+        "placeholder": "Optional, e.g. 60",
+        "hint": "Leave empty to use your default plan timeout.",
+        "planHint": "Maximum allowed by your plan: {max} minutes"
+      },
+      "targets": { "label": "Target URLs", "placeholder": "https://example.com\nhttps://api.example.com/v1", "hint": "Enter one URL per line. Each target will be processed separately." },
+      "notes": { "label": "Internal Notes", "placeholder": "Internal references or context for this scan..." },
+      "userAgent": { "label": "User-Agent", "placeholder": "Mozilla/5.0...", "hint": "Custom browser identifier for the scanner." },
+      "authToken": {
+        "label": "Auth Token",
+        "placeholder": "eyJh...",
+        "hint": "Used as Authorization: Bearer '<token>'",
+        "blockedTitle": "Auth scanning is blocked by your plan",
+        "blockedHint": "Token and cookies are disabled for this scan under your current plan restrictions."
+      },
+      "headers": { "title": "Custom Headers", "placeholderKey": "X-API-Key", "placeholderValue": "secret-123", "tooltip": "Additional HTTP headers sent with every request." },
+      "cookies": { "title": "Session Cookies", "placeholderKey": "sessionid", "placeholderValue": "abc123xyz", "tooltip": "Use session cookies to scan authenticated areas of the application." },
+      "zap": {
+        "scanType": { "label": "Scan Type", "baseline": "Baseline (Passive Scan)", "full": "Full (Active Scan)", "api": "API (OpenAPI/GraphQL)", "apiHint": "Designed for scanning API endpoints." },
+        "ajax": { "label": "Enable AJAX Spider", "hint": "Use for Single Page Apps (React/Vue/etc.)" }
+      },
+      "ffuf": {
+        "wordlist": { "label": "Wordlist", "common": "common.txt (Standard)", "big": "big.txt (Deep Fuzz)" },
+        "recursion": { "label": "Enable Recursion", "hint": "Fuzz directories recursively" },
+        "mc": { "label": "Match Codes (mc)", "placeholder": "200,301,403" },
+        "fc": { "label": "Filter Codes (fc)", "placeholder": "404,500" },
+        "proTip": "Pro Tip: Remember to include FUZZ in the URL, e.g. https://example.com/FUZZ"
+      },
+      "extraArgs": { "label": "Extra Arguments", "placeholder": "e.g. -v --debug-log" }
+    },
+    "actions": {
+      "ai": {
+        "generate": "Get AI recommendation",
+        "generating": "Generating recommendation...",
+        "apply": "Apply to scan form"
+      }
+    },
+    "summary": {
+      "title": "Scan Preview",
+      "scanName": "Scan Name",
+      "untitled": "Untitled Scan",
+      "targetsCount": "{count} Target{count, plural, one {} other {s}} detected",
+      "auth": "Authentication",
+      "noAuth": "No auth configured",
+      "zapConfig": "ZAP Config",
+      "ffufConfig": "ffuf Config",
+      "credits": "{count, plural, one {Unlimited} other {# Credits}}",
+      "startScan": "Start Security Scan",
+      "starting": "Starting Scan...",
+      "previewJson": "Preview JSON Payload",
+      "upgrade": "Upgrade Plan",
+      "creditsError": "Action Required",
+      "creditsDesc": "You have 0 credits remaining.",
+      "captchaWarning": "CAPTCHA detected. Automated scans will likely fail unless you use session cookies."
+    },
+    "messages": {
+      "success": "Scan started successfully!",
+      "error": "Submission Failed",
+      "invalidUrl": "URL is invalid.",
+      "toolNotAllowed": "The selected tool is not allowed by your current plan.",
+      "authNotAllowed": "Authentication settings are blocked by your current plan.",
+      "timeoutExceedsPlan": "Timeout cannot exceed {max} minutes for your current plan.",
+      "ai": {
+        "missingFields": "Plan ID, prompt, target URL, and time budget are required.",
+        "success": "AI recommendation generated successfully.",
+        "error": "Failed to generate AI recommendation.",
+        "notEnabled": "AI assistant is currently disabled on the server.",
+        "gatewayError": "AI service is temporarily unavailable (gateway error). Please try again in a moment.",
+        "noResponse": "No AI response to apply.",
+        "applied": "AI recommendation applied to scan form."
+      }
+    }
+  },
+  "plansPage": {
+    "hero": {
+      "badge": "Flexible plans",
+      "title": "Pick a plan that scales with your security needs",
+      "subtitle": "Transparent pricing, clear limits, and no surprises. Start small, then grow into advanced scanning as your teams mature.",
+      "note": "Prices shown in USD"
+    },
+    "current": {
+      "title": "Your plan",
+      "subtitle": "View your current plan and upgrade options.",
+      "loading": "Loading plan...",
+      "signedOutTitle": "Sign in to see your plan",
+      "signedOutDesc": "We will show your active plan, credits, and renewal details once you log in.",
+      "loginCta": "Sign in",
+      "registerCta": "Create account",
+      "signedInTitle": "Welcome, {name}",
+      "signedInDesc": "Plan details will appear here once billing is connected.",
+      "userFallback": "there",
+      "noPlanLabel": "No active plan assigned",
+      "unknownPlan": "Plan",
+      "expiresAt": "Expires on {date}",
+      "usageLabel": "Usage",
+      "usageValue": "{used} of {total} used",
+      "remaining": "Remaining: {count}",
+      "extraAvailable": "Extra credits: {count}",
+      "extraCreditsTitle": "Extra credits",
+      "extraExpired": "Expired unused: {count}",
+      "extraPurchaseTitle": "Extra purchases",
+      "extraPurchaseNote": "Purchased extra credits so far",
+      "extraEligibilityTitle": "Extra credit eligibility",
+      "extraEligible": "Eligible",
+      "extraNotEligible": "Not eligible",
+      "managePlanCta": "Manage billing",
+      "primaryCta": "Start scanning"
+    },
+    "plansSection": {
+      "title": "Plans for every stage",
+      "subtitle": "Compare features and choose the right level of scanning power.",
+      "loading": "Loading plans...",
+      "error": "Failed to load plans.",
+      "popular": "Most popular",
+      "planFallback": "Plan",
+      "description": "Includes {credits} scan credits.",
+      "period": "Valid for {months} months",
+      "credits": "{count} included credits",
+      "runtime": "Max runtime: {minutes} minutes",
+      "toolsLabel": "Enabled tools",
+      "toolsAll": "All tools",
+      "restrictionsLabel": "Restrictions",
+      "extraCreditLabel": "Extra credit policy",
+      "allowAuth": "Auth scanning",
+      "blockAuth": "No auth scanning",
+      "allowBrute": "Bruteforce allowed",
+      "blockBrute": "Bruteforce blocked"
+    },
+    "compare": {
+      "title": "Detailed comparison",
+      "subtitle": "See pricing, credits, tools, and restrictions side by side before you buy.",
+      "featureColumn": "Feature",
+      "notAvailable": "Not available",
+      "runtimeValue": "{minutes} min",
+      "extraCreditRule": "{price}, after {usage}% usage, up to {max} times",
+      "rows": {
+        "price": "Price",
+        "credits": "Included credits",
+        "runtime": "Max runtime",
+        "tools": "Enabled tools",
+        "authScanning": "Authenticated scanning",
+        "bruteforce": "Bruteforce tools",
+        "extraCredit": "Extra credit"
+      }
+    },
+    "plans": {
+      "free": "Free"
+    },
+    "actions": {
+      "choosePlan": "Choose plan",
+      "buyExtra": "Buy extra credit",
+      "extraSuccess": "Extra credit checkout started successfully.",
+      "extraError": "Failed to start extra credit purchase.",
+      "processing": "Processing...",
+      "checkoutMissing": "Checkout link is unavailable.",
+      "checkoutError": "Failed to start checkout.",
+      "checkoutSuccess": "Payment completed successfully.",
+      "checkoutFailed": "Payment was canceled or failed."
+    },
+    "status": {
+      "success": {
+        "title": "Payment completed",
+        "description": "Your checkout returned successfully. The active plan and credit state will refresh automatically.",
+        "toast": "Payment completed successfully."
+      },
+      "failed": {
+        "title": "Payment failed",
+        "description": "The purchase did not complete. Review the checkout details and try again.",
+        "toast": "Payment failed. Please try again."
+      },
+      "cancel": {
+        "title": "Payment canceled",
+        "description": "The checkout was canceled before completion.",
+        "toast": "Payment was canceled."
+      }
+    },
+    "faq": {
+      "title": "Frequently asked questions",
+      "subtitle": "Answers to the most common billing and plan questions.",
+      "items": [
+        {
+          "q": "Can I change plans later?",
+          "a": "Yes. You can upgrade or downgrade at any time and the changes apply instantly."
+        },
+        {
+          "q": "What happens when I run out of credits?",
+          "a": "Scans pause automatically until you purchase additional credits or upgrade your plan."
+        },
+        {
+          "q": "Do you offer annual billing?",
+          "a": "Enterprise plans are billed annually with flexible invoicing options."
+        },
+        {
+          "q": "Is there a trial for paid plans?",
+          "a": "Yes, we can activate a time-limited Pro trial on request."
+        }
+      ]
+    }
+  },
+  "billingPage": {
+    "hero": {
+      "badge": "Billing workspace",
+      "eyebrow": "Current active plan",
+      "title": "Track credits, expiry, and extra credit eligibility",
+      "subtitle": "Review your live plan state, understand restrictions, and start extra credit checkout when your plan allows it."
+    },
+    "labels": {
+      "notAvailable": "Not available",
+      "free": "Free"
+    },
+    "summary": {
+      "currentPlan": "Current plan",
+      "planId": "Plan ID #{id}",
+      "remainingCredits": "Remaining credits",
+      "usedOfTotal": "{used} of {total} used",
+      "expiresAt": "Expires at",
+      "purchasedAt": "Purchased {date}",
+      "extraCredits": "Extra credits",
+      "expiredUnused": "Expired unused: {count}"
+    },
+    "usage": {
+      "title": "Usage progress",
+      "subtitle": "Current consumption across the active plan period.",
+      "progressLabel": "Credits consumed",
+      "remaining": "Remaining",
+      "extraPurchases": "Extra purchases",
+      "extraAvailable": "Extra available"
+    },
+    "extra": {
+      "title": "Extra credit purchase",
+      "subtitle": "Eligibility and business rules for extra scan credits.",
+      "eligibility": "Eligibility",
+      "allowed": "Purchase allowed",
+      "blocked": "Purchase blocked",
+      "price": "Price",
+      "expiresIn": "Credit expiry",
+      "minUsage": "Required usage before purchase",
+      "maxPurchases": "Max purchases per plan",
+      "months": "{count} months",
+      "percent": "{value}%",
+      "currency": "Currency"
+    },
+    "access": {
+      "title": "Enabled tools",
+      "subtitle": "Tools currently available through this plan.",
+      "allTools": "All tools"
+    },
+    "restrictions": {
+      "title": "Restrictions",
+      "subtitle": "Business limitations enforced by the active plan.",
+      "authAllowed": "Authenticated scanning allowed",
+      "authBlocked": "Authenticated scanning blocked",
+      "bruteforceAllowed": "Bruteforce tooling allowed",
+      "bruteforceBlocked": "Bruteforce tooling blocked"
+    },
+    "states": {
+      "error": {
+        "title": "Failed to load billing state",
+        "description": "Unable to fetch the current active plan."
+      },
+      "empty": {
+        "badge": "No active plan",
+        "title": "No active plan is assigned to this account",
+        "description": "Choose a plan first to unlock scans, credits, and extra credit purchases."
+      }
+    },
+    "status": {
+      "success": {
+        "title": "Payment completed",
+        "description": "The checkout returned successfully and your plan state is being refreshed.",
+        "toast": "Payment completed successfully."
+      },
+      "failed": {
+        "title": "Payment failed",
+        "description": "The purchase did not complete. Review the payment details and try again.",
+        "toast": "Payment failed. Please try again."
+      },
+      "cancel": {
+        "title": "Payment canceled",
+        "description": "The checkout was canceled before completion.",
+        "toast": "Payment was canceled."
+      }
+    },
+    "actions": {
+      "retry": "Retry",
+      "comparePlans": "Compare plans",
+      "startScan": "Start scanning",
+      "choosePlan": "Choose a plan",
+      "buyExtraCredit": "Buy extra credit",
+      "processing": "Processing...",
+      "checkoutMissing": "Checkout link is unavailable.",
+      "extraPurchaseSuccess": "Extra credit checkout started successfully.",
+      "extraPurchaseError": "Failed to start extra credit purchase."
+    }
+  },
+  "profile": {
+    "title": "Profile",
+    "subtitle": "Manage your account details.",
+    "card": {
+      "title": "Profile Information",
+      "subtitle": "Update your display name for reports and scans."
+    },
+    "details": {
+      "title": "Account Details",
+      "subtitle": "Your status and access information."
+    },
+    "plan": {
+      "title": "Plan & Credits",
+      "subtitle": "Your active plan and remaining credits.",
+      "error": "Unable to load plan.",
+      "errorDesc": "Please try again.",
+      "empty": "No active plan",
+      "emptyDesc": "Choose a plan to start scanning.",
+      "labels": {
+        "name": "Plan Name",
+        "expiresAt": "Expires",
+        "purchasedAt": "Purchased",
+        "creditsUsage": "Credits used",
+        "remaining": "Remaining",
+        "extraCredits": "Extra credits",
+        "extraPurchases": "Extra purchases",
+        "canBuyExtra": "Extra credit purchases",
+        "allowed": "Allowed",
+        "blocked": "Blocked"
+      }
+    },
+    "fields": {
+      "name": "Full Name",
+      "email": "Email"
+    },
+    "placeholders": {
+      "name": "Enter your full name"
+    },
+    "actions": {
+      "save": "Save Changes",
+      "saving": "Saving...",
+      "retry": "Retry"
+    },
+    "labels": {
+      "status": "Status",
+      "active": "Active",
+      "inactive": "Inactive",
+      "createdAt": "Created",
+      "lastLogin": "Last login",
+      "roles": "Roles",
+      "rolesEmpty": "No roles",
+      "notAvailable": "Not available"
+    },
+    "messages": {
+      "saved": "Profile updated successfully.",
+      "savedTitle": "Saved",
+      "saveError": "Failed to update profile.",
+      "saveErrorTitle": "Update failed",
+      "nameRequired": "Name is required.",
+      "loadError": "Unable to load profile.",
+      "loadErrorDesc": "Please try again.",
+      "empty": "No profile data available.",
+      "emptyDesc": "Try refreshing the page."
+    }
+  },
+  "admin": {
+    "guard": {
+      "accessDenied": "You do not have permission to access Admin."
+    },
+    "nav": {
+      "title": "Administration",
+      "overview": "Overview",
+      "users": "Users",
+      "scans": "Scans",
+      "plans": "Plans",
+      "auditLogs": "Audit Logs",
+      "queue": "Queue",
+      "billing": "Billing"
+    },
+    "overview": {
+      "title": "Overview",
+      "subtitle": "High-level activity across the platform.",
+      "loading": "Loading...",
+      "stats": {
+        "users": "Total Users",
+        "scans": "Total Scans",
+        "auditLogs": "Audit Events",
+        "queue": "Queue Size",
+        "plans": "Plan Definitions",
+        "userPlans": "Active User Plans"
+      },
+      "actions": {
+        "title": "Quick Actions",
+        "subtitle": "Jump to frequently used admin sections.",
+        "users": "Manage Users",
+        "scans": "Review Scans",
+        "queue": "View Queue",
+        "billing": "Grant Plan",
+        "liveQueue": "Live queue: {count}"
+      }
+    },
+    "users": {
+      "title": "Users",
+      "subtitle": "Manage platform users and roles.",
+      "columns": {
+        "id": "ID",
+        "name": "Name",
+        "email": "Email",
+        "roles": "Roles",
+        "status": "Status",
+        "createdAt": "Created",
+        "lastLogin": "Last Login",
+        "actions": "Actions"
+      },
+      "actions": {
+        "create": "Create User",
+        "view": "View",
+        "edit": "Edit",
+        "delete": "Delete",
+        "save": "Save",
+        "cancel": "Cancel",
+        "saving": "Saving...",
+        "prev": "Previous",
+        "next": "Next"
+      },
+      "form": {
+        "fullName": "Full Name",
+        "fullNamePlaceholder": "Enter full name",
+        "email": "Email",
+        "emailPlaceholder": "Enter email address",
+        "password": "Password",
+        "passwordPlaceholderCreate": "Enter password",
+        "passwordPlaceholderEdit": "Leave empty to keep current password",
+        "isActive": "Active user"
+      },
+      "dialogs": {
+        "createTitle": "Create User",
+        "editTitle": "Edit User",
+        "deleteTitle": "Delete User",
+        "deleteDescription": "Are you sure you want to delete \"{name}\"?"
+      },
+      "validation": {
+        "nameRequired": "Name is required.",
+        "emailRequired": "Email is required.",
+        "emailInvalid": "Enter a valid email address.",
+        "passwordRequired": "Password is required.",
+        "passwordMinLength": "Password must be at least 8 characters."
+      },
+      "messages": {
+        "createSuccess": "User created successfully.",
+        "createError": "Failed to create user.",
+        "updateSuccess": "User updated successfully.",
+        "updateError": "Failed to update user.",
+        "deleteSuccess": "User deleted successfully.",
+        "deleteError": "Failed to delete user."
+      },
+      "status": {
+        "active": "Active",
+        "inactive": "Inactive"
+      },
+      "loading": "Loading users...",
+      "empty": "No users found.",
+      "unknown": "Unknown",
+      "pagination": "Page {page} of {totalPages} · Showing {from}-{to} of {total}"
+    },
+    "userDetails": {
+      "title": "User Details",
+      "subtitle": "Profile and access information.",
+      "fields": {
+        "name": "Name",
+        "email": "Email",
+        "status": "Status",
+        "createdAt": "Created",
+        "lastLogin": "Last Login",
+        "roles": "Roles"
+      },
+      "status": {
+        "active": "Active",
+        "inactive": "Inactive"
+      },
+      "loading": "Loading user...",
+      "notFound": "User not found.",
+      "unknown": "Unknown"
+    },
+    "scans": {
+      "title": "Scans",
+      "subtitle": "Admin view of all scans.",
+      "columns": {
+        "id": "Scan ID",
+        "status": "Status",
+        "targetId": "Target ID",
+        "requestedAt": "Requested",
+        "startedAt": "Started",
+        "finishedAt": "Finished",
+        "actions": "Actions"
+      },
+      "filters": {
+        "searchPlaceholder": "Search by scan ID, target ID, or user ID",
+        "allStatuses": "All statuses",
+        "status": {
+          "pending": "Pending",
+          "running": "Running",
+          "completed": "Completed",
+          "failed": "Failed",
+          "canceled": "Canceled"
+        }
+      },
+      "actions": {
+        "details": "Details",
+        "forceFail": "Force Fail",
+        "export": "Export PDF",
+        "exporting": "Exporting...",
+        "exportSuccess": "Scan PDF exported successfully.",
+        "exportError": "Failed to export scan PDF.",
+        "forceFailConfirm": "Force-fail this scan?",
+        "forceFailSuccess": "Scan marked as failed.",
+        "forceFailError": "Failed to force-fail scan.",
+        "cancelAll": "Cancel All",
+        "cancelAllConfirm": "Cancel all running and pending scans?",
+        "cancelAllStrongWarning": "This action can disrupt active scan jobs for all users. Use it only during emergency intervention.",
+        "cancelAllConfirmToken": "CANCEL ALL",
+        "cancelAllTypePrompt": "Type {token} to confirm this action.",
+        "cancelAllTypePlaceholder": "Type confirmation text",
+        "cancelAllSuccess": "Cancel-all request sent.",
+        "cancelAllError": "Failed to cancel all scans.",
+        "prev": "Previous",
+        "next": "Next"
+      },
+      "loading": "Loading scans...",
+      "empty": "No scans found.",
+      "emptyFiltered": "No scans match your filters.",
+      "pagination": "Page {page} · Total {total}",
+      "details": {
+        "title": "Scan Details",
+        "subtitle": "Review and manage a specific scan.",
+        "notFound": "Scan not found.",
+        "backToList": "Back to scans list",
+        "currentStatus": "Current Status",
+        "currentFailureReason": "Current Failure Reason",
+        "updateSectionTitle": "Update scan status",
+        "statusLabel": "Status",
+        "selectStatus": "Select status",
+        "failureReasonLabel": "Failure Reason",
+        "failureReasonPlaceholder": "Provide a failure reason when needed",
+        "updateButton": "Update Scan",
+        "updating": "Updating...",
+        "updateSuccess": "Scan updated successfully.",
+        "updateError": "Failed to update scan.",
+        "refreshStatus": "Refresh Status",
+        "export": "Export PDF",
+        "exporting": "Exporting...",
+        "exportSuccess": "Scan PDF exported successfully.",
+        "exportError": "Failed to export scan PDF.",
+        "dangerZone": "Danger Zone",
+        "forceFailDescription": "Force this scan to fail immediately when intervention is required.",
+        "forceFailReasonLabel": "Force-Fail Reason (optional)",
+        "forceFailReasonPlaceholder": "Add a reason for force-fail",
+        "forceFailButton": "Force Fail",
+        "forceFailing": "Force-failing...",
+        "forceFailSuccess": "Scan force-failed successfully.",
+        "forceFailError": "Failed to force-fail scan.",
+        "forceFailConfirmTitle": "Force Fail Scan",
+        "forceFailConfirmDescription": "Are you sure you want to force this scan to fail?",
+        "deleteDescription": "Delete this scan permanently. This action cannot be undone.",
+        "deleteButton": "Delete Scan",
+        "deleting": "Deleting...",
+        "deleteSuccess": "Scan deleted successfully.",
+        "deleteError": "Failed to delete scan.",
+        "deleteConfirmTitle": "Delete Scan",
+        "deleteConfirmDescription": "Are you sure you want to delete this scan?",
+        "validation": {
+          "statusRequired": "Status is required.",
+          "failureReasonRequired": "Failure reason is required when status is Failed."
+        }
+      }
+    },
+    "plans": {
+      "title": "Plans",
+      "subtitle": "Manage plan definitions and user plans.",
+      "definitions": {
+        "columns": {
+          "name": "Plan",
+          "updatedAt": "Updated",
+          "actions": "Actions"
+        },
+        "actions": {
+          "create": "Create Plan",
+          "view": "View",
+          "edit": "Edit",
+          "delete": "Delete",
+          "prev": "Previous",
+          "next": "Next"
+        },
+        "details": {
+          "title": "Plan Definition Details"
+        },
+        "editor": {
+          "createTitle": "Create Plan Definition",
+          "editTitle": "Edit Plan Definition",
+          "description": "Use the JSON editor to create or update the full plan definition.",
+          "planName": "Plan Name",
+          "planNamePlaceholder": "e.g. pro, enterprise",
+          "jsonLabel": "Plan JSON",
+          "jsonPlaceholder": "Paste a valid JSON plan definition",
+          "createAction": "Create",
+          "saveAction": "Save",
+          "saving": "Saving..."
+        },
+        "delete": {
+          "title": "Delete Plan Definition",
+          "description": "Are you sure you want to delete \"{name}\"?",
+          "warning": "This action cannot be undone and may affect billing and user plan assignments."
+        },
+        "validation": {
+          "planNameRequired": "Plan name is required.",
+          "invalidJson": "Plan JSON must be a valid object.",
+          "planNameMismatch": "Path plan name must match `plan_name` in JSON."
+        },
+        "messages": {
+          "createSuccess": "Plan definition created successfully.",
+          "createError": "Failed to create plan definition.",
+          "updateSuccess": "Plan definition updated successfully.",
+          "updateError": "Failed to update plan definition.",
+          "deleteSuccess": "Plan definition deleted successfully.",
+          "deleteError": "Failed to delete plan definition."
+        },
+        "loading": "Loading plan definitions...",
+        "empty": "No plan definitions found.",
+        "unknown": "Unknown",
+        "pagination": "Page {page} of {totalPages} · Total {total}"
+      },
+      "userPlans": {
+        "title": "User Plans",
+        "subtitle": "Active plans by user.",
+        "columns": {
+          "user": "User",
+          "plan": "Plan",
+          "status": "Status",
+          "expiresAt": "Expires",
+          "credits": "Credits",
+          "actions": "Actions"
+        },
+        "status": {
+          "active": "Active",
+          "expired": "Expired",
+          "canceled": "Canceled"
+        },
+        "actions": {
+          "view": "View",
+          "edit": "Edit",
+          "delete": "Delete",
+          "save": "Save",
+          "prev": "Previous",
+          "next": "Next"
+        },
+        "details": {
+          "title": "User Plan Details",
+          "loading": "Loading user plan...",
+          "loadError": "Failed to load user plan details.",
+          "notFound": "User plan not found.",
+          "fields": {
+            "id": "User Plan ID",
+            "userId": "User ID",
+            "user": "User",
+            "plan": "Plan",
+            "status": "Status",
+            "purchasedAt": "Purchased At",
+            "expiresAt": "Expires At",
+            "credits": "Credits",
+            "extraPurchaseCount": "Extra Purchase Count"
+          }
+        },
+        "editor": {
+          "title": "Edit User Plan",
+          "description": "Update plan status, credits, and expiry settings.",
+          "status": "Status",
+          "statusPlaceholder": "Select status",
+          "expiresAt": "Expires At",
+          "includedCredits": "Included Credits",
+          "includedCreditsUsed": "Included Credits Used",
+          "extraPurchaseCount": "Extra Purchase Count",
+          "saving": "Saving..."
+        },
+        "delete": {
+          "title": "Delete User Plan",
+          "description": "Are you sure you want to delete the plan for \"{name}\"?",
+          "warning": "This removes the active user plan record and cannot be undone."
+        },
+        "validation": {
+          "statusRequired": "Status is required.",
+          "invalidExpiry": "Expiry date is invalid.",
+          "invalidIncludedCredits": "Included credits must be a non-negative integer.",
+          "invalidIncludedCreditsUsed": "Used credits must be a non-negative integer.",
+          "invalidExtraPurchaseCount": "Extra purchase count must be a non-negative integer.",
+          "usedMoreThanIncluded": "Used credits cannot be greater than included credits."
+        },
+        "messages": {
+          "updateSuccess": "User plan updated successfully.",
+          "updateError": "Failed to update user plan.",
+          "deleteSuccess": "User plan deleted successfully.",
+          "deleteError": "Failed to delete user plan."
+        },
+        "loading": "Loading user plans...",
+        "empty": "No user plans found.",
+        "pagination": "Page {page} · Total {total}"
+      }
+    },
+    "auditLogs": {
+      "title": "Audit Logs",
+      "subtitle": "Review security and system events.",
+      "filters": {
+        "searchLabel": "Search",
+        "searchPlaceholder": "Search by entity, action, user, IP, or timestamp",
+        "actionLabel": "Action",
+        "allActions": "All actions",
+        "activeHint": "Filters are applied to the current page.",
+        "clear": "Clear filters"
+      },
+      "columns": {
+        "action": "Action",
+        "entity": "Entity",
+        "user": "User",
+        "ip": "IP",
+        "timestamp": "Timestamp"
+      },
+      "actions": {
+        "prev": "Previous",
+        "next": "Next"
+      },
+      "loading": "Loading audit logs...",
+      "empty": "No audit logs found.",
+      "emptyFiltered": "No audit logs match the current filters.",
+      "pagination": "Page {page} of {totalPages} · Total {total}"
+    },
+    "queue": {
+      "title": "Queue",
+      "subtitle": "Monitor VPS queue and job ordering.",
+      "queueSize": "Queue size: {count}",
+      "livePolling": "Live updates every {seconds} seconds",
+      "columns": {
+        "scanId": "Scan ID",
+        "tool": "Tool",
+        "position": "Position",
+        "jobsAhead": "Jobs Ahead",
+        "user": "User",
+        "estimate": "ETA",
+        "actions": "Actions"
+      },
+      "summary": {
+        "queueSizeLabel": "Queue Size",
+        "jobsAheadLabel": "Avg Jobs Ahead",
+        "nearestEtaLabel": "Nearest ETA",
+        "seconds": "{value}s",
+        "minutes": "{value}m"
+      },
+      "actions": {
+        "refresh": "Refresh",
+        "moveUp": "Move Up",
+        "moveDown": "Move Down",
+        "reorderSuccess": "Queue order updated.",
+        "reorderError": "Failed to reorder queue job.",
+        "delete": "Remove",
+        "deleteConfirm": "Remove this job from queue?",
+        "deleteSuccess": "Job removed from queue.",
+        "deleteError": "Failed to remove job."
+      },
+      "loading": "Loading queue...",
+      "empty": "Queue is empty."
+    },
+    "billing": {
+      "title": "Admin Billing",
+      "subtitle": "Grant plans and manage billing utilities.",
+      "grant": {
+        "userId": "User ID",
+        "userIdPlaceholder": "UUID of the user",
+        "planName": "Plan Name",
+        "planNamePlaceholder": "e.g. pro, enterprise",
+        "required": "User ID and plan name are required.",
+        "userIdInvalid": "User ID must be a valid UUID.",
+        "submit": "Grant Plan",
+        "submitting": "Granting...",
+        "success": "Plan granted successfully.",
+        "error": "Failed to grant plan."
+      }
+    }
+  }
+}
+

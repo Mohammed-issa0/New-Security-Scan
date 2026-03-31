@@ -1,0 +1,53 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --font-inter: 'Inter', system-ui, sans-serif;
+  --font-cairo: 'Cairo', system-ui, sans-serif;
+  --font-display: 'Space Grotesk', system-ui, sans-serif;
+}
+
+.font-sans {
+  font-family: var(--font-inter), ui-sans-serif, system-ui, -apple-system, sans-serif;
+}
+
+.font-arabic {
+  font-family: var(--font-cairo), ui-sans-serif, system-ui, -apple-system, sans-serif;
+}
+
+.font-display {
+  font-family: var(--font-display), ui-sans-serif, system-ui, -apple-system, sans-serif;
+}
+
+[dir="rtl"] .ltr-only { display: none; }
+[dir="ltr"] .rtl-only { display: none; }
+
+/* Ensure logical spacing */
+.ps-4 { padding-inline-start: 1rem; }
+.pe-4 { padding-inline-end: 1rem; }
+.ms-4 { margin-inline-start: 1rem; }
+.me-4 { margin-inline-end: 1rem; }
+
+@layer base {
+  body {
+    @apply antialiased text-gray-900 bg-white selection:bg-blue-100 selection:text-blue-700;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
+
+.landing-ambient {
+  background:
+    radial-gradient(700px 320px at 15% 8%, rgba(59, 130, 246, 0.12), transparent 60%),
+    radial-gradient(520px 280px at 85% 10%, rgba(14, 165, 233, 0.12), transparent 60%),
+    radial-gradient(420px 260px at 50% 90%, rgba(251, 191, 36, 0.1), transparent 65%),
+    linear-gradient(to bottom, #ffffff, #f8fafc);
+}
+
+
+

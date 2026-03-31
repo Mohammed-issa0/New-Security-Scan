@@ -1,0 +1,1459 @@
+{
+  "common": {
+    "title": "سكيوريتي سكان",
+    "states": {
+      "loading": "جارٍ التحميل...",
+      "empty": "لا توجد بيانات.",
+      "error": "حدث خطأ ما.",
+      "retry": "إعادة المحاولة"
+    },
+    "confirmation": {
+      "cancel": "إلغاء",
+      "processing": "جارٍ التنفيذ..."
+    },
+    "nav": {
+      "features": "الميزات",
+      "tools": "الأدوات",
+      "plans": "الباقات",
+      "billing": "الفوترة",
+      "profile": "الملف الشخصي",
+      "howItWorks": "كيف يعمل",
+      "startScanning": "ابدأ الفحص"
+    },
+    "buttons": {
+      "startNow": "ابدأ الفحص الآن",
+      "viewHow": "شاهد كيف يعمل",
+      "viewPlans": "شاهد الباقات",
+      "createAccount": "أنشئ حساباً مجانياً",
+      "startFirstScan": "ابدأ أول فحص",
+      "getStarted": "ابدأ الآن",
+      "close": "إغلاق",
+      "copy": "نسخ البيانات",
+      "copied": "تم النسخ!",
+      "add": "إضافة"
+    }
+  },
+  "landing": {
+    "hero": {
+      "badge": "منصة فحص موحدة",
+      "headlinePrefix": "أمان مستمر",
+      "headlineGradient": "لتطبيقات الويب والواجهات البرمجية",
+      "subheadline": "شغّل ZAP و FFUF و Nmap و WPScan و SQLMap من مساحة عمل سحابية واحدة مع طابور تنفيذ وحدود خطط وتقارير جاهزة للتدقيق."
+    },
+    "features": {
+      "title": "كل ما تحتاجه لتشغيل الفحوصات",
+      "subtitle": "من إعداد الهدف حتى تصدير PDF، نحول مخرجات الأدوات إلى نتائج واضحة قابلة للمشاركة.",
+      "discovery": {
+        "title": "تنسيق موحد",
+        "desc": "إطلاق الفحوصات وتتبع الطابور وحالة الأدوات في لوحة واحدة."
+      },
+      "analysis": {
+        "title": "حوكمة حسب الخطة",
+        "desc": "الأرصدة وحدود الوقت والأدوات تُطبق تلقائياً لكل خطة."
+      },
+      "distributed": {
+        "title": "تقارير قابلة للتنفيذ",
+        "desc": "تصدير PDF وتلخيص الثغرات وإنشاء تذاكر Jira عند الحاجة."
+      }
+    },
+    "tools": {
+      "title": "الأدوات التي تثق بها",
+      "subtitle": "نفس الأدوات بمعايير إخراج موحدة وحدود واضحة ونتائج متسقة.",
+      "viewAll": "شاهد خيارات الأدوات",
+      "integrated": "مدمج",
+      "comingSoon": "قريباً",
+      "items": {
+        "zap": "فحص الويب والواجهات البرمجية بمعايير منظمة.",
+        "ffuf": "اكتشاف سريع للمسارات مع تنفيذ عبر الطابور.",
+        "nmap": "اكتشاف الشبكة وبصمة الخدمات على نطاق واسع.",
+        "wpscan": "تحليل ثغرات ووردبريس بشكل موجه.",
+        "sqlmap": "اختبار حقن SQL مع إعدادات محسنة.",
+        "custom": "تلخيصات AI وتصدير PDF وإنشاء تذاكر Jira."
+      }
+    },
+    "howItWorks": {
+      "title": "من الهدف إلى التقرير بأربع خطوات",
+      "subtitle": "ابدأ بسرعة ووسّع النتائج دون تغيير سير العمل.",
+      "step1": { "title": "اختيار الخطة والنطاق", "desc": "اختر الخطة وحدد الأهداف وأداة الفحص." },
+      "step2": { "title": "إضافة المصادقة", "desc": "أضف الرموز أو الكوكيز أو الرؤوس للفحص الموثق." },
+      "step3": { "title": "الطابور والتنفيذ", "desc": "تعمل الفحوصات عبر طابور VPS مع حالة ووقت متوقع." },
+      "step4": { "title": "التقرير والمشاركة", "desc": "صدّر PDF وتابع الثغرات وأنشئ تذاكر Jira." }
+    },
+    "auth": {
+      "title": "مصادقة واحدة. تغطية كاملة.",
+      "subtitle": "أضف رموز المصادقة أو الرؤوس أو الكوكيز ليتحول الفحص إلى المناطق المحمية فعلاً.",
+      "items": [
+        "رموز Bearer ومفاتيح API وملفات تعريف الارتباط",
+        "رؤوس مخصصة والتحكم في User-Agent",
+        "فحص أكثر أماناً للّوحات والمسارات الخاصة",
+        "إعدادات المصادقة لكل هدف"
+      ]
+    },
+    "trust": {
+      "title": "حدود واضحة واستخدام متوقع",
+      "subtitle": "الخطط تضبط الأرصدة والوقت والأدوات لضمان استخدام عادل.",
+      "captcha": {
+        "title": "التعامل مع الكابتشا",
+        "desc": "حل الكابتشا المؤتمت غير مدعوم. استخدم جلسات موثقة للفحص." 
+      },
+      "credits": {
+        "title": "الأرصدة وحدود الوقت",
+        "desc": "كل فحص يستهلك رصيداً ويخضع لحدود الوقت حسب الخطة."
+      }
+    },
+    "cta": {
+      "title": "أطلق أول فحص خلال دقائق",
+      "subtitle": "اختر خطة وأداة واحصل على نتائج منظمة وتقارير قابلة للتصدير.",
+      "joined": "موثوق به من فرق الأمن والهندسة."
+    },
+    "personas": {
+      "title": "مصممة لفرق تطلق بثقة",
+      "subtitle": "الأمن والهندسة والعمليات في مسار واحد.",
+      "items": [
+        { "title": "مهندسو الأمن", "benefit": "توحيد الفحوصات وتصدير تقارير PDF للتدقيق." },
+        { "title": "مطورو الخلفية", "benefit": "اختبار أمان الـAPI مع حدود خطط واضحة." },
+        { "title": "المنصة و DevOps", "benefit": "طابور للفحوصات ومتابعة التنفيذ دون إبطاء الإطلاق." },
+        { "title": "المستشارون", "benefit": "نتائج متسقة وتذاكر Jira جاهزة." }
+      ]
+    },
+    "footer": {
+      "tagline": "فحص موحد لتطبيقات الويب والواجهات والبنية التحتية — من الإعداد حتى تصدير PDF.",
+      "productTitle": "المنتج",
+      "legalTitle": "قانوني",
+      "privacy": "سياسة الخصوصية",
+      "terms": "شروط الخدمة",
+      "rights": "جميع الحقوق محفوظة."
+    },
+    "login": {
+      "title": "مرحباً بعودتك",
+      "subtitle": "سجل الدخول إلى حسابك لإدارة فحوصاتك.",
+      "email": "البريد الإلكتروني",
+      "password": "كلمة المرور",
+      "submit": "تسجيل الدخول",
+      "noAccount": "ليس لديك حساب؟",
+      "register": "سجل هنا"
+    },
+    "register": {
+      "title": "إنشاء حساب",
+      "subtitle": "انضم إلى منصتنا للبدء في تأمين تطبيقاتك.",
+      "fullName": "الاسم الكامل",
+      "email": "البريد الإلكتروني",
+      "password": "كلمة المرور",
+      "confirmPassword": "تأكيد كلمة المرور",
+      "submit": "إنشاء الحساب",
+      "hasAccount": "لديك حساب بالفعل؟",
+      "login": "سجل الدخول هنا",
+      "confirmPasswordMismatch": "كلمتا المرور غير متطابقتين",
+      "passwordRules": {
+        "minLength": "يجب أن تتكون كلمة المرور من 8 أحرف على الأقل.",
+        "uppercase": "يجب أن تحتوي كلمة المرور على حرف كبير واحد على الأقل.",
+        "lowercase": "يجب أن تحتوي كلمة المرور على حرف صغير واحد على الأقل.",
+        "special": "يجب أن تحتوي كلمة المرور على رمز خاص واحد على الأقل.",
+        "hint": "استخدم 8 أحرف على الأقل مع حرف كبير وصغير ورمز خاص."
+      }
+    },
+    "targets": {
+      "title": "الأهداف",
+      "subtitle": "إدارة أهداف الفحص الخاصة بك.",
+      "add": "إضافة هدف",
+      "create": "إنشاء هدف",
+      "creating": "جارٍ الإنشاء...",
+      "url": "الرابط",
+      "createdAt": "تاريخ الإنشاء",
+      "actions": "الإجراءات",
+      "view": "عرض",
+      "delete": "حذف",
+      "deleting": "جارٍ الحذف...",
+      "cancel": "إلغاء",
+      "close": "إغلاق",
+      "confirmDelete": "هل أنت متأكد من حذف هذا الهدف؟",
+      "noTargets": "لم يتم العثور على أهداف.",
+      "placeholder": "https://example.com",
+      "previous": "السابق",
+      "next": "التالي",
+      "page": "الصفحة",
+      "of": "من",
+      "createModal": {
+        "eyebrow": "إدارة الأهداف",
+        "title": "إضافة هدف جديد",
+        "description": "أنشئ هدف موقع جديدًا وأضفه إلى مساحة عمل الفحص الخاصة بك.",
+        "helper": "يتم قبول روابط HTTP و HTTPS الصحيحة فقط. سيظهر الهدف الجديد في القائمة مباشرة بعد إنشائه."
+      },
+      "deleteModal": {
+        "title": "حذف الهدف",
+        "description": "سيؤدي هذا الإجراء إلى إزالة الهدف من قائمتك. لن يتم الحذف إلا بعد تأكيدك هنا."
+      },
+      "details": {
+        "eyebrow": "تفاصيل الهدف",
+        "title": "نظرة عامة على الهدف",
+        "description": "راجع بيانات الهدف المتاحة حاليًا داخل مساحة العمل.",
+        "id": "معرّف الهدف",
+        "updatedAt": "تاريخ آخر تحديث",
+        "copyUrl": "نسخ الرابط",
+        "copied": "تم النسخ",
+        "notAvailable": "غير متاح"
+      },
+      "browserAuth": {
+        "eyebrow": "مصادقة المتصفح",
+        "title": "إعداد مصادقة المتصفح",
+        "description": "أدخل بيانات تسجيل الدخول لسيناريوهات الفحص التي تتطلب مصادقة. تبقى كلمة المرور مخفية في الواجهة وتُخزَّن مشفّرة في الخلفية.",
+        "helper": "استخدم رابط تسجيل الدخول لصفحة الدخول، واستخدم رابط الهدف للمنطقة المحمية التي يجب أن يصل إليها الفاحص بعد تسجيل الدخول.",
+        "cardTitle": "الفحص بعد تسجيل الدخول",
+        "cardDescription": "احفظ بيانات الدخول المعتمدة على المتصفح لهذا الهدف حتى تصل الفحوصات إلى الصفحات المحمية.",
+        "configure": "إعداد مصادقة المتصفح",
+        "statusLabel": "مصادقة المتصفح",
+        "statusConfigured": "مُعدّة",
+        "statusNotConfigured": "غير مُعدّة",
+        "loginUrl": "رابط تسجيل الدخول",
+        "targetUrl": "رابط الهدف",
+        "username": "اسم المستخدم",
+        "password": "كلمة المرور",
+        "mfa": "يتطلب MFA",
+        "mfaDescription": "فعّل هذا إذا كانت عملية تسجيل الدخول تتطلب خطوة تحقق متعددة العوامل.",
+        "usernamePlaceholder": "jane.doe@example.com",
+        "passwordPlaceholder": "أدخل كلمة المرور",
+        "showPassword": "إظهار كلمة المرور",
+        "hidePassword": "إخفاء كلمة المرور",
+        "save": "حفظ الإعدادات",
+        "saving": "جارٍ الحفظ...",
+        "delete": "حذف الإعدادات",
+        "deleting": "جارٍ الحذف...",
+        "validation": {
+          "usernameRequired": "اسم المستخدم مطلوب.",
+          "passwordRequired": "كلمة المرور مطلوبة."
+        },
+        "feedback": {
+          "saveSuccess": "تم حفظ مصادقة المتصفح بنجاح.",
+          "saveError": "تعذر حفظ مصادقة المتصفح.",
+          "deleteSuccess": "تم حذف مصادقة المتصفح بنجاح.",
+          "deleteError": "تعذر حذف مصادقة المتصفح."
+        }
+      },
+      "validation": {
+        "required": "رابط الهدف مطلوب.",
+        "invalid": "أدخل رابطًا صحيحًا.",
+        "httpOnly": "يُسمح فقط بروابط HTTP و HTTPS."
+      },
+      "feedback": {
+        "createSuccess": "تمت إضافة الهدف بنجاح.",
+        "createError": "تعذر إضافة الهدف.",
+        "deleteSuccess": "تم حذف الهدف بنجاح.",
+        "deleteError": "تعذر حذف الهدف.",
+        "loadError": "تعذر تحميل الأهداف."
+      }
+    },
+    "jiraProjects": {
+      "title": "مشاريع Jira",
+      "subtitle": "إدارة إعدادات مشاريع Jira المرتبطة.",
+      "empty": "لا توجد مشاريع Jira.",
+      "table": {
+        "name": "الاسم",
+        "url": "الرابط",
+        "projectKey": "مفتاح المشروع",
+        "linkedTargets": "الأهداف المرتبطة",
+        "updatedAt": "آخر تحديث",
+        "actions": "الإجراءات"
+      },
+      "actions": {
+        "view": "عرض",
+        "edit": "تعديل",
+        "create": "إنشاء مشروع Jira",
+        "linkTarget": "ربط هدف",
+        "unlinkTarget": "فك ربط هدف",
+        "delete": "حذف",
+        "test": "اختبار",
+        "testing": "جارٍ الاختبار...",
+        "linking": "جارٍ الربط...",
+        "unlinking": "جارٍ فك الربط...",
+        "close": "إغلاق",
+        "cancel": "إلغاء",
+        "save": "حفظ",
+        "saving": "جارٍ الحفظ...",
+        "creating": "جارٍ الإنشاء...",
+        "deleting": "جارٍ الحذف..."
+      },
+      "createDialog": {
+        "title": "إنشاء إعداد مشروع Jira",
+        "description": "أضف تكامل Jira جديدًا لأتمتة التذاكر.",
+        "user": "المستخدم",
+        "token": "الرمز",
+        "tokenPlaceholder": "أدخل رمز Jira API",
+        "showToken": "إظهار",
+        "hideToken": "إخفاء",
+        "issueType": "نوع التذكرة",
+        "teamRoles": "أدوار الفريق",
+        "addRole": "إضافة دور",
+        "rolePlaceholder": "الدور (مثال: DevOps)",
+        "accountIdPlaceholder": "معرّف حساب Jira",
+        "labels": "الوسوم",
+        "labelPlaceholder": "اكتب الوسم ثم اضغط Enter",
+        "addLabel": "إضافة وسم"
+      },
+      "pagination": {
+        "page": "الصفحة",
+        "of": "من",
+        "previous": "السابق",
+        "next": "التالي"
+      },
+      "viewDialog": {
+        "title": "تفاصيل المشروع",
+        "userEmail": "بريد المستخدم",
+        "issueType": "نوع التذكرة",
+        "apiToken": "رمز API"
+      },
+      "editDialog": {
+        "title": "تعديل مشروع Jira",
+        "user": "المستخدم",
+        "token": "الرمز",
+        "tokenPlaceholder": "اتركه فارغاً للإبقاء على الرمز الحالي",
+        "showToken": "إظهار",
+        "hideToken": "إخفاء",
+        "issueType": "نوع التذكرة",
+        "customLabels": "الوسوم المخصصة",
+        "customLabelsPlaceholder": "security, critical, backend"
+      },
+      "linkDialog": {
+        "title": "ربط هدف",
+        "description": "اختر هدفًا لربطه مع \"{name}\".",
+        "target": "الهدف",
+        "targetPlaceholder": "اختر هدفًا"
+      },
+      "unlinkDialog": {
+        "title": "فك ربط هدف",
+        "description": "اختر هدفًا لفك ربطه من إعداد Jira.",
+        "target": "الهدف",
+        "targetPlaceholder": "اختر هدفًا"
+      },
+      "deleteDialog": {
+        "title": "حذف مشروع Jira",
+        "description": "هل أنت متأكد من حذف \"{name}\"؟",
+        "confirmNameHint": "اكتب \"{name}\" لتأكيد الحذف.",
+        "confirmNamePlaceholder": "اسم المشروع"
+      },
+      "messages": {
+        "loadError": "تعذر تحميل مشاريع Jira.",
+        "requiredFields": "الاسم والرابط والمستخدم والرمز ومفتاح المشروع ونوع التذكرة حقول مطلوبة.",
+        "createSuccess": "تم إنشاء مشروع Jira بنجاح.",
+        "createError": "فشل إنشاء مشروع Jira.",
+        "targetRequired": "يرجى اختيار الهدف أولاً.",
+        "testSuccess": "تم اختبار الاتصال بنجاح.",
+        "testError": "فشل اختبار الاتصال.",
+        "linkSuccess": "تم ربط الهدف بنجاح.",
+        "linkError": "فشل ربط الهدف.",
+        "unlinkSuccess": "تم فك ربط الهدف بنجاح.",
+        "unlinkError": "فشل فك ربط الهدف.",
+        "updateSuccess": "تم تحديث مشروع Jira بنجاح.",
+        "updateError": "فشل تحديث مشروع Jira.",
+        "deleteSuccess": "تم حذف مشروع Jira بنجاح.",
+        "deleteError": "فشل حذف مشروع Jira."
+      }
+    },
+    "scans": {
+      "title": "الفحوصات",
+      "subtitle": "عرض وإدارة فحوصاتك الأمنية.",
+      "target": "الهدف",
+      "status": "الحالة",
+      "requested": "تم الطلب",
+      "started": "بدأ في",
+      "finished": "انتهى في",
+      "actions": "الإجراءات",
+      "view": "عرض التفاصيل",
+      "cancel": "إلغاء",
+      "noScans": "لم يتم العثور على فحوصات.",
+      "previous": "السابق",
+      "next": "التالي",
+      "page": "الصفحة",
+      "of": "من",
+      "filters": {
+        "label": "تصفية حسب الحالة",
+        "all": "الكل",
+        "toolLabel": "تصفية حسب الأداة",
+        "allTools": "كل الأدوات"
+      },
+      "details": {
+        "eyebrow": "مساحة عمل الفحص",
+        "title": "فحص #{id}",
+        "summary": "الملخص",
+        "tools": "الأدوات",
+        "vulnerabilities": "الثغرات",
+        "report": "التقرير",
+        "eta": {
+          "title": "الجدول الزمني الحي للأدوات",
+          "subtitle": "يتم تحديث ترتيب الطابور ووقت الإنهاء المتوقع تلقائياً.",
+          "activeTools": "الأدوات النشطة",
+          "jobsAhead": "الوظائف قبلها",
+          "nextEta": "أقرب وقت متوقع",
+          "queuePosition": "ترتيب الطابور",
+          "estimatedFinishAt": "الإنهاء المتوقع",
+          "unavailable": "وقت متوقع غير متاح",
+          "empty": "لا توجد بيانات ETA متاحة بعد للأدوات النشطة."
+        },
+        "pdf": {
+          "exportButton": "تصدير PDF",
+          "exporting": "جار التصدير...",
+          "exportSuccess": "تم تنزيل تقرير PDF بنجاح.",
+          "exportError": "فشل تصدير تقرير PDF."
+        },
+        "jira": {
+          "createButton": "إنشاء تذاكر Jira",
+          "creating": "جار إنشاء التذاكر...",
+          "availableWhenCompleted": "يمكن إنشاء تذاكر Jira بعد اكتمال الفحص.",
+          "summaryTitle": "ملخص إنشاء تذاكر Jira",
+          "created": "تم الإنشاء",
+          "skipped": "تم التجاوز",
+          "failed": "فشل",
+          "references": "مراجع التذاكر",
+          "openTicket": "فتح التذكرة",
+          "ticketFallback": "تذكرة Jira",
+          "errorsTitle": "أخطاء الإنشاء",
+          "toastError": "فشل إنشاء تذاكر Jira.",
+          "toastSuccess": "تمت معالجة تذاكر Jira: {created} تم إنشاؤها، {skipped} تم تجاوزها، {failed} فشلت."
+        },
+        "aiReport": {
+          "title": "تقرير AI بعد الفحص",
+          "verbosityLabel": "مستوى التفاصيل",
+          "verbosity": {
+            "brief": "مختصر",
+            "detailed": "تفصيلي",
+            "comprehensive": "شامل"
+          },
+          "createJiraLabel": "إنشاء تذاكر Jira من تقرير AI",
+          "generateButton": "توليد تقرير AI",
+          "generating": "جار توليد تقرير AI...",
+          "availableWhenCompleted": "تقرير AI متاح فقط بعد اكتمال الفحص.",
+          "outputLabel": "مخرجات تقرير AI",
+          "emptyOutput": "لم يتم استلام نص من AI.",
+          "rawResponseLabel": "استجابة AI الخام",
+          "tokenUsage": {
+            "prompt": "Prompt tokens",
+            "completion": "Completion tokens",
+            "total": "إجمالي التوكنز",
+            "model": "النموذج",
+            "duration": "المدة"
+          },
+          "toastSuccess": "تم توليد تقرير AI بعد الفحص بنجاح.",
+          "notEnabled": "ميزة تقرير AI بعد الفحص غير مفعلة حاليًا على الخادم.",
+          "toastError": "فشل توليد تقرير AI بعد الفحص."
+        },
+        "tabs": {
+          "overview": "نظرة عامة",
+          "tools": "الأدوات",
+          "vulnerabilities": "الثغرات",
+          "report": "التقرير"
+        },
+        "cancelButton": "إلغاء الفحص",
+        "cancelConfirm": "هل أنت متأكد من إلغاء هذا الفحص؟",
+        "cancelRequested": "تم إرسال طلب إلغاء الفحص.",
+        "cancelError": "فشل إلغاء الفحص.",
+        "canceling": "جار الإلغاء...",
+        "cancelNotAllowed": "يمكن إلغاء الفحوصات قيد الانتظار أو قيد التنفيذ فقط.",
+        "cancelModal": {
+          "title": "إلغاء هذا الفحص؟",
+          "description": "سيتم إيقاف الفحص الجاري أو المعلق في أقرب وقت ممكن.",
+          "confirm": "نعم، ألغِ الفحص",
+          "cancel": "متابعة الفحص",
+          "close": "إغلاق النافذة"
+        },
+        "notFound": "الفحص غير موجود.",
+        "statusLabel": "الحالة",
+        "status": {
+          "pending": "قيد الانتظار",
+          "running": "قيد التنفيذ",
+          "completed": "مكتمل",
+          "failed": "فشل",
+          "canceled": "ملغي",
+          "unknown": "غير معروف"
+        },
+        "requestedAt": "تم الطلب {date}",
+        "requestedAtLabel": "تم الطلب",
+        "durationLabel": "المدة",
+        "durationValue": "{seconds}ث",
+        "running": "قيد التنفيذ...",
+        "timestampsTitle": "الطوابع الزمنية",
+        "scanIdLabel": "معرّف الفحص",
+        "targetIdLabel": "معرّف الهدف",
+        "toolsCountLabel": "عدد الأدوات",
+        "startedAtLabel": "بدأ في",
+        "finishedAtLabel": "انتهى في",
+        "loadingTools": "جار تحميل الأدوات...",
+        "failureDetailsTitle": "تفاصيل الفشل",
+        "terminationDetailsTitle": "تفاصيل الإيقاف",
+        "failureDetailsEmpty": "لا توجد تفاصيل إضافية متاحة.",
+        "vulnerabilitiesCountLabel": "الثغرات",
+        "riskScoreLabel": "مؤشر الخطورة",
+        "toolsEmpty": "لا توجد أدوات لهذا الفحص.",
+        "toolPending": "قيد الانتظار",
+        "vulnerabilityFallback": "ثغرة غير مسماة",
+        "noVulnerabilities": "لا توجد ثغرات.",
+        "scanInProgress": "الفحص قيد التنفيذ...",
+        "reportUnavailable": "التقرير غير متاح لهذا الفحص.",
+        "reportPending": "سيظهر التقرير عند اكتمال الفحص.",
+        "openReportPage": "فتح صفحة التقرير المستقلة",
+        "reportGeneratedAt": "تم توليد التقرير في {date}"
+      },
+      "reportPage": {
+        "eyebrow": "عرض تقرير مستقل",
+        "title": "تقرير الفحص #{id}",
+        "subtitle": "راجع ملخص النتائج المولّد في صفحة مخصصة وواضحة.",
+        "backToScan": "العودة إلى تفاصيل الفحص",
+        "reportMeta": "تم التوليد {date}",
+        "nav": {
+          "summary": "الملخص",
+          "charts": "الرسوم",
+          "vulnerabilities": "الثغرات"
+        },
+        "export": {
+          "button": "تصدير التقرير",
+          "exporting": "جار تصدير التقرير...",
+          "success": "تم تصدير التقرير بنجاح.",
+          "error": "فشل تصدير التقرير."
+        },
+        "cards": {
+          "totalVulnerabilities": "إجمالي الثغرات",
+          "riskScore": "مؤشر الخطورة العام",
+          "generatedAt": "وقت التوليد",
+          "scanStatus": "حالة الفحص"
+        },
+        "severityTitle": "توزيع الشدّة",
+        "severitySubtitle": "أعداد الثغرات حسب جميع مستويات الشدة في هذا التقرير.",
+        "summaryTitle": "ملخص التقرير",
+        "highlightsTitle": "أهم المؤشرات",
+        "highlights": {
+          "criticalHigh": "حرجة + عالية",
+          "mediumLow": "متوسطة + منخفضة",
+          "informational": "معلوماتية",
+          "toolsUsed": "الأدوات المستخدمة"
+        },
+        "charts": {
+          "severityTitle": "مخطط الشدّة",
+          "severitySubtitle": "تمثيل بصري لتوزيع النتائج حسب مستويات الشدة.",
+          "totalIssues": "{count} إجمالي النتائج",
+          "centerLabel": "النتائج",
+          "riskTitle": "ملخص الخطورة",
+          "riskSubtitle": "المؤشر العام ومستوى التعرض مع عرض متجاوب على مختلف الشاشات.",
+          "riskScore": "مؤشر الخطورة",
+          "criticalExposure": "النتائج الحرجة",
+          "highExposure": "النتائج العالية",
+          "riskBands": {
+            "critical": "خطورة حرجة",
+            "high": "خطورة عالية",
+            "medium": "خطورة متوسطة",
+            "low": "خطورة منخفضة"
+          }
+        },
+        "vulnerabilities": {
+          "title": "الثغرات",
+          "subtitle": "ابحث وصفِّ وفرِّز وافتح تفاصيل كل نتيجة بسهولة.",
+          "search": "بحث",
+          "searchPlaceholder": "ابحث بالاسم أو الوصف أو الأداة أو المورد",
+          "filter": "تصفية الشدة",
+          "allSeverities": "كل درجات الشدة",
+          "sort": "الفرز",
+          "sortOptions": {
+            "severityDesc": "الشدة: الأعلى أولاً",
+            "severityAsc": "الشدة: الأقل أولاً",
+            "nameAsc": "الاسم: من أ إلى ي",
+            "nameDesc": "الاسم: من ي إلى أ",
+            "toolAsc": "الأداة: من أ إلى ي"
+          },
+          "columns": {
+            "name": "الاسم",
+            "severity": "الشدة",
+            "tool": "الأداة",
+            "resource": "المورد المتأثر",
+            "actions": "الإجراءات"
+          },
+          "viewDetails": "عرض التفاصيل",
+          "loading": "جار تحميل الثغرات...",
+          "empty": "لا توجد ثغرات مطابقة للفلاتر الحالية.",
+          "drawerSubtitle": "معلومات تفصيلية عن الثغرة",
+          "closeDrawer": "إغلاق نافذة التفاصيل",
+          "sections": {
+            "description": "الوصف",
+            "resource": "المورد المتأثر",
+            "identifier": "معرّف الثغرة",
+            "recommendation": "التوصية",
+            "evidence": "الدليل"
+          }
+        }
+      }
+    }
+  },
+  "scanForm": {
+    "title": "فحص أمني جديد",
+    "subtitle": "قم بتكوين وإطلاق فحص أمني في دقائق.",
+    "sections": {
+      "aiAssistant": {
+        "title": "مساعد AI لإعدادات الفحص",
+        "desc": "اطلب من AI اقتراح إعدادات الفحص بناءً على خطتك ونوع الهدف والوقت المتاح.",
+        "recommendedToolsTitle": "الأدوات الموصى بها",
+        "rawResponse": "استجابة AI الخام"
+      },
+      "general": {
+        "title": "تكوين الفحص العام",
+        "desc": "حدد الهدف والنطاق الأساسي لتقييمك الأمني.",
+        "restrictionsTitle": "قيود الباقة",
+        "restrictions": {
+          "tools": "الأدوات المسموحة: {tools}",
+          "runtime": "الحد الأقصى للمهلة حسب الباقة: {max} دقيقة",
+          "auth": "الفحص بالمصادقة: {state}",
+          "bruteforce": "فحص Brute Force: {state}",
+          "allowed": "مسموح",
+          "blocked": "محظور"
+        }
+      },
+      "connection": {
+        "title": "إعدادات الاتصال بالهدف",
+        "desc": "قم بتكوين الرؤوس، ووكلاء المستخدم، ورموز المصادقة."
+      },
+      "toolConfig": {
+        "title": "تكوين الأداة: {tool}",
+        "desc": "اضبط الإعدادات الخاصة بمحرك {tool}."
+      },
+      "advanced": {
+        "title": "إعدادات متقدمة",
+        "desc": "أعلام المحرك الخام — استخدمها بحذر",
+        "dangerZone": "منطقة الخطر: يتم تمرير الخيارات المتقدمة مباشرة إلى الأداة. قد تتسبب الأعلام غير الصحيحة في تعطل الفحص أو إنتاج نتائج غير صالحة."
+      },
+      "captcha": {
+        "title": "الهدف يستخدم حماية الكابتشا",
+        "desc": "قم بتمكين هذا إذا كان الموقع المستهدف يمنع الحركة المؤتمتة بالتحديات.",
+        "warning": {
+          "title": "حل الكابتشا غير مدعوم",
+          "desc": "الماسح لا يدعم حالياً حل الكابتشا المؤتمت.",
+          "workaround": "الحل الموصى به:",
+          "steps": [
+            "قم بحل الكابتشا يدوياً في متصفحك.",
+            "استخرج ملفات تعريف ارتباط الجلسة.",
+            "أضفها في منطقة ملفات تعريف ارتباط الجلسة أعلاه."
+          ]
+        }
+      }
+    },
+    "fields": {
+      "ai": {
+        "planId": {
+          "label": "معرّف الخطة",
+          "placeholder": "مثال: 8f3b2db0-3f9f-42c3-a3a0-8db92b2ebca3"
+        },
+        "userPrompt": {
+          "label": "تعليماتك",
+          "placeholder": "اشرح ماذا تريد فحصه وما الذي يهمك أكثر (العمق، السرعة، المصادقة...)."
+        },
+        "targetUrl": {
+          "label": "رابط الهدف",
+          "placeholder": "https://example.com"
+        },
+        "targetType": {
+          "label": "نوع الهدف",
+          "options": {
+            "web": "تطبيق ويب",
+            "api": "واجهة برمجية",
+            "network": "شبكة"
+          }
+        },
+        "timeBudget": {
+          "label": "الوقت المتاح (بالدقائق)",
+          "placeholder": "مثال: 60"
+        }
+      },
+      "name": { "label": "اسم الفحص", "placeholder": "مثال: تدقيق موقعي الإلكتروني", "hint": "معرف فريد لمهمة الفحص هذه." },
+      "tool": {
+        "label": "أداة الفحص",
+        "notAllowedSuffix": "غير مسموح",
+        "allowedHint": "الأدوات المسموحة في باقتك الحالية: {tools}"
+      },
+      "target": {
+        "label": "الهدف",
+        "placeholder": "اختر هدفًا",
+        "loading": "جار تحميل الأهداف...",
+        "hint": "اختر هدفًا موجودًا واحدًا لهذا الفحص."
+      },
+      "scopeSigned": {
+        "label": "اعتماد النطاق",
+        "hint": "أؤكد أن هذا الهدف ضمن نطاق مصرح به."
+      },
+      "timeoutMinutes": {
+        "label": "المهلة (بالدقائق)",
+        "placeholder": "اختياري، مثال: 60",
+        "hint": "اتركه فارغًا لاستخدام المهلة الافتراضية للباقة.",
+        "planHint": "الحد الأقصى المسموح في باقتك: {max} دقيقة"
+      },
+      "targets": { "label": "روابط الأهداف", "placeholder": "https://example.com\nhttps://api.example.com/v1", "hint": "أدخل رابطاً واحداً في كل سطر. سيتم معالجة كل هدف بشكل منفصل." },
+      "notes": { "label": "ملاحظات داخلية", "placeholder": "مراجع داخلية أو سياق لهذا الفحص..." },
+      "userAgent": { "label": "وكيل المستخدم", "placeholder": "Mozilla/5.0...", "hint": "معرف المتصفح المخصص للماسح." },
+      "authToken": {
+        "label": "رمز المصادقة",
+        "placeholder": "eyJh...",
+        "hint": "يستخدم كـ Authorization: Bearer '<token>'",
+        "blockedTitle": "الفحص بالمصادقة محظور في باقتك",
+        "blockedHint": "تم تعطيل الرمز وملفات تعريف الارتباط لهذا الفحص حسب قيود باقتك الحالية."
+      },
+      "headers": { "title": "الرؤوس المخصصة", "placeholderKey": "X-API-Key", "placeholderValue": "secret-123", "tooltip": "رؤوس HTTP إضافية ترسل مع كل طلب." },
+      "cookies": { "title": "ملفات تعريف ارتباط الجلسة", "placeholderKey": "sessionid", "placeholderValue": "abc123xyz", "tooltip": "استخدم ملفات تعريف ارتباط الجلسة لفحص المناطق المحمية في التطبيق." },
+      "zap": {
+        "scanType": { "label": "نوع الفحص", "baseline": "أساسي (فحص سلبي)", "full": "كامل (فحص نشط)", "api": "واجهة برمجية (OpenAPI/GraphQL)", "apiHint": "مصمم لفحص نقاط نهاية الواجهة البرمجية." },
+        "ajax": { "label": "تمكين AJAX Spider", "hint": "استخدمه لتطبيقات الصفحة الواحدة (React/Vue/إلخ)" }
+      },
+      "ffuf": {
+        "wordlist": { "label": "قائمة الكلمات", "common": "common.txt (قياسي)", "big": "big.txt (فحص عميق)" },
+        "recursion": { "label": "تمكين التكرار", "hint": "فحص المجلدات بشكل متكرر" },
+        "mc": { "label": "رموز المطابقة (mc)", "placeholder": "200,301,403" },
+        "fc": { "label": "رموز التصفية (fc)", "placeholder": "404,500" },
+        "proTip": "نصيحة: تأكد من تضمين كلمة FUZZ في الرابط، مثال: https://example.com/FUZZ"
+      },
+      "extraArgs": { "label": "وسيطات إضافية", "placeholder": "مثال: -v --debug-log" }
+    },
+    "actions": {
+      "ai": {
+        "generate": "الحصول على توصية AI",
+        "generating": "جار توليد التوصية...",
+        "apply": "تطبيقها على نموذج الفحص"
+      }
+    },
+    "summary": {
+      "title": "معاينة الفحص",
+      "scanName": "اسم الفحص",
+      "untitled": "فحص بدون عنوان",
+      "targetsCount": "تم اكتشاف {count} هدف",
+      "auth": "المصادقة",
+      "noAuth": "لم يتم ضبط مصادقة",
+      "zapConfig": "إعدادات ZAP",
+      "ffufConfig": "إعدادات ffuf",
+      "credits": "{count, plural, one {غير محدود} other {# رصيد}}",
+      "startScan": "ابدأ الفحص الأمني",
+      "starting": "جاري بدء الفحص...",
+      "previewJson": "معاينة بيانات JSON",
+      "upgrade": "ترقية الخطة",
+      "creditsError": "مطلوب اتخاذ إجراء",
+      "creditsDesc": "ليس لديك رصيد متبقي.",
+      "captchaWarning": "تم اكتشاف كابتشا. قد تفشل الفحوصات المؤتمتة ما لم تستخدم ملفات تعريف ارتباط الجلسة."
+    },
+    "messages": {
+      "success": "تم بدء الفحص بنجاح!",
+      "error": "فشل الإرسال",
+      "invalidUrl": "الرابط غير صالح.",
+      "toolNotAllowed": "الأداة المحددة غير مسموح بها في باقتك الحالية.",
+      "authNotAllowed": "إعدادات المصادقة محظورة في باقتك الحالية.",
+      "timeoutExceedsPlan": "المهلة لا يمكن أن تتجاوز {max} دقيقة في باقتك الحالية.",
+      "ai": {
+        "missingFields": "معرّف الخطة وتعليماتك ورابط الهدف والوقت المتاح حقول مطلوبة.",
+        "success": "تم توليد توصية AI بنجاح.",
+        "error": "فشل توليد توصية AI.",
+        "notEnabled": "مساعد AI غير مفعل حاليًا على الخادم.",
+        "gatewayError": "خدمة AI غير متاحة مؤقتًا (خطأ بوابة). حاول مرة أخرى بعد لحظات.",
+        "noResponse": "لا توجد استجابة AI لتطبيقها.",
+        "applied": "تم تطبيق توصية AI على نموذج الفحص."
+      }
+    }
+  },
+  "plansPage": {
+    "hero": {
+      "badge": "خطط مرنة",
+      "title": "اختر خطة تناسب احتياجات الأمان لديك",
+      "subtitle": "تسعير واضح وحدود محددة بدون مفاجآت. ابدأ صغيراً ثم توسع مع نمو فريقك.",
+      "note": "الأسعار بالدولار الأمريكي"
+    },
+    "current": {
+      "title": "باقتك الحالية",
+      "subtitle": "اعرض خطتك الحالية وخيارات الترقية.",
+      "loading": "جار تحميل الباقة...",
+      "signedOutTitle": "سجّل الدخول لرؤية باقتك",
+      "signedOutDesc": "سنُظهر خطتك النشطة والرصيد وتفاصيل التجديد بعد تسجيل الدخول.",
+      "loginCta": "تسجيل الدخول",
+      "registerCta": "إنشاء حساب",
+      "signedInTitle": "مرحباً، {name}",
+      "signedInDesc": "ستظهر تفاصيل الباقة هنا بعد تفعيل نظام الدفع.",
+      "userFallback": "بك",
+      "noPlanLabel": "لا توجد باقة فعالة",
+      "unknownPlan": "باقة",
+      "expiresAt": "تنتهي في {date}",
+      "usageLabel": "الاستخدام",
+      "usageValue": "{used} من {total} مستخدم",
+      "remaining": "المتبقي: {count}",
+      "extraAvailable": "رصيد إضافي: {count}",
+      "extraCreditsTitle": "الأرصدة الإضافية",
+      "extraExpired": "منتهي غير مستخدم: {count}",
+      "extraPurchaseTitle": "مشتريات إضافية",
+      "extraPurchaseNote": "عدد مشتريات الرصيد الإضافي",
+      "extraEligibilityTitle": "أهلية شراء رصيد إضافي",
+      "extraEligible": "مسموح",
+      "extraNotEligible": "غير مسموح",
+      "managePlanCta": "إدارة الفوترة",
+      "primaryCta": "ابدأ الفحص"
+    },
+    "plansSection": {
+      "title": "خطط لكل مرحلة",
+      "subtitle": "قارن المزايا واختر مستوى قوة الفحص المناسب لك.",
+      "loading": "جار تحميل الخطط...",
+      "error": "فشل تحميل الخطط.",
+      "popular": "الأكثر شيوعاً",
+      "planFallback": "باقة",
+      "description": "تشمل {credits} رصيد فحص.",
+      "period": "صالحة لمدة {months} أشهر",
+      "credits": "{count} رصيد متضمن",
+      "runtime": "المدة القصوى: {minutes} دقيقة",
+      "toolsLabel": "الأدوات المتاحة",
+      "toolsAll": "كل الأدوات",
+      "restrictionsLabel": "القيود",
+      "extraCreditLabel": "سياسة الرصيد الإضافي",
+      "allowAuth": "فحص بالمصادقة",
+      "blockAuth": "بدون فحص بالمصادقة",
+      "allowBrute": "مسموح brute force",
+      "blockBrute": "ممنوع brute force"
+    },
+    "compare": {
+      "title": "مقارنة تفصيلية",
+      "subtitle": "اعرض الأسعار والأرصدة والأدوات والقيود جنباً إلى جنب قبل الشراء.",
+      "featureColumn": "الميزة",
+      "notAvailable": "غير متاح",
+      "runtimeValue": "{minutes} دقيقة",
+      "extraCreditRule": "{price}، بعد استخدام {usage}%، حتى {max} مرات",
+      "rows": {
+        "price": "السعر",
+        "credits": "الأرصدة المتضمنة",
+        "runtime": "المدة القصوى",
+        "tools": "الأدوات المتاحة",
+        "authScanning": "الفحص بالمصادقة",
+        "bruteforce": "أدوات brute force",
+        "extraCredit": "الرصيد الإضافي"
+      }
+    },
+    "plans": {
+      "free": "مجاني"
+    },
+    "actions": {
+      "choosePlan": "اختيار الخطة",
+      "buyExtra": "شراء رصيد إضافي",
+      "extraSuccess": "تم بدء شراء الرصيد الإضافي بنجاح.",
+      "extraError": "فشل بدء شراء الرصيد الإضافي.",
+      "processing": "جار المعالجة...",
+      "checkoutMissing": "رابط الدفع غير متاح.",
+      "checkoutError": "فشل بدء الدفع.",
+      "checkoutSuccess": "تم الدفع بنجاح.",
+      "checkoutFailed": "تم إلغاء الدفع أو فشل."
+    },
+    "status": {
+      "success": {
+        "title": "اكتمل الدفع",
+        "description": "عاد المستخدم من صفحة الدفع بنجاح، وسيتم تحديث الخطة والأرصدة تلقائياً.",
+        "toast": "تم الدفع بنجاح."
+      },
+      "failed": {
+        "title": "فشل الدفع",
+        "description": "لم تكتمل عملية الشراء. راجع تفاصيل الدفع ثم حاول مرة أخرى.",
+        "toast": "فشل الدفع. حاول مرة أخرى."
+      },
+      "cancel": {
+        "title": "تم إلغاء الدفع",
+        "description": "تم إلغاء عملية الدفع قبل اكتمالها.",
+        "toast": "تم إلغاء الدفع."
+      }
+    },
+    "faq": {
+      "title": "الأسئلة الشائعة",
+      "subtitle": "إجابات عن الأسئلة الأكثر شيوعاً حول الفوترة والخطط.",
+      "items": [
+        {
+          "q": "هل يمكنني تغيير الخطة لاحقاً؟",
+          "a": "نعم، يمكنك الترقية أو التخفيض في أي وقت وتطبق التغييرات فوراً."
+        },
+        {
+          "q": "ماذا يحدث عند نفاد الرصيد؟",
+          "a": "تتوقف الفحوصات تلقائياً حتى تشتري رصيداً إضافياً أو ترقية." 
+        },
+        {
+          "q": "هل يوجد فواتير سنوية؟",
+          "a": "خطط Enterprise تُفوتر سنوياً مع خيارات فوترة مرنة."
+        },
+        {
+          "q": "هل يوجد تجربة للخطط المدفوعة؟",
+          "a": "نعم، يمكن تفعيل تجربة Pro لفترة محدودة عند الطلب."
+        }
+      ]
+    }
+  },
+  "billingPage": {
+    "hero": {
+      "badge": "مساحة الفوترة",
+      "eyebrow": "الخطة النشطة الحالية",
+      "title": "تابع الأرصدة والانتهاء وأهلية شراء الرصيد الإضافي",
+      "subtitle": "راجع حالة الخطة المباشرة، وافهم القيود، وابدأ شراء رصيد إضافي عندما تسمح القواعد بذلك."
+    },
+    "labels": {
+      "notAvailable": "غير متاح",
+      "free": "مجاني"
+    },
+    "summary": {
+      "currentPlan": "الخطة الحالية",
+      "planId": "معرّف الخطة #{id}",
+      "remainingCredits": "الأرصدة المتبقية",
+      "usedOfTotal": "تم استخدام {used} من {total}",
+      "expiresAt": "تنتهي في",
+      "purchasedAt": "تم الشراء {date}",
+      "extraCredits": "الأرصدة الإضافية",
+      "expiredUnused": "المنتهي غير المستخدم: {count}"
+    },
+    "usage": {
+      "title": "تقدم الاستخدام",
+      "subtitle": "الاستهلاك الحالي خلال فترة الخطة النشطة.",
+      "progressLabel": "الأرصدة المستهلكة",
+      "remaining": "المتبقي",
+      "extraPurchases": "المشتريات الإضافية",
+      "extraAvailable": "الإضافي المتاح"
+    },
+    "extra": {
+      "title": "شراء رصيد إضافي",
+      "subtitle": "الأهلية وقواعد العمل الخاصة بشراء رصيد فحص إضافي.",
+      "eligibility": "الأهلية",
+      "allowed": "الشراء مسموح",
+      "blocked": "الشراء غير مسموح",
+      "price": "السعر",
+      "expiresIn": "انتهاء الرصيد",
+      "minUsage": "الحد الأدنى للاستخدام قبل الشراء",
+      "maxPurchases": "أقصى عدد مشتريات لكل خطة",
+      "months": "{count} أشهر",
+      "percent": "{value}%",
+      "currency": "العملة"
+    },
+    "access": {
+      "title": "الأدوات المتاحة",
+      "subtitle": "الأدوات المتاحة حالياً عبر هذه الخطة.",
+      "allTools": "كل الأدوات"
+    },
+    "restrictions": {
+      "title": "القيود",
+      "subtitle": "القيود التجارية المطبقة على الخطة النشطة.",
+      "authAllowed": "الفحص بالمصادقة مسموح",
+      "authBlocked": "الفحص بالمصادقة غير مسموح",
+      "bruteforceAllowed": "أدوات brute force مسموحة",
+      "bruteforceBlocked": "أدوات brute force غير مسموحة"
+    },
+    "states": {
+      "error": {
+        "title": "تعذر تحميل حالة الفوترة",
+        "description": "تعذر جلب الخطة النشطة الحالية."
+      },
+      "empty": {
+        "badge": "لا توجد خطة نشطة",
+        "title": "لا توجد خطة نشطة مرتبطة بهذا الحساب",
+        "description": "اختر خطة أولاً لتفعيل الفحوصات والأرصدة وشراء الرصيد الإضافي."
+      }
+    },
+    "status": {
+      "success": {
+        "title": "اكتمل الدفع",
+        "description": "عادت عملية الدفع بنجاح ويجري تحديث حالة الخطة الآن.",
+        "toast": "تم الدفع بنجاح."
+      },
+      "failed": {
+        "title": "فشل الدفع",
+        "description": "لم تكتمل عملية الشراء. راجع التفاصيل ثم حاول مرة أخرى.",
+        "toast": "فشل الدفع. حاول مرة أخرى."
+      },
+      "cancel": {
+        "title": "تم إلغاء الدفع",
+        "description": "تم إلغاء صفحة الدفع قبل الإنهاء.",
+        "toast": "تم إلغاء الدفع."
+      }
+    },
+    "actions": {
+      "retry": "إعادة المحاولة",
+      "comparePlans": "مقارنة الخطط",
+      "startScan": "ابدأ الفحص",
+      "choosePlan": "اختر خطة",
+      "buyExtraCredit": "شراء رصيد إضافي",
+      "processing": "جار المعالجة...",
+      "checkoutMissing": "رابط الدفع غير متاح.",
+      "extraPurchaseSuccess": "تم بدء شراء الرصيد الإضافي بنجاح.",
+      "extraPurchaseError": "فشل بدء شراء الرصيد الإضافي."
+    }
+  },
+  "profile": {
+    "title": "الملف الشخصي",
+    "subtitle": "إدارة تفاصيل حسابك.",
+    "card": {
+      "title": "معلومات الملف الشخصي",
+      "subtitle": "حدّث الاسم الذي يظهر في التقارير والفحوصات."
+    },
+    "details": {
+      "title": "تفاصيل الحساب",
+      "subtitle": "حالة الحساب ومعلومات الوصول."
+    },
+    "plan": {
+      "title": "الخطة والأرصدة",
+      "subtitle": "خطة الاشتراك والأرصدة المتبقية.",
+      "error": "تعذر تحميل الخطة.",
+      "errorDesc": "يرجى المحاولة مرة أخرى.",
+      "empty": "لا توجد خطة نشطة",
+      "emptyDesc": "اختر خطة لتبدأ الفحوصات.",
+      "labels": {
+        "name": "اسم الخطة",
+        "expiresAt": "تاريخ الانتهاء",
+        "purchasedAt": "تاريخ الشراء",
+        "creditsUsage": "الأرصدة المستخدمة",
+        "remaining": "المتبقي",
+        "extraCredits": "أرصدة إضافية",
+        "extraPurchases": "عمليات شراء إضافية",
+        "canBuyExtra": "شراء أرصدة إضافية",
+        "allowed": "مسموح",
+        "blocked": "غير مسموح"
+      }
+    },
+    "fields": {
+      "name": "الاسم الكامل",
+      "email": "البريد الإلكتروني"
+    },
+    "placeholders": {
+      "name": "أدخل اسمك الكامل"
+    },
+    "actions": {
+      "save": "حفظ التغييرات",
+      "saving": "جار الحفظ...",
+      "retry": "إعادة المحاولة"
+    },
+    "labels": {
+      "status": "الحالة",
+      "active": "نشط",
+      "inactive": "غير نشط",
+      "createdAt": "تاريخ الإنشاء",
+      "lastLogin": "آخر تسجيل دخول",
+      "roles": "الأدوار",
+      "rolesEmpty": "لا توجد أدوار",
+      "notAvailable": "غير متوفر"
+    },
+    "messages": {
+      "saved": "تم تحديث الملف الشخصي بنجاح.",
+      "savedTitle": "تم الحفظ",
+      "saveError": "فشل تحديث الملف الشخصي.",
+      "saveErrorTitle": "فشل التحديث",
+      "nameRequired": "الاسم مطلوب.",
+      "loadError": "تعذر تحميل الملف الشخصي.",
+      "loadErrorDesc": "يرجى المحاولة مرة أخرى.",
+      "empty": "لا توجد بيانات للملف الشخصي.",
+      "emptyDesc": "حاول تحديث الصفحة."
+    }
+  },
+  "admin": {
+    "guard": {
+      "accessDenied": "ليست لديك صلاحية للوصول إلى قسم الإدارة."
+    },
+    "nav": {
+      "title": "الإدارة",
+      "overview": "نظرة عامة",
+      "users": "المستخدمون",
+      "scans": "الفحوصات",
+      "plans": "الخطط",
+      "auditLogs": "سجل التدقيق",
+      "queue": "الطابور",
+      "billing": "فوترة الإدارة"
+    },
+    "overview": {
+      "title": "نظرة عامة",
+      "subtitle": "مؤشرات سريعة عن نشاط المنصة.",
+      "loading": "جار التحميل...",
+      "stats": {
+        "users": "إجمالي المستخدمين",
+        "scans": "إجمالي الفحوصات",
+        "auditLogs": "أحداث التدقيق",
+        "queue": "حجم الطابور",
+        "plans": "تعريفات الخطط",
+        "userPlans": "خطط المستخدمين النشطة"
+      },
+      "actions": {
+        "title": "إجراءات سريعة",
+        "subtitle": "انتقل بسرعة إلى أقسام الإدارة المستخدمة كثيراً.",
+        "users": "إدارة المستخدمين",
+        "scans": "مراجعة الفحوصات",
+        "queue": "عرض الطابور",
+        "billing": "منح خطة",
+        "liveQueue": "الطابور الحالي: {count}"
+      }
+    },
+    "users": {
+      "title": "المستخدمون",
+      "subtitle": "إدارة المستخدمين والأدوار.",
+      "columns": {
+        "id": "المعرف",
+        "name": "الاسم",
+        "email": "البريد الإلكتروني",
+        "roles": "الأدوار",
+        "status": "الحالة",
+        "createdAt": "تاريخ الإنشاء",
+        "lastLogin": "آخر تسجيل دخول",
+        "actions": "الإجراءات"
+      },
+      "actions": {
+        "create": "إنشاء مستخدم",
+        "view": "عرض",
+        "edit": "تعديل",
+        "delete": "حذف",
+        "save": "حفظ",
+        "cancel": "إلغاء",
+        "saving": "جارٍ الحفظ...",
+        "prev": "السابق",
+        "next": "التالي"
+      },
+      "form": {
+        "fullName": "الاسم الكامل",
+        "fullNamePlaceholder": "أدخل الاسم الكامل",
+        "email": "البريد الإلكتروني",
+        "emailPlaceholder": "أدخل البريد الإلكتروني",
+        "password": "كلمة المرور",
+        "passwordPlaceholderCreate": "أدخل كلمة المرور",
+        "passwordPlaceholderEdit": "اتركها فارغة للإبقاء على كلمة المرور الحالية",
+        "isActive": "مستخدم نشط"
+      },
+      "dialogs": {
+        "createTitle": "إنشاء مستخدم",
+        "editTitle": "تعديل مستخدم",
+        "deleteTitle": "حذف مستخدم",
+        "deleteDescription": "هل أنت متأكد من حذف \"{name}\"؟"
+      },
+      "validation": {
+        "nameRequired": "الاسم مطلوب.",
+        "emailRequired": "البريد الإلكتروني مطلوب.",
+        "emailInvalid": "أدخل بريدًا إلكترونيًا صحيحًا.",
+        "passwordRequired": "كلمة المرور مطلوبة.",
+        "passwordMinLength": "يجب أن تكون كلمة المرور 8 أحرف على الأقل."
+      },
+      "messages": {
+        "createSuccess": "تم إنشاء المستخدم بنجاح.",
+        "createError": "فشل إنشاء المستخدم.",
+        "updateSuccess": "تم تحديث المستخدم بنجاح.",
+        "updateError": "فشل تحديث المستخدم.",
+        "deleteSuccess": "تم حذف المستخدم بنجاح.",
+        "deleteError": "فشل حذف المستخدم."
+      },
+      "status": {
+        "active": "نشط",
+        "inactive": "غير نشط"
+      },
+      "loading": "جار تحميل المستخدمين...",
+      "empty": "لا يوجد مستخدمون.",
+      "unknown": "غير معروف",
+      "pagination": "الصفحة {page} من {totalPages} · عرض {from}-{to} من {total}"
+    },
+    "userDetails": {
+      "title": "تفاصيل المستخدم",
+      "subtitle": "معلومات الحساب والصلاحيات.",
+      "fields": {
+        "name": "الاسم",
+        "email": "البريد الإلكتروني",
+        "status": "الحالة",
+        "createdAt": "تاريخ الإنشاء",
+        "lastLogin": "آخر تسجيل دخول",
+        "roles": "الأدوار"
+      },
+      "status": {
+        "active": "نشط",
+        "inactive": "غير نشط"
+      },
+      "loading": "جار تحميل المستخدم...",
+      "notFound": "المستخدم غير موجود.",
+      "unknown": "غير معروف"
+    },
+    "scans": {
+      "title": "الفحوصات",
+      "subtitle": "عرض إداري لجميع الفحوصات.",
+      "columns": {
+        "id": "معرف الفحص",
+        "status": "الحالة",
+        "targetId": "معرف الهدف",
+        "requestedAt": "تم الطلب",
+        "startedAt": "بدأ في",
+        "finishedAt": "انتهى في",
+        "actions": "الإجراءات"
+      },
+      "filters": {
+        "searchPlaceholder": "ابحث بمعرف الفحص أو الهدف أو المستخدم",
+        "allStatuses": "كل الحالات",
+        "status": {
+          "pending": "قيد الانتظار",
+          "running": "قيد التشغيل",
+          "completed": "مكتمل",
+          "failed": "فاشل",
+          "canceled": "ملغي"
+        }
+      },
+      "actions": {
+        "details": "التفاصيل",
+        "forceFail": "إجبار الفشل",
+        "export": "تصدير PDF",
+        "exporting": "جارٍ التصدير...",
+        "exportSuccess": "تم تصدير PDF للفحص بنجاح.",
+        "exportError": "فشل تصدير PDF للفحص.",
+        "forceFailConfirm": "هل تريد إجبار فشل هذا الفحص؟",
+        "forceFailSuccess": "تم وضع الفحص كفاشل.",
+        "forceFailError": "فشل إجبار الفشل.",
+        "cancelAll": "إلغاء الجميع",
+        "cancelAllConfirm": "إلغاء جميع الفحوصات الجارية والمعلقة؟",
+        "cancelAllStrongWarning": "هذا الإجراء قد يعطل الفحوصات النشطة لجميع المستخدمين. استخدمه فقط عند الحاجة الطارئة.",
+        "cancelAllConfirmToken": "CANCEL ALL",
+        "cancelAllTypePrompt": "اكتب {token} لتأكيد هذا الإجراء.",
+        "cancelAllTypePlaceholder": "اكتب نص التأكيد",
+        "cancelAllSuccess": "تم إرسال طلب الإلغاء.",
+        "cancelAllError": "فشل إلغاء جميع الفحوصات.",
+        "prev": "السابق",
+        "next": "التالي"
+      },
+      "loading": "جار تحميل الفحوصات...",
+      "empty": "لا توجد فحوصات.",
+      "emptyFiltered": "لا توجد فحوصات مطابقة للفلاتر.",
+      "pagination": "صفحة {page} · الإجمالي {total}",
+      "details": {
+        "title": "تفاصيل الفحص",
+        "subtitle": "مراجعة وإدارة فحص محدد.",
+        "notFound": "الفحص غير موجود.",
+        "backToList": "العودة إلى قائمة الفحوصات",
+        "currentStatus": "الحالة الحالية",
+        "currentFailureReason": "سبب الفشل الحالي",
+        "updateSectionTitle": "تحديث حالة الفحص",
+        "statusLabel": "الحالة",
+        "selectStatus": "اختر الحالة",
+        "failureReasonLabel": "سبب الفشل",
+        "failureReasonPlaceholder": "أدخل سبب الفشل عند الحاجة",
+        "updateButton": "تحديث الفحص",
+        "updating": "جارٍ التحديث...",
+        "updateSuccess": "تم تحديث الفحص بنجاح.",
+        "updateError": "فشل تحديث الفحص.",
+        "refreshStatus": "تحديث الحالة",
+        "export": "تصدير PDF",
+        "exporting": "جارٍ التصدير...",
+        "exportSuccess": "تم تصدير PDF للفحص بنجاح.",
+        "exportError": "فشل تصدير PDF للفحص.",
+        "dangerZone": "منطقة خطرة",
+        "forceFailDescription": "أجبر هذا الفحص على الفشل فورًا عند الحاجة للتدخل.",
+        "forceFailReasonLabel": "سبب إجبار الفشل (اختياري)",
+        "forceFailReasonPlaceholder": "أضف سببًا لإجبار الفشل",
+        "forceFailButton": "إجبار الفشل",
+        "forceFailing": "جارٍ إجبار الفشل...",
+        "forceFailSuccess": "تم إجبار الفحص على الفشل بنجاح.",
+        "forceFailError": "فشل إجبار الفشل.",
+        "forceFailConfirmTitle": "إجبار فشل الفحص",
+        "forceFailConfirmDescription": "هل أنت متأكد من إجبار هذا الفحص على الفشل؟",
+        "deleteDescription": "احذف هذا الفحص نهائيًا. لا يمكن التراجع عن هذا الإجراء.",
+        "deleteButton": "حذف الفحص",
+        "deleting": "جارٍ الحذف...",
+        "deleteSuccess": "تم حذف الفحص بنجاح.",
+        "deleteError": "فشل حذف الفحص.",
+        "deleteConfirmTitle": "حذف الفحص",
+        "deleteConfirmDescription": "هل أنت متأكد من حذف هذا الفحص؟",
+        "validation": {
+          "statusRequired": "الحالة مطلوبة.",
+          "failureReasonRequired": "سبب الفشل مطلوب عندما تكون الحالة فاشل."
+        }
+      }
+    },
+    "plans": {
+      "title": "الخطط",
+      "subtitle": "إدارة تعريفات الخطط وخطط المستخدمين.",
+      "definitions": {
+        "columns": {
+          "name": "الخطة",
+          "updatedAt": "آخر تحديث",
+          "actions": "الإجراءات"
+        },
+        "actions": {
+          "create": "إنشاء خطة",
+          "view": "عرض",
+          "edit": "تعديل",
+          "delete": "حذف",
+          "prev": "السابق",
+          "next": "التالي"
+        },
+        "details": {
+          "title": "تفاصيل تعريف الخطة"
+        },
+        "editor": {
+          "createTitle": "إنشاء تعريف خطة",
+          "editTitle": "تعديل تعريف خطة",
+          "description": "استخدم محرر JSON لإنشاء أو تعديل تعريف الخطة بالكامل.",
+          "planName": "اسم الخطة",
+          "planNamePlaceholder": "مثال: pro أو enterprise",
+          "jsonLabel": "JSON الخطة",
+          "jsonPlaceholder": "ألصق تعريف خطة بصيغة JSON صحيحة",
+          "createAction": "إنشاء",
+          "saveAction": "حفظ",
+          "saving": "جارٍ الحفظ..."
+        },
+        "delete": {
+          "title": "حذف تعريف الخطة",
+          "description": "هل أنت متأكد من حذف \"{name}\"؟",
+          "warning": "لا يمكن التراجع عن هذا الإجراء وقد يؤثر على الفوترة وربط خطط المستخدمين."
+        },
+        "validation": {
+          "planNameRequired": "اسم الخطة مطلوب.",
+          "invalidJson": "JSON الخطة يجب أن يكون كائنًا صحيحًا.",
+          "planNameMismatch": "اسم الخطة في المسار يجب أن يطابق `plan_name` داخل JSON."
+        },
+        "messages": {
+          "createSuccess": "تم إنشاء تعريف الخطة بنجاح.",
+          "createError": "فشل إنشاء تعريف الخطة.",
+          "updateSuccess": "تم تحديث تعريف الخطة بنجاح.",
+          "updateError": "فشل تحديث تعريف الخطة.",
+          "deleteSuccess": "تم حذف تعريف الخطة بنجاح.",
+          "deleteError": "فشل حذف تعريف الخطة."
+        },
+        "loading": "جار تحميل تعريفات الخطط...",
+        "empty": "لا توجد تعريفات خطط.",
+        "unknown": "غير معروف",
+        "pagination": "الصفحة {page} من {totalPages} · الإجمالي {total}"
+      },
+      "userPlans": {
+        "title": "خطط المستخدمين",
+        "subtitle": "الخطط النشطة حسب المستخدم.",
+        "columns": {
+          "user": "المستخدم",
+          "plan": "الخطة",
+          "status": "الحالة",
+          "expiresAt": "تاريخ الانتهاء",
+          "credits": "الأرصدة",
+          "actions": "الإجراءات"
+        },
+        "status": {
+          "active": "نشطة",
+          "expired": "منتهية",
+          "canceled": "ملغاة"
+        },
+        "actions": {
+          "view": "عرض",
+          "edit": "تعديل",
+          "delete": "حذف",
+          "save": "حفظ",
+          "prev": "السابق",
+          "next": "التالي"
+        },
+        "details": {
+          "title": "تفاصيل خطة المستخدم",
+          "loading": "جارٍ تحميل خطة المستخدم...",
+          "loadError": "فشل تحميل تفاصيل خطة المستخدم.",
+          "notFound": "خطة المستخدم غير موجودة.",
+          "fields": {
+            "id": "معرف خطة المستخدم",
+            "userId": "معرف المستخدم",
+            "user": "المستخدم",
+            "plan": "الخطة",
+            "status": "الحالة",
+            "purchasedAt": "تاريخ الشراء",
+            "expiresAt": "تاريخ الانتهاء",
+            "credits": "الأرصدة",
+            "extraPurchaseCount": "عدد الشراء الإضافي"
+          }
+        },
+        "editor": {
+          "title": "تعديل خطة المستخدم",
+          "description": "حدّث حالة الخطة والأرصدة وتاريخ الانتهاء.",
+          "status": "الحالة",
+          "statusPlaceholder": "اختر الحالة",
+          "expiresAt": "تاريخ الانتهاء",
+          "includedCredits": "الأرصدة المضمنة",
+          "includedCreditsUsed": "الأرصدة المستخدمة",
+          "extraPurchaseCount": "عدد الشراء الإضافي",
+          "saving": "جارٍ الحفظ..."
+        },
+        "delete": {
+          "title": "حذف خطة المستخدم",
+          "description": "هل أنت متأكد من حذف خطة المستخدم \"{name}\"؟",
+          "warning": "سيتم حذف سجل الخطة النشطة للمستخدم ولا يمكن التراجع عن هذا الإجراء."
+        },
+        "validation": {
+          "statusRequired": "الحالة مطلوبة.",
+          "invalidExpiry": "تاريخ الانتهاء غير صالح.",
+          "invalidIncludedCredits": "الأرصدة المضمنة يجب أن تكون رقمًا صحيحًا غير سالب.",
+          "invalidIncludedCreditsUsed": "الأرصدة المستخدمة يجب أن تكون رقمًا صحيحًا غير سالب.",
+          "invalidExtraPurchaseCount": "عدد الشراء الإضافي يجب أن يكون رقمًا صحيحًا غير سالب.",
+          "usedMoreThanIncluded": "لا يمكن أن تكون الأرصدة المستخدمة أكبر من الأرصدة المضمنة."
+        },
+        "messages": {
+          "updateSuccess": "تم تحديث خطة المستخدم بنجاح.",
+          "updateError": "فشل تحديث خطة المستخدم.",
+          "deleteSuccess": "تم حذف خطة المستخدم بنجاح.",
+          "deleteError": "فشل حذف خطة المستخدم."
+        },
+        "loading": "جار تحميل خطط المستخدمين...",
+        "empty": "لا توجد خطط للمستخدمين.",
+        "pagination": "صفحة {page} · الإجمالي {total}"
+      }
+    },
+    "auditLogs": {
+      "title": "سجل التدقيق",
+      "subtitle": "مراجعة الأحداث الأمنية والنظامية.",
+      "filters": {
+        "searchLabel": "بحث",
+        "searchPlaceholder": "ابحث بالكيان أو الإجراء أو المستخدم أو IP أو الوقت",
+        "actionLabel": "الإجراء",
+        "allActions": "كل الإجراءات",
+        "activeHint": "يتم تطبيق الفلاتر على الصفحة الحالية.",
+        "clear": "مسح الفلاتر"
+      },
+      "columns": {
+        "action": "الإجراء",
+        "entity": "الكيان",
+        "user": "المستخدم",
+        "ip": "IP",
+        "timestamp": "الوقت"
+      },
+      "actions": {
+        "prev": "السابق",
+        "next": "التالي"
+      },
+      "loading": "جار تحميل سجل التدقيق...",
+      "empty": "لا توجد سجلات تدقيق.",
+      "emptyFiltered": "لا توجد سجلات مطابقة للفلاتر الحالية.",
+      "pagination": "الصفحة {page} من {totalPages} · الإجمالي {total}"
+    },
+    "queue": {
+      "title": "الطابور",
+      "subtitle": "مراقبة طابور VPS وترتيب الوظائف.",
+      "queueSize": "حجم الطابور: {count}",
+      "livePolling": "تحديث حي كل {seconds} ثوانٍ",
+      "columns": {
+        "scanId": "معرف الفحص",
+        "tool": "الأداة",
+        "position": "الترتيب",
+        "jobsAhead": "المهام قبلها",
+        "user": "المستخدم",
+        "estimate": "الوقت المتوقع",
+        "actions": "الإجراءات"
+      },
+      "summary": {
+        "queueSizeLabel": "حجم الطابور",
+        "jobsAheadLabel": "متوسط المهام السابقة",
+        "nearestEtaLabel": "أقرب وقت متوقع",
+        "seconds": "{value}ث",
+        "minutes": "{value}د"
+      },
+      "actions": {
+        "refresh": "تحديث",
+        "moveUp": "تحريك لأعلى",
+        "moveDown": "تحريك لأسفل",
+        "reorderSuccess": "تم تحديث ترتيب الطابور.",
+        "reorderError": "فشل إعادة ترتيب المهمة في الطابور.",
+        "delete": "إزالة",
+        "deleteConfirm": "إزالة هذه المهمة من الطابور؟",
+        "deleteSuccess": "تمت إزالة المهمة من الطابور.",
+        "deleteError": "فشل إزالة المهمة."
+      },
+      "loading": "جار تحميل الطابور...",
+      "empty": "الطابور فارغ."
+    },
+    "billing": {
+      "title": "فوترة الإدارة",
+      "subtitle": "منح الخطط وأدوات الفوترة.",
+      "grant": {
+        "userId": "معرف المستخدم",
+        "userIdPlaceholder": "UUID للمستخدم",
+        "planName": "اسم الخطة",
+        "planNamePlaceholder": "مثال: pro أو enterprise",
+        "required": "معرف المستخدم واسم الخطة مطلوبان.",
+        "userIdInvalid": "معرف المستخدم يجب أن يكون UUID صالحًا.",
+        "submit": "منح الخطة",
+        "submitting": "جار المنح...",
+        "success": "تم منح الخطة بنجاح.",
+        "error": "فشل منح الخطة."
+      }
+    }
+  }
+}
+
