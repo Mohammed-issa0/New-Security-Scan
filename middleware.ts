@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 import createMiddleware from 'next-intl/middleware';
 import type { NextRequest } from 'next/server';
 import { NextResponse } from 'next/server';
@@ -78,16 +77,3 @@ export const config = {
 
 
 
-=======
-import createMiddleware from 'next-intl/middleware';
-
-export default createMiddleware({
-  locales: ['en', 'ar'],
-  defaultLocale: 'en'
-});
-
-export const config = {
-  matcher: ['/', '/(ar|en)/:path*']
-};
-
->>>>>>> f20558da0e9739abef83058bed2216a60f039e2e
