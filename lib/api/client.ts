@@ -1,7 +1,7 @@
 import { tokenStore } from '../auth/tokenStore';
 import { clearSensitiveBrowserData, notifySessionEnded, redirectToLogin } from '../auth/session';
 
-const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || '';
+const API_PREFIX = '/api/v1';
 
 export interface ApiError {
   error?: string;
@@ -37,7 +37,7 @@ async function refreshTokens() {
       throw new Error('Refresh token expired');
     }
 
-    const response = await fetch(`${BASE_URL}/api/v1/auth/refresh`, {
+    const response = await fetch(`${API_PREFIX}/auth/refresh`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -93,7 +93,7 @@ async function apiFetch(endpoint: string, options: RequestInit = {}, responseTyp
     headers.set('Authorization', `Bearer ${tokens.accessToken}`);
   }
 
-  const url = `${BASE_URL}/api/v1${endpoint}`;
+  const url = `${API_PREFIX}${endpoint}`;
   let response = await fetch(url, { ...options, headers });
 
   // Handle 401 and retry refresh
