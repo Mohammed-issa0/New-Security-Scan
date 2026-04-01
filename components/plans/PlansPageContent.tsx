@@ -11,7 +11,7 @@ import { tokenStore } from '@/lib/auth/tokenStore';
 import { authService } from '@/lib/auth/authService';
 import type { UserProfile } from '@/lib/api/types';
 import { plansService } from '@/lib/plans/plansService';
-import type { PlanPublicResponse } from '@/lib/plans/types';
+import type { CheckoutSessionResponse, PlanPublicResponse, PurchaseExtraScanResponse, PurchasePlanResponse } from '@/lib/plans/types';
 import { ApiRequestError } from '@/lib/api/client';
 import { findMatchingPlanDefinition, getCreditsUsagePercent, getPlanDisplayName, getPlanTools } from '@/lib/plans/utils';
 import { Alert, Badge, Button } from '@/components/scans/ui';
@@ -87,7 +87,7 @@ export function PlansPageContent({
 
   const matchedActivePlan = findMatchingPlanDefinition(activePlan, plansData);
 
-  const checkoutPlanMutation = useMutation({
+  const checkoutPlanMutation = useMutation<CheckoutSessionResponse | PurchasePlanResponse, Error, string>({
     mutationFn: (planName: string) =>
       billingMode === 'direct'
         ? plansService.purchasePlanDirect(planName)
@@ -111,7 +111,7 @@ export function PlansPageContent({
     onSettled: () => setActivePurchase(null),
   });
 
-  const checkoutExtraCreditMutation = useMutation({
+  const checkoutExtraCreditMutation = useMutation<CheckoutSessionResponse | PurchaseExtraScanResponse, Error, void>({
     mutationFn: () =>
       billingMode === 'direct'
         ? plansService.purchaseExtraScanDirect()

@@ -4,6 +4,7 @@ import { HowItWorks, AuthHighlight, TrustSection } from '@/components/landing/Se
 import { Personas, FinalCTA, Footer } from '@/components/landing/FinalSections';
 import { PlansPageContent } from '@/components/plans/PlansPageContent';
 import { setRequestLocale } from 'next-intl/server';
+import { Suspense } from 'react';
 
 export default function LandingPage({ params: { locale } }: { params: { locale: string } }) {
   setRequestLocale(locale);
@@ -18,7 +19,9 @@ export default function LandingPage({ params: { locale } }: { params: { locale: 
         <Tools />
         <section id="plans" className="bg-gray-50/60">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
-            <PlansPageContent mode="section" />
+            <Suspense fallback={<div className="h-24 animate-pulse rounded-xl bg-gray-100" />}>
+              <PlansPageContent mode="section" />
+            </Suspense>
           </div>
         </section>
         <HowItWorks />

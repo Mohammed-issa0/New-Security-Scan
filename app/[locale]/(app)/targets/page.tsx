@@ -27,11 +27,15 @@ export default function TargetsPage() {
     queryFn: () => scansService.getTargets(page),
   });
 
+  const targetsTotalPages =
+    targetsData?.totalPages ??
+    (targetsData ? Math.max(1, Math.ceil(targetsData.totalCount / targetsData.pageSize)) : 1);
+
   useEffect(() => {
-    if (targetsData && targetsData.totalPages > 0 && page > targetsData.totalPages) {
-      setPage(targetsData.totalPages);
+    if (targetsData && targetsTotalPages > 0 && page > targetsTotalPages) {
+      setPage(targetsTotalPages);
     }
-  }, [page, targetsData]);
+  }, [page, targetsData, targetsTotalPages]);
 
   const updateTargetCaches = (targetId: string, updater: (target: Target) => Target) => {
     queryClient.setQueriesData<PaginatedResponse<Target>>({ queryKey: ['targets'] }, (currentData) => {
@@ -266,7 +270,7 @@ export default function TargetsPage() {
             </table>
           </div>
 
-        {targetsData && targetsData.totalPages > 1 && !isError && (
+        {targetsData && targetsTotalPages > 1 && !isError && (
           <div className="bg-white px-4 py-3 flex items-center justify-between border-t border-gray-200 sm:px-6">
             <div className="flex-1 flex justify-between sm:hidden">
               <button
@@ -279,8 +283,8 @@ export default function TargetsPage() {
               </button>
               <button
                 type="button"
-                onClick={() => setPage(Math.min(targetsData.totalPages, page + 1))}
-                disabled={page === targetsData.totalPages}
+                onClick={() => setPage(Math.min(targetsTotalPages, page + 1))}
+                disabled={page === targetsTotalPages}
                 className="ml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {t('next')}
@@ -289,7 +293,7 @@ export default function TargetsPage() {
             <div className="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
               <div>
                 <p className="text-sm text-gray-700">
-                  {t('page')} <span className="font-medium">{page}</span> {t('of')} <span className="font-medium">{targetsData.totalPages}</span>
+                  {t('page')} <span className="font-medium">{page}</span> {t('of')} <span className="font-medium">{targetsTotalPages}</span>
                 </p>
               </div>
               <div>
@@ -307,8 +311,8 @@ export default function TargetsPage() {
                   </button>
                   <button
                     type="button"
-                    onClick={() => setPage(Math.min(targetsData.totalPages, page + 1))}
-                    disabled={page === targetsData.totalPages}
+                    onClick={() => setPage(Math.min(targetsTotalPages, page + 1))}
+                    disabled={page === targetsTotalPages}
                     className="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     <span className="sr-only">{t('next')}</span>

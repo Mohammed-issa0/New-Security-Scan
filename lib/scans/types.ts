@@ -44,7 +44,7 @@ export interface ScanPayload {
   name: string;
   scopeSigned: boolean;
   targets: string[];
-  tool: string;
+  tool: Tool;
   notes?: string;
   targetConfig?: {
     user_agent?: string;

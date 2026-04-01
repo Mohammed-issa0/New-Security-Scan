@@ -328,7 +328,14 @@ export default function ScanDetailsPage() {
 
   const canCancel = normalizedStatus === 'Pending' || normalizedStatus === 'Running';
 
-  const toolRows = (() => {
+  const toolRows: Array<{
+    id?: string;
+    toolName: string;
+    status: ToolStatus['status'];
+    startTime?: string;
+    endTime?: string;
+    logs?: string;
+  }> = (() => {
     const fromTools = (tools || []).map((tool) => ({
       id: tool.id,
       toolName: tool.toolName,

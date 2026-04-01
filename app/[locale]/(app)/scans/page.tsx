@@ -147,7 +147,7 @@ export default function ScansPage() {
             ) : (scansData?.items?.length ?? 0) === 0 ? (
               <TableEmptyRow columns={5} title={t('noScans')} />
             ) : (
-              scansData.items.map((scan) => (
+              (scansData?.items ?? []).map((scan) => (
                 <tr key={scan.id} className="hover:bg-gray-50">
                   <td className="px-6 py-4 whitespace-nowrap">
                     <StatusBadge status={scan.status} />

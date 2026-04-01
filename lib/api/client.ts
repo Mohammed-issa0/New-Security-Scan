@@ -4,13 +4,15 @@ import { clearSensitiveBrowserData, notifySessionEnded, redirectToLogin } from '
 const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || '';
 
 export interface ApiError {
-  error: string;
+  error?: string;
+  message?: string;
+  detail?: string;
   details?: Record<string, string[]>;
 }
 
 export class ApiRequestError extends Error {
   constructor(public status: number, public data: ApiError) {
-    super(data.error || 'API Request Failed');
+    super(data.error || data.message || data.detail || 'API Request Failed');
   }
 }
 
