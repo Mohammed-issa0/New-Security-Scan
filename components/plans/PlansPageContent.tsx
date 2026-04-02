@@ -271,24 +271,24 @@ export function PlansPageContent({
   return (
     <div className={isCompact ? 'space-y-10' : 'space-y-16'}>
       {showFull && (
-        <section className={`relative overflow-hidden rounded-3xl border border-blue-100/60 bg-gradient-to-br from-blue-50 via-white to-slate-50 ${
+        <section className={`app-panel relative overflow-hidden rounded-3xl ${
           isCompact ? 'p-6 md:p-8' : 'p-8 md:p-12'
         }`}>
-          <div className="absolute -top-24 -right-24 h-64 w-64 rounded-full bg-blue-200/40 blur-3xl" />
-          <div className="absolute -bottom-24 -left-24 h-64 w-64 rounded-full bg-cyan-200/40 blur-3xl" />
+          <div className="absolute -top-24 -right-24 h-64 w-64 rounded-full bg-cyan-400/20 blur-3xl" />
+          <div className="absolute -bottom-24 -left-24 h-64 w-64 rounded-full bg-blue-400/20 blur-3xl" />
 
           <div className="relative max-w-3xl space-y-4">
-            <Badge variant="outline" className="bg-white/80">
+            <Badge variant="outline" className="bg-white/8">
               <Sparkles size={14} className="mr-2" />
               {t('hero.badge')}
             </Badge>
-            <h1 className={`${isCompact ? 'text-3xl' : 'text-4xl md:text-5xl'} font-extrabold text-gray-900 leading-tight`}>
+            <h1 className={`${isCompact ? 'text-3xl' : 'text-4xl md:text-5xl'} font-extrabold text-text-primary leading-tight`}>
               {t('hero.title')}
             </h1>
-            <p className="text-base md:text-lg text-gray-600 leading-relaxed">
+            <p className="text-base md:text-lg text-text-secondary leading-relaxed">
               {t('hero.subtitle')}
             </p>
-            <p className="text-xs font-semibold uppercase tracking-widest text-blue-600">
+            <p className="text-xs font-semibold uppercase tracking-widest text-cyan-300">
               {t('hero.note')}
             </p>
           </div>
@@ -305,17 +305,17 @@ export function PlansPageContent({
         <section className="space-y-6">
           <div className="flex flex-wrap items-end justify-between gap-3">
             <div>
-              <h2 className="text-2xl font-bold text-gray-900">{t('current.title')}</h2>
-              <p className="text-sm text-gray-500">{t('current.subtitle')}</p>
+              <h2 className="text-2xl font-bold text-text-primary">{t('current.title')}</h2>
+              <p className="text-sm text-text-secondary">{t('current.subtitle')}</p>
             </div>
           </div>
 
-          <div className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
+          <div className="rounded-2xl border border-white/14 bg-white/6 p-6 shadow-sm">
             {!isAuthenticated ? (
               <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
                 <div className="space-y-1">
-                  <div className="text-lg font-semibold text-gray-900">{t('current.signedOutTitle')}</div>
-                  <p className="text-sm text-gray-600">{t('current.signedOutDesc')}</p>
+                  <div className="text-lg font-semibold text-text-primary">{t('current.signedOutTitle')}</div>
+                  <p className="text-sm text-text-secondary">{t('current.signedOutDesc')}</p>
                 </div>
                 <div className="flex flex-wrap items-center gap-3">
                   <Link href={`/${locale}/login`}>
@@ -333,36 +333,36 @@ export function PlansPageContent({
             ) : (
               <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
                 <div className="space-y-2">
-                  <div className="flex items-center gap-2 text-lg font-semibold text-gray-900">
+                  <div className="flex items-center gap-2 text-lg font-semibold text-text-primary">
                     <User size={18} />
                     {t('current.signedInTitle', { name: profile?.fullName || profile?.email || t('current.userFallback') })}
                   </div>
-                  <p className="text-sm text-gray-600">{t('current.signedInDesc')}</p>
+                  <p className="text-sm text-text-secondary">{t('current.signedInDesc')}</p>
                   {activePlanLoading ? (
-                    <div className="text-sm text-gray-500">{t('current.loading')}</div>
+                    <div className="text-sm text-text-secondary">{t('current.loading')}</div>
                   ) : !activePlan ? (
-                    <div className="inline-flex items-center gap-2 rounded-full bg-blue-50 px-3 py-1 text-xs font-semibold text-blue-700">
+                    <div className="inline-flex items-center gap-2 rounded-full border border-cyan-300/24 bg-cyan-400/12 px-3 py-1 text-xs font-semibold text-cyan-200">
                       <Star size={14} />
                       {t('current.noPlanLabel')}
                     </div>
                   ) : (
                     <div className="space-y-3">
-                      <div className="flex flex-wrap items-center gap-2 text-sm text-gray-600">
+                      <div className="flex flex-wrap items-center gap-2 text-sm text-text-secondary">
                         <Badge variant="outline">{getPlanDisplayName(matchedActivePlan || activePlan) || t('current.unknownPlan')}</Badge>
                         <span>{t('current.expiresAt', { date: new Date(activePlan.expiresAt).toLocaleDateString(locale) })}</span>
                       </div>
                       <div className="space-y-2">
-                        <div className="flex items-center justify-between text-xs font-semibold text-gray-600">
+                        <div className="flex items-center justify-between text-xs font-semibold text-text-secondary">
                           <span>{t('current.usageLabel')}</span>
                           <span>{t('current.usageValue', { used: formatCredits(usedCredits), total: formatCredits(totalCredits) })}</span>
                         </div>
-                        <div className="h-2 w-full rounded-full bg-gray-100">
+                        <div className="h-2 w-full rounded-full bg-white/10">
                           <div
-                            className="h-2 rounded-full bg-blue-600 transition-all"
+                            className="h-2 rounded-full bg-cyan-300 transition-all"
                             style={{ width: `${usedPercent}%` }}
                           />
                         </div>
-                        <div className="flex flex-wrap items-center gap-3 text-xs text-gray-500">
+                        <div className="flex flex-wrap items-center gap-3 text-xs text-text-muted">
                           <span>{t('current.remaining', { count: formatCredits(activePlan.remainingCredits) })}</span>
                           <span>{t('current.extraAvailable', { count: formatCredits(activePlan.extraCreditsAvailable) })}</span>
                         </div>
@@ -390,31 +390,31 @@ export function PlansPageContent({
 
           {isAuthenticated && activePlan && (
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-              <div className="rounded-2xl border border-gray-200 bg-white p-5">
-                <div className="text-xs font-semibold text-gray-500">{t('current.extraCreditsTitle')}</div>
-                <div className="mt-2 text-2xl font-semibold text-gray-900">
+              <div className="rounded-2xl border border-white/14 bg-white/6 p-5">
+                <div className="text-xs font-semibold text-text-muted">{t('current.extraCreditsTitle')}</div>
+                <div className="mt-2 text-2xl font-semibold text-text-primary">
                   {formatCredits(activePlan.extraCreditsAvailable)}
                 </div>
-                <div className="mt-1 text-xs text-gray-500">
+                <div className="mt-1 text-xs text-text-secondary">
                   {t('current.extraExpired', { count: formatCredits(activePlan.extraCreditsExpiredUnused) })}
                 </div>
               </div>
-              <div className="rounded-2xl border border-gray-200 bg-white p-5">
-                <div className="text-xs font-semibold text-gray-500">{t('current.extraPurchaseTitle')}</div>
-                <div className="mt-2 text-2xl font-semibold text-gray-900">
+              <div className="rounded-2xl border border-white/14 bg-white/6 p-5">
+                <div className="text-xs font-semibold text-text-muted">{t('current.extraPurchaseTitle')}</div>
+                <div className="mt-2 text-2xl font-semibold text-text-primary">
                   {formatCredits(activePlan.extraPurchaseCount)}
                 </div>
-                <div className="mt-1 text-xs text-gray-500">
+                <div className="mt-1 text-xs text-text-secondary">
                   {t('current.extraPurchaseNote')}
                 </div>
               </div>
-              <div className="rounded-2xl border border-gray-200 bg-white p-5">
-                <div className="text-xs font-semibold text-gray-500">{t('current.extraEligibilityTitle')}</div>
-                <div className="mt-2 text-sm font-semibold text-gray-900">
+              <div className="rounded-2xl border border-white/14 bg-white/6 p-5">
+                <div className="text-xs font-semibold text-text-muted">{t('current.extraEligibilityTitle')}</div>
+                <div className="mt-2 text-sm font-semibold text-text-primary">
                   {activePlan.canBuyExtraCredit ? t('current.extraEligible') : t('current.extraNotEligible')}
                 </div>
                 {!activePlan.canBuyExtraCredit && activePlan.cannotBuyExtraCreditReason && (
-                  <div className="mt-2 text-xs text-red-600">{activePlan.cannotBuyExtraCreditReason}</div>
+                  <div className="mt-2 text-xs text-status-danger">{activePlan.cannotBuyExtraCreditReason}</div>
                 )}
                 <div className="mt-3 flex flex-wrap gap-2">
                   <Button
@@ -437,8 +437,8 @@ export function PlansPageContent({
 
       <section className="space-y-8">
         <div className="space-y-2">
-          <h2 className="text-2xl font-bold text-gray-900">{t('plansSection.title')}</h2>
-          <p className="text-sm text-gray-500">{t('plansSection.subtitle')}</p>
+          <h2 className="text-2xl font-bold text-text-primary">{t('plansSection.title')}</h2>
+          <p className="text-sm text-text-secondary">{t('plansSection.subtitle')}</p>
         </div>
 
         <motion.div
@@ -448,9 +448,9 @@ export function PlansPageContent({
           className="grid grid-cols-1 lg:grid-cols-3 gap-6"
         >
           {plansLoading ? (
-            <div className="col-span-full text-sm text-gray-500">{t('plansSection.loading')}</div>
+            <div className="col-span-full text-sm text-text-secondary">{t('plansSection.loading')}</div>
           ) : plansError ? (
-            <div className="col-span-full text-sm text-red-600">{t('plansSection.error')}</div>
+            <div className="col-span-full text-sm text-status-danger">{t('plansSection.error')}</div>
           ) : (
             sortedPlans.map((plan, index) => {
               const highlight = index === 1 && sortedPlans.length >= 3;
@@ -459,44 +459,44 @@ export function PlansPageContent({
                   key={plan.planName || `plan-${index}`}
                   variants={itemVariants}
                   className={`relative rounded-3xl border ${
-                    highlight ? 'border-blue-500/60 shadow-xl shadow-blue-100' : 'border-gray-200'
-                  } bg-white p-6 flex flex-col gap-6`}
+                    highlight ? 'border-cyan-300/40 shadow-xl shadow-cyan-900/20' : 'border-white/14'
+                  } bg-white/6 p-6 flex flex-col gap-6`}
                 >
                   {highlight && (
-                    <div className="absolute -top-3 right-6 rounded-full bg-blue-600 px-3 py-1 text-xs font-semibold text-white">
+                    <div className="absolute -top-3 right-6 rounded-full bg-cyan-300 px-3 py-1 text-xs font-semibold text-slate-950">
                       {t('plansSection.popular')}
                     </div>
                   )}
                   <div className="space-y-3">
-                    <div className="text-sm font-semibold uppercase tracking-widest text-blue-600">
+                    <div className="text-sm font-semibold uppercase tracking-widest text-cyan-300">
                       {getPlanDisplayName(plan) || t('plansSection.planFallback')}
                     </div>
-                    <div className="text-2xl font-bold text-gray-900">
+                    <div className="text-2xl font-bold text-text-primary">
                       {getPlanDisplayName(plan) || t('plansSection.planFallback')}
                     </div>
-                    <p className="text-sm text-gray-600">
+                    <p className="text-sm text-text-secondary">
                       {t('plansSection.description', { credits: formatCredits(plan.includedScanCredits) })}
                     </p>
                   </div>
-                  <div className="rounded-2xl border border-gray-100 bg-gray-50/80 p-4">
-                    <div className="text-3xl font-extrabold text-gray-900">
+                  <div className="rounded-2xl border border-white/10 bg-white/8 p-4">
+                    <div className="text-3xl font-extrabold text-text-primary">
                       {formatPrice(plan)}
                     </div>
-                    <div className="text-xs font-semibold uppercase tracking-widest text-gray-500">
+                    <div className="text-xs font-semibold uppercase tracking-widest text-text-muted">
                       {t('plansSection.period', { months: plan.expiresInMonths })}
                     </div>
                   </div>
-                  <ul className="space-y-3 text-sm text-gray-700">
+                  <ul className="space-y-3 text-sm text-text-secondary">
                     <li className="flex items-start gap-2">
-                      <Check size={16} className="mt-0.5 text-blue-600" />
+                      <Check size={16} className="mt-0.5 text-cyan-300" />
                       <span>{t('plansSection.credits', { count: formatCredits(plan.includedScanCredits) })}</span>
                     </li>
                     <li className="flex items-start gap-2">
-                      <Check size={16} className="mt-0.5 text-blue-600" />
+                      <Check size={16} className="mt-0.5 text-cyan-300" />
                       <span>{t('plansSection.runtime', { minutes: formatCredits(plan.maxRuntimeMinutes) })}</span>
                     </li>
                     <li className="flex items-start gap-2">
-                      <Check size={16} className="mt-0.5 text-blue-600" />
+                      <Check size={16} className="mt-0.5 text-cyan-300" />
                       <span>{t('plansSection.toolsLabel')}</span>
                     </li>
                     <div className="flex flex-wrap gap-2">
@@ -511,7 +511,7 @@ export function PlansPageContent({
                       )}
                     </div>
                     <li className="flex items-start gap-2">
-                      <Check size={16} className="mt-0.5 text-blue-600" />
+                      <Check size={16} className="mt-0.5 text-cyan-300" />
                       <span>{t('plansSection.restrictionsLabel')}</span>
                     </li>
                     <div className="flex flex-wrap gap-2">
@@ -527,10 +527,10 @@ export function PlansPageContent({
                       </Badge>
                     </div>
                     <li className="flex items-start gap-2">
-                      <Check size={16} className="mt-0.5 text-blue-600" />
+                      <Check size={16} className="mt-0.5 text-cyan-300" />
                       <span>{t('plansSection.extraCreditLabel')}</span>
                     </li>
-                    <p className="text-sm leading-6 text-gray-600">{formatExtraRule(plan)}</p>
+                    <p className="text-sm leading-6 text-text-secondary">{formatExtraRule(plan)}</p>
                   </ul>
                   <div className="mt-auto">
                     <Button
@@ -560,32 +560,32 @@ export function PlansPageContent({
       {showFull && (
         <section className="space-y-6">
           <div className="space-y-2">
-            <h2 className="text-2xl font-bold text-gray-900">{t('compare.title')}</h2>
-            <p className="text-sm text-gray-500">{t('compare.subtitle')}</p>
+            <h2 className="text-2xl font-bold text-text-primary">{t('compare.title')}</h2>
+            <p className="text-sm text-text-secondary">{t('compare.subtitle')}</p>
           </div>
 
-          <div className="overflow-hidden rounded-3xl border border-gray-200 bg-white shadow-sm">
+          <div className="overflow-hidden rounded-3xl border border-white/14 bg-white/6 shadow-sm">
             <div className="overflow-x-auto">
-              <table className="min-w-full divide-y divide-gray-200 text-sm">
-                <thead className="bg-gray-50/80">
+              <table className="min-w-full divide-y divide-white/10 text-sm">
+                <thead className="bg-white/8">
                   <tr>
-                    <th className="px-6 py-4 text-left font-semibold text-gray-500">{t('compare.featureColumn')}</th>
+                    <th className="px-6 py-4 text-left font-semibold text-text-muted">{t('compare.featureColumn')}</th>
                     {sortedPlans.map((plan) => (
-                      <th key={plan.planName || getPlanDisplayName(plan) || 'plan'} className="px-6 py-4 text-left font-semibold text-gray-900">
+                      <th key={plan.planName || getPlanDisplayName(plan) || 'plan'} className="px-6 py-4 text-left font-semibold text-text-primary">
                         <div className="space-y-1">
                           <div>{getPlanDisplayName(plan) || t('plansSection.planFallback')}</div>
-                          <div className="text-xs font-medium text-gray-500">{formatPrice(plan)}</div>
+                          <div className="text-xs font-medium text-text-muted">{formatPrice(plan)}</div>
                         </div>
                       </th>
                     ))}
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-gray-200">
+                <tbody className="divide-y divide-white/10">
                   {compareRows.map((row) => (
                     <tr key={row.key} className="align-top">
-                      <td className="px-6 py-4 font-semibold text-gray-700">{row.label}</td>
+                      <td className="px-6 py-4 font-semibold text-text-secondary">{row.label}</td>
                       {sortedPlans.map((plan) => (
-                        <td key={`${row.key}-${plan.planName || row.label}`} className="px-6 py-4 text-gray-600">
+                        <td key={`${row.key}-${plan.planName || row.label}`} className="px-6 py-4 text-text-secondary">
                           {row.render(plan)}
                         </td>
                       ))}
@@ -601,14 +601,14 @@ export function PlansPageContent({
       {showFull && (
         <section className="space-y-6">
           <div className="space-y-2">
-            <h2 className="text-2xl font-bold text-gray-900">{t('faq.title')}</h2>
-            <p className="text-sm text-gray-500">{t('faq.subtitle')}</p>
+            <h2 className="text-2xl font-bold text-text-primary">{t('faq.title')}</h2>
+            <p className="text-sm text-text-secondary">{t('faq.subtitle')}</p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {(t.raw('faq.items') as { q: string; a: string }[]).map((item) => (
-              <div key={item.q} className="rounded-2xl border border-gray-200 bg-white p-5">
-                <div className="text-sm font-semibold text-gray-900">{item.q}</div>
-                <p className="mt-2 text-sm text-gray-600 leading-relaxed">{item.a}</p>
+              <div key={item.q} className="rounded-2xl border border-white/14 bg-white/6 p-5">
+                <div className="text-sm font-semibold text-text-primary">{item.q}</div>
+                <p className="mt-2 text-sm text-text-secondary leading-relaxed">{item.a}</p>
               </div>
             ))}
           </div>

@@ -46,7 +46,7 @@ function Backdrop({ onClose }: { onClose: () => void }) {
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       onClick={onClose}
-      className="absolute inset-0 bg-gray-950/45 backdrop-blur-sm"
+      className="absolute inset-0 bg-slate-950/70 backdrop-blur-sm"
       aria-label="Close dialog"
     />
   );
@@ -82,7 +82,7 @@ function DialogShell({
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 16, scale: 0.98 }}
             transition={{ duration: 0.18 }}
-            className="relative w-full max-w-lg overflow-hidden rounded-3xl border border-gray-200 bg-white shadow-2xl"
+            className="relative w-full max-w-lg overflow-hidden rounded-3xl border border-white/12 bg-[rgba(8,16,30,0.98)] shadow-[0_30px_80px_rgba(0,0,0,0.48)]"
             role="dialog"
             aria-modal="true"
           >
@@ -147,21 +147,21 @@ export function CreateTargetDialog({
 
   return (
     <DialogShell isOpen={isOpen} onClose={onClose}>
-      <div className="border-b border-gray-100 px-6 py-5">
+      <div className="border-b border-white/10 px-6 py-5">
         <div className="flex items-start justify-between gap-4">
           <div>
-            <p className="text-sm font-medium uppercase tracking-[0.2em] text-blue-600">
+            <p className="text-sm font-medium uppercase tracking-[0.2em] text-cyan-300">
               {t('createModal.eyebrow')}
             </p>
-            <h2 className="mt-2 text-2xl font-semibold text-gray-900">
+            <h2 className="mt-2 text-2xl font-semibold text-text-primary">
               {t('createModal.title')}
             </h2>
-            <p className="mt-1 text-sm text-gray-500">{t('createModal.description')}</p>
+            <p className="mt-1 text-sm text-text-muted">{t('createModal.description')}</p>
           </div>
           <button
             type="button"
             onClick={onClose}
-            className="rounded-xl p-2 text-gray-400 transition hover:bg-gray-100 hover:text-gray-700"
+            className="rounded-xl p-2 text-text-muted transition hover:bg-white/10 hover:text-text-secondary"
             aria-label={t('close')}
           >
             <X className="h-5 w-5" />
@@ -170,9 +170,9 @@ export function CreateTargetDialog({
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-5 px-6 py-6">
-        <div className="rounded-2xl border border-blue-100 bg-blue-50/60 p-4 text-sm text-blue-900">
+        <div className="rounded-2xl border border-cyan-400/15 bg-cyan-500/10 p-4 text-sm text-text-secondary">
           <div className="flex items-start gap-3">
-            <div className="rounded-xl bg-white p-2 text-blue-600 shadow-sm">
+            <div className="rounded-xl bg-white/8 p-2 text-cyan-300 shadow-sm">
               <Globe className="h-5 w-5" />
             </div>
             <p>{t('createModal.helper')}</p>
@@ -200,14 +200,14 @@ export function CreateTargetDialog({
             aria-invalid={Boolean(validationError || errorMessage)}
           />
           {validationError ? (
-            <p className="mt-2 text-sm text-red-600">{validationError}</p>
+            <p className="mt-2 text-sm text-status-danger">{validationError}</p>
           ) : null}
           {!validationError && errorMessage ? (
-            <p className="mt-2 text-sm text-red-600">{errorMessage}</p>
+            <p className="mt-2 text-sm text-status-danger">{errorMessage}</p>
           ) : null}
         </div>
 
-        <div className="flex items-center justify-end gap-3 border-t border-gray-100 pt-5">
+        <div className="flex items-center justify-end gap-3 border-t border-white/10 pt-5">
           <Button type="button" variant="outline" onClick={onClose} disabled={isSubmitting}>
             {t('cancel')}
           </Button>
@@ -232,24 +232,24 @@ export function DeleteTargetDialog({
   return (
     <DialogShell isOpen={isOpen} onClose={onClose}>
       <div className="px-6 py-6">
-        <div className="flex items-start gap-4">
-          <div className="rounded-2xl bg-red-50 p-3 text-red-600">
+          <div className="flex items-start gap-4">
+          <div className="rounded-2xl border border-status-danger/20 bg-status-danger/10 p-3 text-status-danger">
             <TriangleAlert className="h-6 w-6" />
           </div>
           <div className="flex-1">
-            <h2 className="text-xl font-semibold text-gray-900">{t('deleteModal.title')}</h2>
-            <p className="mt-2 text-sm leading-6 text-gray-600">
+            <h2 className="text-xl font-semibold text-text-primary">{t('deleteModal.title')}</h2>
+            <p className="mt-2 text-sm leading-6 text-text-muted">
               {t('deleteModal.description')}
             </p>
             {target ? (
-              <div className="mt-4 rounded-2xl border border-gray-200 bg-gray-50 px-4 py-3 text-sm text-gray-700">
-                <span className="font-medium text-gray-900">{t('url')}:</span> {target.url}
+              <div className="mt-4 rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-text-secondary">
+                <span className="font-medium text-text-primary">{t('url')}:</span> {target.url}
               </div>
             ) : null}
           </div>
         </div>
 
-        <div className="mt-6 flex items-center justify-end gap-3 border-t border-gray-100 pt-5">
+        <div className="mt-6 flex items-center justify-end gap-3 border-t border-white/10 pt-5">
           <Button type="button" variant="outline" onClick={onClose} disabled={isSubmitting}>
             {t('cancel')}
           </Button>
@@ -297,19 +297,19 @@ export function ViewTargetDialog({ isOpen, onClose, onConfigureAuth, target }: V
 
   return (
     <DialogShell isOpen={isOpen} onClose={onClose}>
-      <div className="border-b border-gray-100 px-6 py-5">
+      <div className="border-b border-white/10 px-6 py-5">
         <div className="flex items-start justify-between gap-4">
           <div>
-            <p className="text-sm font-medium uppercase tracking-[0.2em] text-blue-600">
+            <p className="text-sm font-medium uppercase tracking-[0.2em] text-cyan-300">
               {t('details.eyebrow')}
             </p>
-            <h2 className="mt-2 text-2xl font-semibold text-gray-900">{t('details.title')}</h2>
-            <p className="mt-1 text-sm text-gray-500">{t('details.description')}</p>
+            <h2 className="mt-2 text-2xl font-semibold text-text-primary">{t('details.title')}</h2>
+            <p className="mt-1 text-sm text-text-muted">{t('details.description')}</p>
           </div>
           <button
             type="button"
             onClick={onClose}
-            className="rounded-xl p-2 text-gray-400 transition hover:bg-gray-100 hover:text-gray-700"
+            className="rounded-xl p-2 text-text-muted transition hover:bg-white/10 hover:text-text-secondary"
             aria-label={t('close')}
           >
             <X className="h-5 w-5" />
@@ -318,11 +318,11 @@ export function ViewTargetDialog({ isOpen, onClose, onConfigureAuth, target }: V
       </div>
 
       <div className="max-h-[70vh] space-y-5 overflow-y-auto px-6 py-6">
-        <div className="rounded-2xl border border-gray-200 bg-gray-50 p-4">
-          <p className="text-xs font-semibold uppercase tracking-[0.16em] text-gray-500">
+        <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
+          <p className="text-xs font-semibold uppercase tracking-[0.16em] text-text-muted">
             {t('url')}
           </p>
-          <p className="mt-2 break-all text-sm font-medium text-gray-900">{target?.url ?? t('details.notAvailable')}</p>
+          <p className="mt-2 break-all text-sm font-medium text-text-primary">{target?.url ?? t('details.notAvailable')}</p>
           <div className="mt-4">
             <Button type="button" variant="outline" size="sm" onClick={copyUrl} disabled={!target} className="gap-2">
               {copied ? <Check className="h-4 w-4 text-green-600" /> : <Copy className="h-4 w-4" />}
@@ -332,35 +332,35 @@ export function ViewTargetDialog({ isOpen, onClose, onConfigureAuth, target }: V
         </div>
 
         <div className="grid gap-4 sm:grid-cols-2">
-          <div className="rounded-2xl border border-gray-200 bg-white p-4">
-            <p className="text-xs font-semibold uppercase tracking-[0.16em] text-gray-500">{t('details.id')}</p>
-            <p className="mt-2 break-all text-sm text-gray-900">{target?.id ?? t('details.notAvailable')}</p>
+          <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
+            <p className="text-xs font-semibold uppercase tracking-[0.16em] text-text-muted">{t('details.id')}</p>
+            <p className="mt-2 break-all text-sm text-text-primary">{target?.id ?? t('details.notAvailable')}</p>
           </div>
-          <div className="rounded-2xl border border-gray-200 bg-white p-4">
-            <p className="text-xs font-semibold uppercase tracking-[0.16em] text-gray-500">{t('browserAuth.statusLabel')}</p>
-            <p className="mt-2 text-sm text-gray-900">
+          <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
+            <p className="text-xs font-semibold uppercase tracking-[0.16em] text-text-muted">{t('browserAuth.statusLabel')}</p>
+            <p className="mt-2 text-sm text-text-primary">
               {target?.browserAuthConfigured ? t('browserAuth.statusConfigured') : t('browserAuth.statusNotConfigured')}
             </p>
           </div>
-          <div className="rounded-2xl border border-gray-200 bg-white p-4">
-            <p className="text-xs font-semibold uppercase tracking-[0.16em] text-gray-500">{t('createdAt')}</p>
-            <p className="mt-2 text-sm text-gray-900">{formatDate(target?.createdAt)}</p>
+          <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
+            <p className="text-xs font-semibold uppercase tracking-[0.16em] text-text-muted">{t('createdAt')}</p>
+            <p className="mt-2 text-sm text-text-primary">{formatDate(target?.createdAt)}</p>
           </div>
-          <div className="rounded-2xl border border-gray-200 bg-white p-4 sm:col-span-2">
-            <p className="text-xs font-semibold uppercase tracking-[0.16em] text-gray-500">{t('details.updatedAt')}</p>
-            <p className="mt-2 text-sm text-gray-900">{formatDate(target?.updatedAt)}</p>
+          <div className="rounded-2xl border border-white/10 bg-white/5 p-4 sm:col-span-2">
+            <p className="text-xs font-semibold uppercase tracking-[0.16em] text-text-muted">{t('details.updatedAt')}</p>
+            <p className="mt-2 text-sm text-text-primary">{formatDate(target?.updatedAt)}</p>
           </div>
         </div>
 
-        <div className="rounded-2xl border border-blue-100 bg-blue-50/60 p-4">
+        <div className="rounded-2xl border border-cyan-400/15 bg-cyan-500/10 p-4">
           <div className="flex items-start gap-3">
-            <div className="rounded-xl bg-white p-2 text-blue-600 shadow-sm">
+            <div className="rounded-xl bg-white/8 p-2 text-cyan-300 shadow-sm">
               <ShieldCheck className="h-5 w-5" />
             </div>
             <div className="space-y-3">
               <div>
-                <p className="text-sm font-semibold text-gray-900">{t('browserAuth.cardTitle')}</p>
-                <p className="mt-1 text-sm text-gray-600">{t('browserAuth.cardDescription')}</p>
+                <p className="text-sm font-semibold text-text-primary">{t('browserAuth.cardTitle')}</p>
+                <p className="mt-1 text-sm text-text-muted">{t('browserAuth.cardDescription')}</p>
               </div>
               <Button
                 type="button"
@@ -377,7 +377,7 @@ export function ViewTargetDialog({ isOpen, onClose, onConfigureAuth, target }: V
           </div>
         </div>
 
-        <div className="flex justify-end border-t border-gray-100 pt-5">
+        <div className="flex justify-end border-t border-white/10 pt-5">
           <Button type="button" onClick={onClose}>{t('close')}</Button>
         </div>
       </div>
@@ -484,19 +484,19 @@ export function BrowserAuthDialog({
 
   return (
     <DialogShell isOpen={isOpen} onClose={onClose}>
-      <div className="border-b border-gray-100 px-6 py-5">
+      <div className="border-b border-white/10 px-6 py-5">
         <div className="flex items-start justify-between gap-4">
           <div>
-            <p className="text-sm font-medium uppercase tracking-[0.2em] text-blue-600">
+            <p className="text-sm font-medium uppercase tracking-[0.2em] text-cyan-300">
               {t('browserAuth.eyebrow')}
             </p>
-            <h2 className="mt-2 text-2xl font-semibold text-gray-900">{t('browserAuth.title')}</h2>
-            <p className="mt-1 text-sm text-gray-500">{t('browserAuth.description')}</p>
+            <h2 className="mt-2 text-2xl font-semibold text-text-primary">{t('browserAuth.title')}</h2>
+            <p className="mt-1 text-sm text-text-muted">{t('browserAuth.description')}</p>
           </div>
           <button
             type="button"
             onClick={onClose}
-            className="rounded-xl p-2 text-gray-400 transition hover:bg-gray-100 hover:text-gray-700"
+            className="rounded-xl p-2 text-text-muted transition hover:bg-white/10 hover:text-text-secondary"
             aria-label={t('close')}
           >
             <X className="h-5 w-5" />
@@ -505,9 +505,9 @@ export function BrowserAuthDialog({
       </div>
 
       <form onSubmit={handleSave} className="space-y-5 px-6 py-6">
-        <div className="rounded-2xl border border-blue-100 bg-blue-50/60 p-4 text-sm text-blue-900">
+        <div className="rounded-2xl border border-cyan-400/15 bg-cyan-500/10 p-4 text-sm text-text-secondary">
           <div className="flex items-start gap-3">
-            <div className="rounded-xl bg-white p-2 text-blue-600 shadow-sm">
+            <div className="rounded-xl bg-white/8 p-2 text-cyan-300 shadow-sm">
               <ShieldCheck className="h-5 w-5" />
             </div>
             <p>{t('browserAuth.helper')}</p>
@@ -560,7 +560,7 @@ export function BrowserAuthDialog({
               <button
                 type="button"
                 onClick={() => setShowPassword((current) => !current)}
-                className="absolute inset-y-0 right-0 flex w-11 items-center justify-center text-gray-400 transition hover:text-gray-700"
+                className="absolute inset-y-0 right-0 flex w-11 items-center justify-center text-text-muted transition hover:text-text-secondary"
                 aria-label={showPassword ? t('browserAuth.hidePassword') : t('browserAuth.showPassword')}
               >
                 {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
@@ -569,7 +569,7 @@ export function BrowserAuthDialog({
           </div>
         </div>
 
-        <label htmlFor={mfaId} className="flex items-start gap-3 rounded-2xl border border-gray-200 bg-gray-50 px-4 py-3">
+        <label htmlFor={mfaId} className="flex items-start gap-3 rounded-2xl border border-white/10 bg-white/5 px-4 py-3">
           <Checkbox
             id={mfaId}
             checked={formData.mfa}
@@ -577,14 +577,14 @@ export function BrowserAuthDialog({
             className="mt-0.5"
           />
           <div>
-            <p className="text-sm font-medium text-gray-900">{t('browserAuth.mfa')}</p>
-            <p className="mt-1 text-sm text-gray-500">{t('browserAuth.mfaDescription')}</p>
+            <p className="text-sm font-medium text-text-primary">{t('browserAuth.mfa')}</p>
+            <p className="mt-1 text-sm text-text-muted">{t('browserAuth.mfaDescription')}</p>
           </div>
         </label>
 
-        {errorMessage ? <p className="text-sm text-red-600">{errorMessage}</p> : null}
+        {errorMessage ? <p className="text-sm text-status-danger">{errorMessage}</p> : null}
 
-        <div className="flex flex-col gap-3 border-t border-gray-100 pt-5 sm:flex-row sm:items-center sm:justify-between">
+        <div className="flex flex-col gap-3 border-t border-white/10 pt-5 sm:flex-row sm:items-center sm:justify-between">
           <Button
             type="button"
             variant="danger"

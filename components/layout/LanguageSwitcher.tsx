@@ -21,9 +21,9 @@ export function LanguageSwitcher() {
       variant="outline"
       size="sm"
       onClick={toggleLanguage}
-      className="gap-2 font-bold px-3 min-w-[60px] border-gray-200 hover:border-blue-200 transition-all"
+      className="gap-2 px-3 min-w-[64px]"
     >
-      <Languages size={16} className="text-blue-600" />
+      <Languages size={16} className="text-cyan-300" />
       <span>{locale === 'en' ? 'AR' : 'EN'}</span>
     </Button>
   );

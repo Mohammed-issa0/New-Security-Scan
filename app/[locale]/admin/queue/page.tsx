@@ -116,62 +116,62 @@ export default function AdminQueuePage() {
       </CardHeader>
       <CardContent>
         <div className="mb-4 grid grid-cols-1 gap-3 sm:grid-cols-3">
-          <div className="rounded-xl border border-gray-200 bg-gray-50 p-4">
-            <div className="mb-2 flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-gray-500">
+          <div className="rounded-xl border border-white/12 bg-white/6 p-4">
+            <div className="mb-2 flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-text-muted">
               <UsersRound size={14} />
               {t('summary.queueSizeLabel')}
             </div>
-            <p className="text-2xl font-semibold text-gray-900">{summary.queueSize}</p>
+            <p className="text-2xl font-semibold text-text-primary">{summary.queueSize}</p>
           </div>
-          <div className="rounded-xl border border-gray-200 bg-gray-50 p-4">
-            <div className="mb-2 flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-gray-500">
+          <div className="rounded-xl border border-white/12 bg-white/6 p-4">
+            <div className="mb-2 flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-text-muted">
               <Server size={14} />
               {t('summary.jobsAheadLabel')}
             </div>
-            <p className="text-2xl font-semibold text-gray-900">{summary.avgJobsAhead}</p>
+            <p className="text-2xl font-semibold text-text-primary">{summary.avgJobsAhead}</p>
           </div>
-          <div className="rounded-xl border border-gray-200 bg-gray-50 p-4">
-            <div className="mb-2 flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-gray-500">
+          <div className="rounded-xl border border-white/12 bg-white/6 p-4">
+            <div className="mb-2 flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-text-muted">
               <Timer size={14} />
               {t('summary.nearestEtaLabel')}
             </div>
-            <p className="text-2xl font-semibold text-gray-900">{formatEta(summary.nearestEta)}</p>
+            <p className="text-2xl font-semibold text-text-primary">{formatEta(summary.nearestEta)}</p>
           </div>
         </div>
 
-        <div className="mb-4 flex items-center gap-2 text-xs text-gray-500">
-          <span className="inline-flex h-2 w-2 rounded-full bg-emerald-500" />
+        <div className="mb-4 flex items-center gap-2 text-xs text-text-muted">
+          <span className="inline-flex h-2 w-2 rounded-full bg-status-success" />
           <span>{t('livePolling', { seconds: 5 })}</span>
         </div>
 
         <div className="overflow-x-auto">
-          <table className="min-w-full divide-y divide-gray-200">
-            <thead className="bg-gray-50">
+          <table className="min-w-full divide-y divide-white/10">
+            <thead className="bg-white/8">
               <tr>
-                <th className="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-text-muted">
                   {t('columns.scanId')}
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-text-muted">
                   {t('columns.tool')}
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-text-muted">
                   {t('columns.position')}
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-text-muted">
                   {t('columns.jobsAhead')}
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-text-muted">
                   {t('columns.user')}
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-text-muted">
                   {t('columns.estimate')}
                 </th>
-                <th className="px-6 py-3 text-right text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-right text-xs font-semibold uppercase tracking-wider text-text-muted">
                   {t('columns.actions')}
                 </th>
               </tr>
             </thead>
-            <tbody className="bg-white divide-y divide-gray-200">
+            <tbody className="divide-y divide-white/10 bg-transparent">
               {isLoading ? (
                 <TableSkeletonRows columns={7} />
               ) : isError ? (
@@ -185,13 +185,13 @@ export default function AdminQueuePage() {
                 <TableEmptyRow columns={7} title={t('empty')} />
               ) : (
                 jobs.map((job) => (
-                  <tr key={job.scanToolId} className="hover:bg-gray-50">
-                    <td className="px-6 py-4 text-sm text-gray-700">{job.scanId}</td>
-                    <td className="px-6 py-4 text-sm text-gray-600">{job.toolName || '-'}</td>
-                    <td className="px-6 py-4 text-sm text-gray-600">{job.queuePosition}</td>
-                    <td className="px-6 py-4 text-sm text-gray-600">{job.jobsAheadCount ?? 0}</td>
-                    <td className="px-6 py-4 text-sm text-gray-600">{job.userEmail || job.userId}</td>
-                    <td className="px-6 py-4 text-sm text-gray-600">
+                  <tr key={job.scanToolId} className="hover:bg-white/7">
+                    <td className="px-6 py-4 text-sm text-text-secondary">{job.scanId}</td>
+                    <td className="px-6 py-4 text-sm text-text-muted">{job.toolName || '-'}</td>
+                    <td className="px-6 py-4 text-sm text-text-muted">{job.queuePosition}</td>
+                    <td className="px-6 py-4 text-sm text-text-muted">{job.jobsAheadCount ?? 0}</td>
+                    <td className="px-6 py-4 text-sm text-text-muted">{job.userEmail || job.userId}</td>
+                    <td className="px-6 py-4 text-sm text-text-muted">
                       {job.estimatedFinishAt ? new Date(job.estimatedFinishAt).toLocaleString() : '-'}
                     </td>
                     <td className="px-6 py-4 text-right text-sm">
@@ -200,7 +200,7 @@ export default function AdminQueuePage() {
                           type="button"
                           onClick={() => moveJob(job, 'up')}
                           disabled={reorderMutation.isPending || job.queuePosition <= 1}
-                          className="inline-flex items-center gap-1 text-gray-700 hover:text-gray-900 disabled:cursor-not-allowed disabled:opacity-40"
+                          className="inline-flex items-center gap-1 text-text-secondary hover:text-cyan-200 disabled:cursor-not-allowed disabled:opacity-40"
                         >
                           <ArrowUp size={16} />
                           {t('actions.moveUp')}
@@ -209,7 +209,7 @@ export default function AdminQueuePage() {
                           type="button"
                           onClick={() => moveJob(job, 'down')}
                           disabled={reorderMutation.isPending || job.queuePosition >= queueSize}
-                          className="inline-flex items-center gap-1 text-gray-700 hover:text-gray-900 disabled:cursor-not-allowed disabled:opacity-40"
+                          className="inline-flex items-center gap-1 text-text-secondary hover:text-cyan-200 disabled:cursor-not-allowed disabled:opacity-40"
                         >
                           <ArrowDown size={16} />
                           {t('actions.moveDown')}
@@ -218,7 +218,7 @@ export default function AdminQueuePage() {
                           <button
                             onClick={() => setJobToRemove(job.vpsJobId || null)}
                             disabled={deleteMutation.isPending}
-                            className="inline-flex items-center gap-1 text-red-600 hover:text-red-700"
+                            className="inline-flex items-center gap-1 text-status-danger hover:text-status-danger/80"
                           >
                             <Trash2 size={16} />
                             {t('actions.delete')}

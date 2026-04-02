@@ -15,8 +15,8 @@ export default async function NewScanPage({ params: { locale } }: { params: { lo
   return (
     <div className="space-y-6">
       <div className="mb-8">
-        <h1 className="text-2xl font-bold text-gray-900 tracking-tight">{t('title')}</h1>
-        <p className="text-sm text-gray-500 font-medium">{t('subtitle')}</p>
+        <h1 className="text-2xl font-bold tracking-tight text-text-primary">{t('title')}</h1>
+        <p className="text-sm font-medium text-text-secondary">{t('subtitle')}</p>
       </div>
 
       <ScanForm />

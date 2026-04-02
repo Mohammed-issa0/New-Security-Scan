@@ -57,7 +57,16 @@
 
 @layer base {
   body {
-    @apply antialiased text-gray-900 bg-white selection:bg-blue-100 selection:text-blue-700;
+    @apply antialiased text-text-primary bg-cyber-bg selection:bg-cyan-300/30 selection:text-cyan-100;
+  }
+
+  select {
+    color-scheme: dark;
+  }
+
+  select option {
+    background-color: rgb(var(--bg-secondary));
+    color: rgb(var(--text-primary));
   }
 
   html {
@@ -195,6 +204,32 @@
       );
     animation: cyberScan 7.6s linear infinite;
     will-change: transform, opacity;
+  }
+
+  .app-shell {
+    min-height: 100vh;
+    background:
+      radial-gradient(760px 360px at 14% 0%, rgba(0, 209, 255, 0.1), transparent 58%),
+      radial-gradient(640px 300px at 85% 5%, rgba(51, 156, 255, 0.08), transparent 62%),
+      linear-gradient(180deg, rgb(var(--bg-primary)) 0%, rgb(3 8 16) 100%);
+    color: rgb(var(--text-primary));
+  }
+
+  .app-content-shell {
+    max-width: 80rem;
+    margin-inline: auto;
+    padding-inline: 1rem;
+    padding-top: 7rem;
+    padding-bottom: 2rem;
+  }
+
+  .app-panel {
+    background: rgba(15, 26, 43, 0.78);
+    border: 1px solid rgba(0, 209, 255, 0.14);
+    box-shadow:
+      0 20px 70px rgba(0, 0, 0, 0.32),
+      0 0 0 1px rgba(255, 255, 255, 0.02) inset;
+    backdrop-filter: blur(14px);
   }
 }
 

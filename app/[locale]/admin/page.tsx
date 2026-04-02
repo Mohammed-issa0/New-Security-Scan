@@ -50,39 +50,39 @@ export default function AdminOverviewPage() {
         <CardHeader title={t('title')} description={t('subtitle')} icon={ShieldCheck} />
         <CardContent>
           <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4">
-            <div className="rounded-xl border border-gray-100 bg-gray-50/60 p-4">
-              <div className="text-xs font-semibold text-gray-500">{t('stats.users')}</div>
-              <div className="mt-2 text-2xl font-semibold text-gray-900">
+            <div className="rounded-xl border border-white/12 bg-white/6 p-4">
+              <div className="text-xs font-semibold text-text-muted">{t('stats.users')}</div>
+              <div className="mt-2 text-2xl font-semibold text-text-primary">
                 {usersLoading ? t('loading') : formatNumber(usersData?.totalCount)}
               </div>
             </div>
-            <div className="rounded-xl border border-gray-100 bg-gray-50/60 p-4">
-              <div className="text-xs font-semibold text-gray-500">{t('stats.scans')}</div>
-              <div className="mt-2 text-2xl font-semibold text-gray-900">
+            <div className="rounded-xl border border-white/12 bg-white/6 p-4">
+              <div className="text-xs font-semibold text-text-muted">{t('stats.scans')}</div>
+              <div className="mt-2 text-2xl font-semibold text-text-primary">
                 {scansLoading ? t('loading') : formatNumber(scansData?.totalCount)}
               </div>
             </div>
-            <div className="rounded-xl border border-gray-100 bg-gray-50/60 p-4">
-              <div className="text-xs font-semibold text-gray-500">{t('stats.auditLogs')}</div>
-              <div className="mt-2 text-2xl font-semibold text-gray-900">
+            <div className="rounded-xl border border-white/12 bg-white/6 p-4">
+              <div className="text-xs font-semibold text-text-muted">{t('stats.auditLogs')}</div>
+              <div className="mt-2 text-2xl font-semibold text-text-primary">
                 {auditLoading ? t('loading') : formatNumber(auditData?.totalCount)}
               </div>
             </div>
-            <div className="rounded-xl border border-gray-100 bg-gray-50/60 p-4">
-              <div className="text-xs font-semibold text-gray-500">{t('stats.queue')}</div>
-              <div className="mt-2 text-2xl font-semibold text-gray-900">
+            <div className="rounded-xl border border-white/12 bg-white/6 p-4">
+              <div className="text-xs font-semibold text-text-muted">{t('stats.queue')}</div>
+              <div className="mt-2 text-2xl font-semibold text-text-primary">
                 {queueLoading ? t('loading') : formatNumber(queueData?.queueSize)}
               </div>
             </div>
-            <div className="rounded-xl border border-gray-100 bg-gray-50/60 p-4">
-              <div className="text-xs font-semibold text-gray-500">{t('stats.plans')}</div>
-              <div className="mt-2 text-2xl font-semibold text-gray-900">
+            <div className="rounded-xl border border-white/12 bg-white/6 p-4">
+              <div className="text-xs font-semibold text-text-muted">{t('stats.plans')}</div>
+              <div className="mt-2 text-2xl font-semibold text-text-primary">
                 {plansLoading ? t('loading') : formatNumber(plansData?.length)}
               </div>
             </div>
-            <div className="rounded-xl border border-gray-100 bg-gray-50/60 p-4">
-              <div className="text-xs font-semibold text-gray-500">{t('stats.userPlans')}</div>
-              <div className="mt-2 text-2xl font-semibold text-gray-900">
+            <div className="rounded-xl border border-white/12 bg-white/6 p-4">
+              <div className="text-xs font-semibold text-text-muted">{t('stats.userPlans')}</div>
+              <div className="mt-2 text-2xl font-semibold text-text-primary">
                 {userPlansLoading ? t('loading') : formatNumber(userPlansData?.totalCount)}
               </div>
             </div>

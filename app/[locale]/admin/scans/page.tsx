@@ -126,33 +126,33 @@ export default function AdminScansPage() {
         </div>
 
         <div className="overflow-x-auto">
-          <table className="min-w-full divide-y divide-gray-200">
-            <thead className="bg-gray-50">
+          <table className="min-w-full divide-y divide-white/10">
+            <thead className="bg-white/8">
               <tr>
-                <th className="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-text-muted">
                   {t('columns.id')}
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-text-muted">
                   {t('columns.status')}
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-text-muted">
                   {t('columns.targetId')}
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-text-muted">
                   {t('columns.requestedAt')}
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-text-muted">
                   {t('columns.startedAt')}
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-text-muted">
                   {t('columns.finishedAt')}
                 </th>
-                <th className="px-6 py-3 text-right text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-right text-xs font-semibold uppercase tracking-wider text-text-muted">
                   {t('columns.actions')}
                 </th>
               </tr>
             </thead>
-            <tbody className="bg-white divide-y divide-gray-200">
+            <tbody className="divide-y divide-white/10 bg-transparent">
               {isLoading ? (
                 <TableSkeletonRows columns={7} />
               ) : isError ? (
@@ -168,33 +168,33 @@ export default function AdminScansPage() {
                 <TableEmptyRow columns={7} title={t('emptyFiltered')} />
               ) : (
                 filteredScans.map((scan) => (
-                  <tr key={scan.id} className="hover:bg-gray-50">
-                    <td className="px-6 py-4 text-sm text-gray-700">{scan.id}</td>
+                  <tr key={scan.id} className="hover:bg-white/7">
+                    <td className="px-6 py-4 text-sm text-text-secondary">{scan.id}</td>
                     <td className="px-6 py-4 text-sm">
                       <Badge variant="outline">{scan.status || '-'}</Badge>
                     </td>
-                    <td className="px-6 py-4 text-sm text-gray-700">{scan.targetId || '-'}</td>
-                    <td className="px-6 py-4 text-sm text-gray-600">
+                    <td className="px-6 py-4 text-sm text-text-secondary">{scan.targetId || '-'}</td>
+                    <td className="px-6 py-4 text-sm text-text-muted">
                       {scan.requestedAt ? new Date(scan.requestedAt).toLocaleString() : '-'}
                     </td>
-                    <td className="px-6 py-4 text-sm text-gray-600">
+                    <td className="px-6 py-4 text-sm text-text-muted">
                       {scan.startedAt ? new Date(scan.startedAt).toLocaleString() : '-'}
                     </td>
-                    <td className="px-6 py-4 text-sm text-gray-600">
+                    <td className="px-6 py-4 text-sm text-text-muted">
                       {scan.finishedAt ? new Date(scan.finishedAt).toLocaleString() : '-'}
                     </td>
                     <td className="px-6 py-4 text-right text-sm">
                       <div className="inline-flex items-center gap-3">
                         <Link
                           href={`/${locale}/admin/scans/${scan.id}`}
-                          className="inline-flex items-center gap-1 text-blue-600 hover:text-blue-700"
+                          className="inline-flex items-center gap-1 text-cyan-300 hover:text-cyan-200"
                         >
                           <Eye size={16} />
                           {t('actions.details')}
                         </Link>
                         <button
                           onClick={() => setPendingAction({ type: 'force-fail', scanId: scan.id })}
-                          className="inline-flex items-center gap-1 text-red-600 hover:text-red-700"
+                          className="inline-flex items-center gap-1 text-status-danger hover:text-status-danger/80"
                         >
                           <XCircle size={16} />
                           {t('actions.forceFail')}
@@ -206,7 +206,7 @@ export default function AdminScansPage() {
                           }}
                           data-testid={`admin-scan-export-${scan.id}`}
                           disabled={exportingScanId === scan.id}
-                          className="inline-flex items-center gap-1 text-emerald-600 hover:text-emerald-700 disabled:cursor-not-allowed disabled:opacity-50"
+                          className="inline-flex items-center gap-1 text-status-success hover:text-status-success/80 disabled:cursor-not-allowed disabled:opacity-50"
                         >
                           <Download size={16} />
                           {exportingScanId === scan.id ? t('actions.exporting') : t('actions.export')}
@@ -220,7 +220,7 @@ export default function AdminScansPage() {
           </table>
         </div>
         <div className="flex items-center justify-between pt-4">
-          <div className="text-xs text-gray-500">
+          <div className="text-xs text-text-muted">
             {t('pagination', { page, total: data?.totalCount ?? 0 })}
           </div>
           <div className="flex items-center gap-2">

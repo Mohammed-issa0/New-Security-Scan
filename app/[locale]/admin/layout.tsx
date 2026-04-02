@@ -42,8 +42,8 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             aria-current={isActive ? 'page' : undefined}
             className={`group flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
               isActive
-                ? 'bg-blue-50 text-blue-700 ring-1 ring-inset ring-blue-200'
-                : 'text-gray-700 hover:bg-gray-50 hover:text-blue-700'
+                ? 'bg-cyan-400/12 text-cyan-200 ring-1 ring-inset ring-cyan-300/30'
+                : 'text-text-secondary hover:bg-white/8 hover:text-cyan-200'
             }`}
           >
             <Icon size={16} />
@@ -57,27 +57,27 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   return (
     <AuthGuard>
       <AdminGuard>
-        <div className="min-h-screen bg-slate-100/70">
-          <header className="sticky top-0 z-40 border-b border-slate-200 bg-white/95 backdrop-blur">
+        <div className="app-shell">
+          <header className="sticky top-0 z-40 border-b border-cyan-400/14 bg-[rgba(6,11,20,0.86)] backdrop-blur-xl">
             <div className="mx-auto flex h-16 w-full max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
               <div className="flex items-center gap-3">
                 <button
                   type="button"
                   onClick={() => setIsMobileNavOpen((prev) => !prev)}
-                  className="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-slate-200 text-slate-700 hover:bg-slate-50 lg:hidden"
+                  className="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-white/12 text-text-secondary hover:bg-white/8 lg:hidden"
                   aria-label={isMobileNavOpen ? 'Close admin navigation' : 'Open admin navigation'}
                 >
                   {isMobileNavOpen ? <X size={18} /> : <Menu size={18} />}
                 </button>
                 <div>
-                  <p className="text-[11px] font-semibold uppercase tracking-[0.12em] text-slate-500">Control Center</p>
-                  <h1 className="text-sm font-semibold text-slate-900">{t('title')}</h1>
+                  <p className="text-[11px] font-semibold uppercase tracking-[0.12em] text-text-muted">Control Center</p>
+                  <h1 className="text-sm font-semibold text-text-primary">{t('title')}</h1>
                 </div>
               </div>
 
               <Link
                 href={`/${locale}/scans`}
-                className="inline-flex items-center gap-1.5 rounded-lg border border-slate-200 px-3 py-1.5 text-sm font-medium text-slate-700 hover:bg-slate-50"
+                className="inline-flex items-center gap-1.5 rounded-lg border border-cyan-400/24 bg-white/5 px-3 py-1.5 text-sm font-medium text-text-primary hover:bg-white/10"
               >
                 <ArrowLeft size={16} />
                 App
@@ -86,15 +86,15 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           </header>
 
           {isMobileNavOpen && (
-            <div className="border-b border-slate-200 bg-white px-4 py-3 lg:hidden">
+            <div className="border-b border-cyan-400/14 bg-[rgba(6,11,20,0.95)] px-4 py-3 lg:hidden">
               <nav className="space-y-1">{renderNavItems(() => setIsMobileNavOpen(false))}</nav>
             </div>
           )}
 
           <main className="mx-auto w-full max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
             <div className="grid grid-cols-1 items-start gap-6 lg:grid-cols-[250px_1fr]">
-              <aside className="sticky top-24 hidden h-[calc(100vh-7rem)] overflow-y-auto rounded-2xl border border-slate-200 bg-white p-5 shadow-sm lg:block">
-                <div className="px-2 pb-3 text-xs font-semibold uppercase tracking-wider text-slate-500">
+              <aside className="app-panel sticky top-24 hidden h-[calc(100vh-7rem)] overflow-y-auto rounded-2xl p-5 lg:block">
+                <div className="px-2 pb-3 text-xs font-semibold uppercase tracking-wider text-text-muted">
                   {t('title')}
                 </div>
                 <nav className="space-y-1">{renderNavItems()}</nav>

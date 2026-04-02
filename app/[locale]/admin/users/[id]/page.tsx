@@ -24,8 +24,8 @@ export default function AdminUserDetailsPage() {
         <CardHeader title={t('title')} description={t('subtitle')} icon={User} />
         <CardContent>
           {isLoading ? (
-            <div className="flex items-center gap-2 text-sm text-gray-500">
-              <span className="h-5 w-5 border-2 border-blue-600 border-t-transparent rounded-full animate-spin" />
+            <div className="flex items-center gap-2 text-sm text-text-muted">
+              <span className="h-5 w-5 animate-spin rounded-full border-2 border-cyan-300 border-t-transparent" />
               {t('loading')}
             </div>
           ) : isError ? (
@@ -39,15 +39,15 @@ export default function AdminUserDetailsPage() {
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm">
               <div>
-                <div className="text-xs text-gray-500">{t('fields.name')}</div>
-                <div className="text-gray-900 font-semibold">{user.fullName || t('unknown')}</div>
+                <div className="text-xs text-text-muted">{t('fields.name')}</div>
+                <div className="font-semibold text-text-primary">{user.fullName || t('unknown')}</div>
               </div>
               <div>
-                <div className="text-xs text-gray-500">{t('fields.email')}</div>
-                <div className="text-gray-900">{user.email || '-'}</div>
+                <div className="text-xs text-text-muted">{t('fields.email')}</div>
+                <div className="text-text-primary">{user.email || '-'}</div>
               </div>
               <div>
-                <div className="text-xs text-gray-500">{t('fields.status')}</div>
+                <div className="text-xs text-text-muted">{t('fields.status')}</div>
                 {user.isActive ? (
                   <Badge variant="success">{t('status.active')}</Badge>
                 ) : (
@@ -55,17 +55,17 @@ export default function AdminUserDetailsPage() {
                 )}
               </div>
               <div>
-                <div className="text-xs text-gray-500">{t('fields.createdAt')}</div>
-                <div className="text-gray-900">{new Date(user.createdAt).toLocaleString()}</div>
+                <div className="text-xs text-text-muted">{t('fields.createdAt')}</div>
+                <div className="text-text-primary">{new Date(user.createdAt).toLocaleString()}</div>
               </div>
               <div>
-                <div className="text-xs text-gray-500">{t('fields.lastLogin')}</div>
-                <div className="text-gray-900">
+                <div className="text-xs text-text-muted">{t('fields.lastLogin')}</div>
+                <div className="text-text-primary">
                   {user.lastLoginAt ? new Date(user.lastLoginAt).toLocaleString() : '-'}
                 </div>
               </div>
               <div>
-                <div className="text-xs text-gray-500">{t('fields.roles')}</div>
+                <div className="text-xs text-text-muted">{t('fields.roles')}</div>
                 <div className="flex flex-wrap gap-1">
                   {user.roles && user.roles.length > 0 ? (
                     user.roles.map((role) => (

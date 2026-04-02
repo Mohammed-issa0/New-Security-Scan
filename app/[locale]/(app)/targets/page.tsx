@@ -194,8 +194,8 @@ export default function TargetsPage() {
     <div className="space-y-6">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">{t('title')}</h1>
-          <p className="text-gray-600">{t('subtitle')}</p>
+          <h1 className="text-2xl font-bold text-text-primary">{t('title')}</h1>
+          <p className="text-text-secondary">{t('subtitle')}</p>
         </div>
         <Button type="button" onClick={openCreateDialog} className="gap-2 self-start" data-testid="targets-open-create">
           <Plus className="h-4 w-4" />
@@ -203,23 +203,23 @@ export default function TargetsPage() {
         </Button>
       </div>
 
-      <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm">
+      <div className="app-panel overflow-hidden rounded-2xl shadow-sm">
           <div className="overflow-x-auto">
-            <table className="min-w-full divide-y divide-gray-200">
-          <thead className="bg-gray-50">
+            <table className="min-w-full divide-y divide-white/10">
+          <thead className="bg-white/6">
             <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-text-muted">
                 {t('url')}
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-text-muted">
                 {t('createdAt')}
               </th>
-              <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-6 py-3 text-right text-xs font-medium uppercase tracking-wider text-text-muted">
                 {t('actions')}
               </th>
             </tr>
           </thead>
-              <tbody className="bg-white divide-y divide-gray-200">
+              <tbody className="divide-y divide-white/10 bg-transparent">
                 {isLoading ? (
                   <TableSkeletonRows columns={3} />
                 ) : isError ? (
@@ -233,11 +233,11 @@ export default function TargetsPage() {
                   <TableEmptyRow columns={3} title={t('noTargets')} />
                 ) : (
                   targetsData.items.map((target) => (
-                    <tr key={target.id}>
-                      <td className="px-6 py-4 text-sm font-medium text-gray-900">
+                    <tr key={target.id} className="hover:bg-white/6">
+                      <td className="px-6 py-4 text-sm font-medium text-text-primary">
                         <span className="break-all">{target.url}</span>
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-text-secondary">
                         {new Date(target.createdAt).toLocaleString()}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
@@ -245,7 +245,7 @@ export default function TargetsPage() {
                           <button
                             type="button"
                             onClick={() => setTargetToView(target)}
-                            className="inline-flex items-center gap-2 rounded-lg border border-gray-200 px-3 py-2 text-gray-700 transition hover:border-gray-300 hover:bg-gray-50"
+                            className="inline-flex items-center gap-2 rounded-lg border border-white/14 bg-white/5 px-3 py-2 text-text-secondary transition hover:border-cyan-300/30 hover:bg-white/10 hover:text-text-primary"
                             aria-label={t('view')}
                           >
                             <Eye className="h-4 w-4" />
@@ -255,7 +255,7 @@ export default function TargetsPage() {
                             type="button"
                             onClick={() => setTargetToDelete(target)}
                             disabled={deleteMutation.isPending}
-                            className="inline-flex items-center gap-2 rounded-lg border border-red-200 px-3 py-2 text-red-600 transition hover:border-red-300 hover:bg-red-50 disabled:cursor-not-allowed disabled:opacity-50"
+                            className="inline-flex items-center gap-2 rounded-lg border border-status-danger/32 bg-status-danger/12 px-3 py-2 text-status-danger transition hover:bg-status-danger/20 disabled:cursor-not-allowed disabled:opacity-50"
                             aria-label={t('delete')}
                           >
                             <Trash2 className="h-4 w-4" />
@@ -271,13 +271,13 @@ export default function TargetsPage() {
           </div>
 
         {targetsData && targetsTotalPages > 1 && !isError && (
-          <div className="bg-white px-4 py-3 flex items-center justify-between border-t border-gray-200 sm:px-6">
+          <div className="flex items-center justify-between border-t border-white/10 bg-transparent px-4 py-3 sm:px-6">
             <div className="flex-1 flex justify-between sm:hidden">
               <button
                 type="button"
                 onClick={() => setPage(Math.max(1, page - 1))}
                 disabled={page === 1}
-                className="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="relative inline-flex items-center rounded-md border border-white/14 bg-white/5 px-4 py-2 text-sm font-medium text-text-secondary hover:bg-white/10 disabled:cursor-not-allowed disabled:opacity-50"
               >
                 {t('previous')}
               </button>
@@ -285,14 +285,14 @@ export default function TargetsPage() {
                 type="button"
                 onClick={() => setPage(Math.min(targetsTotalPages, page + 1))}
                 disabled={page === targetsTotalPages}
-                className="ml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="relative ml-3 inline-flex items-center rounded-md border border-white/14 bg-white/5 px-4 py-2 text-sm font-medium text-text-secondary hover:bg-white/10 disabled:cursor-not-allowed disabled:opacity-50"
               >
                 {t('next')}
               </button>
             </div>
             <div className="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
               <div>
-                <p className="text-sm text-gray-700">
+                <p className="text-sm text-text-secondary">
                   {t('page')} <span className="font-medium">{page}</span> {t('of')} <span className="font-medium">{targetsTotalPages}</span>
                 </p>
               </div>
@@ -302,7 +302,7 @@ export default function TargetsPage() {
                     type="button"
                     onClick={() => setPage(Math.max(1, page - 1))}
                     disabled={page === 1}
-                    className="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="relative inline-flex items-center rounded-l-md border border-white/14 bg-white/5 px-2 py-2 text-sm font-medium text-text-secondary hover:bg-white/10 disabled:cursor-not-allowed disabled:opacity-50"
                   >
                     <span className="sr-only">{t('previous')}</span>
                     <svg className="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
@@ -313,7 +313,7 @@ export default function TargetsPage() {
                     type="button"
                     onClick={() => setPage(Math.min(targetsTotalPages, page + 1))}
                     disabled={page === targetsTotalPages}
-                    className="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="relative inline-flex items-center rounded-r-md border border-white/14 bg-white/5 px-2 py-2 text-sm font-medium text-text-secondary hover:bg-white/10 disabled:cursor-not-allowed disabled:opacity-50"
                   >
                     <span className="sr-only">{t('next')}</span>
                     <svg className="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">

@@ -8,9 +8,9 @@ export default function AppLayout({
 }) {
   return (
     <AuthGuard>
-      <div className="min-h-screen bg-gray-50">
+      <div className="app-shell">
         <Navbar />
-        <main className="max-w-7xl mx-auto pt-28 pb-6 sm:px-6 lg:px-8">
+        <main className="app-content-shell sm:px-6 lg:px-8">
           {children}
         </main>
       </div>

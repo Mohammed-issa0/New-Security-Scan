@@ -83,19 +83,19 @@ function UserFormDialog({
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4" onClick={onClose}>
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/70 backdrop-blur-sm p-4" onClick={onClose}>
       <div
-        className="w-full max-w-xl rounded-2xl bg-white p-6 shadow-xl"
+        className="w-full max-w-xl rounded-2xl border border-white/14 bg-[rgba(8,16,30,0.98)] p-6 shadow-[0_30px_80px_rgba(0,0,0,0.48)]"
         onClick={(event) => event.stopPropagation()}
         role="dialog"
         aria-modal="true"
       >
         <div className="mb-4 flex items-start justify-between">
-          <h3 className="text-lg font-semibold text-gray-900">{title}</h3>
+          <h3 className="text-lg font-semibold text-text-primary">{title}</h3>
           <button
             type="button"
             onClick={onClose}
-            className="rounded-md p-1 text-gray-400 hover:bg-gray-100 hover:text-gray-600"
+            className="rounded-md p-1 text-text-muted hover:bg-white/10 hover:text-text-secondary"
             aria-label={cancelLabel}
           >
             <X className="h-4 w-4" />
@@ -111,7 +111,7 @@ function UserFormDialog({
               onChange={(event) => onChange({ ...form, fullName: event.target.value })}
               placeholder={t('form.fullNamePlaceholder')}
             />
-            {errors.fullName && <p className="mt-1 text-xs text-red-600">{errors.fullName}</p>}
+            {errors.fullName && <p className="mt-1 text-xs text-status-danger">{errors.fullName}</p>}
           </div>
 
           <div>
@@ -123,7 +123,7 @@ function UserFormDialog({
               onChange={(event) => onChange({ ...form, email: event.target.value })}
               placeholder={t('form.emailPlaceholder')}
             />
-            {errors.email && <p className="mt-1 text-xs text-red-600">{errors.email}</p>}
+            {errors.email && <p className="mt-1 text-xs text-status-danger">{errors.email}</p>}
           </div>
 
           <div>
@@ -135,7 +135,7 @@ function UserFormDialog({
               onChange={(event) => onChange({ ...form, password: event.target.value })}
               placeholder={isEdit ? t('form.passwordPlaceholderEdit') : t('form.passwordPlaceholderCreate')}
             />
-            {errors.password && <p className="mt-1 text-xs text-red-600">{errors.password}</p>}
+            {errors.password && <p className="mt-1 text-xs text-status-danger">{errors.password}</p>}
           </div>
 
           <div className="flex items-center gap-2">
@@ -326,36 +326,36 @@ export default function AdminUsersPage() {
         </CardHeader>
         <CardContent>
           <div className="overflow-x-auto">
-            <table className="min-w-full divide-y divide-gray-200">
-              <thead className="bg-gray-50">
+            <table className="min-w-full divide-y divide-white/10">
+              <thead className="bg-white/8">
                 <tr>
-                  <th className="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-text-muted">
                     {t('columns.id')}
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-text-muted">
                     {t('columns.name')}
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-text-muted">
                     {t('columns.email')}
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-text-muted">
                     {t('columns.roles')}
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-text-muted">
                     {t('columns.status')}
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-text-muted">
                     {t('columns.createdAt')}
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-text-muted">
                     {t('columns.lastLogin')}
                   </th>
-                  <th className="px-6 py-3 text-right text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-right text-xs font-semibold uppercase tracking-wider text-text-muted">
                     {t('columns.actions')}
                   </th>
                 </tr>
               </thead>
-              <tbody className="bg-white divide-y divide-gray-200">
+              <tbody className="divide-y divide-white/10 bg-transparent">
                 {isLoading ? (
                   <TableSkeletonRows columns={8} />
                 ) : isError ? (
@@ -369,15 +369,15 @@ export default function AdminUsersPage() {
                   <TableEmptyRow columns={8} title={t('empty')} />
                 ) : (
                   users.map((user) => (
-                    <tr key={user.id} className="hover:bg-gray-50">
-                      <td className="px-6 py-4 text-sm text-gray-600 font-mono">{user.id}</td>
-                      <td className="px-6 py-4 text-sm font-medium text-gray-900">
+                    <tr key={user.id} className="hover:bg-white/7">
+                      <td className="px-6 py-4 font-mono text-sm text-text-muted">{user.id}</td>
+                      <td className="px-6 py-4 text-sm font-medium text-text-primary">
                         {user.fullName || t('unknown')}
                       </td>
-                      <td className="px-6 py-4 text-sm text-gray-600">
+                      <td className="px-6 py-4 text-sm text-text-secondary">
                         {user.email || '-'}
                       </td>
-                      <td className="px-6 py-4 text-sm text-gray-600">
+                      <td className="px-6 py-4 text-sm text-text-secondary">
                         {user.roles && user.roles.length > 0 ? (
                           <div className="flex flex-wrap gap-1">
                             {user.roles.map((role) => (
@@ -397,16 +397,16 @@ export default function AdminUsersPage() {
                           <Badge variant="error">{t('status.inactive')}</Badge>
                         )}
                       </td>
-                      <td className="px-6 py-4 text-sm text-gray-600">
+                      <td className="px-6 py-4 text-sm text-text-muted">
                         {new Date(user.createdAt).toLocaleString()}
                       </td>
-                      <td className="px-6 py-4 text-sm text-gray-600">
+                      <td className="px-6 py-4 text-sm text-text-muted">
                         {user.lastLoginAt ? new Date(user.lastLoginAt).toLocaleString() : '-'}
                       </td>
                       <td className="px-6 py-4 text-right text-sm font-medium">
                         <Link
                           href={`/${locale}/admin/users/${user.id}`}
-                          className="inline-flex items-center gap-1 text-blue-600 hover:text-blue-800"
+                          className="inline-flex items-center gap-1 text-cyan-300 hover:text-cyan-200"
                         >
                           <Eye size={16} />
                           {t('actions.view')}
@@ -414,7 +414,7 @@ export default function AdminUsersPage() {
                         <button
                           type="button"
                           onClick={() => openEdit(user)}
-                          className="ms-3 inline-flex items-center gap-1 text-amber-600 hover:text-amber-800"
+                          className="ms-3 inline-flex items-center gap-1 text-status-warning hover:text-status-warning/80"
                         >
                           <Pencil size={16} />
                           {t('actions.edit')}
@@ -422,7 +422,7 @@ export default function AdminUsersPage() {
                         <button
                           type="button"
                           onClick={() => setDeleteUser(user)}
-                          className="ms-3 inline-flex items-center gap-1 text-red-600 hover:text-red-800"
+                          className="ms-3 inline-flex items-center gap-1 text-status-danger hover:text-status-danger/80"
                         >
                           <Trash2 size={16} />
                           {t('actions.delete')}
@@ -436,7 +436,7 @@ export default function AdminUsersPage() {
           </div>
 
           <div className="flex items-center justify-between pt-4">
-            <div className="text-xs text-gray-500">
+            <div className="text-xs text-text-muted">
               {pageSummary}
             </div>
             <div className="flex items-center gap-2">

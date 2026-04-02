@@ -362,21 +362,21 @@ export default function AdminPlansPage() {
         </CardHeader>
         <CardContent>
           <div className="overflow-x-auto">
-            <table className="min-w-full divide-y divide-gray-200">
-              <thead className="bg-gray-50">
+            <table className="min-w-full divide-y divide-white/10">
+              <thead className="bg-white/8">
                 <tr>
-                  <th className="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-text-muted">
                     {t('definitions.columns.name')}
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-text-muted">
                     {t('definitions.columns.updatedAt')}
                   </th>
-                  <th className="px-6 py-3 text-right text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-right text-xs font-semibold uppercase tracking-wider text-text-muted">
                     {t('definitions.columns.actions')}
                   </th>
                 </tr>
               </thead>
-              <tbody className="bg-white divide-y divide-gray-200">
+              <tbody className="divide-y divide-white/10 bg-transparent">
                 {plansLoading ? (
                   <TableSkeletonRows columns={3} />
                 ) : isPlansError ? (
@@ -390,11 +390,11 @@ export default function AdminPlansPage() {
                   <TableEmptyRow columns={3} title={t('definitions.empty')} />
                 ) : (
                   visibleDefinitions.map((plan) => (
-                    <tr key={plan.planName || 'unknown'} className="hover:bg-gray-50">
-                      <td className="px-6 py-4 text-sm text-gray-700">
+                    <tr key={plan.planName || 'unknown'} className="hover:bg-white/7">
+                      <td className="px-6 py-4 text-sm text-text-primary">
                         {plan.planName || t('definitions.unknown')}
                       </td>
-                      <td className="px-6 py-4 text-sm text-gray-600">
+                      <td className="px-6 py-4 text-sm text-text-muted">
                         {plan.updatedAt ? new Date(plan.updatedAt).toLocaleString() : '-'}
                       </td>
                       <td className="px-6 py-4 text-right text-sm">
@@ -427,7 +427,7 @@ export default function AdminPlansPage() {
           </div>
           {!plansLoading && !isPlansError && definitions.length > 0 && (
             <div className="flex items-center justify-between pt-4">
-              <div className="text-xs text-gray-500">
+              <div className="text-xs text-text-muted">
                 {t('definitions.pagination', {
                   page: definitionsPage,
                   totalPages: totalDefinitionPages,
@@ -461,30 +461,30 @@ export default function AdminPlansPage() {
         <CardHeader title={t('userPlans.title')} description={t('userPlans.subtitle')} icon={Layers} />
         <CardContent>
           <div className="overflow-x-auto">
-            <table className="min-w-full divide-y divide-gray-200">
-              <thead className="bg-gray-50">
+            <table className="min-w-full divide-y divide-white/10">
+              <thead className="bg-white/8">
                 <tr>
-                  <th className="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-text-muted">
                     {t('userPlans.columns.user')}
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-text-muted">
                     {t('userPlans.columns.plan')}
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-text-muted">
                     {t('userPlans.columns.status')}
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-text-muted">
                     {t('userPlans.columns.expiresAt')}
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-text-muted">
                     {t('userPlans.columns.credits')}
                   </th>
-                  <th className="px-6 py-3 text-right text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-right text-xs font-semibold uppercase tracking-wider text-text-muted">
                     {t('userPlans.columns.actions')}
                   </th>
                 </tr>
               </thead>
-              <tbody className="bg-white divide-y divide-gray-200">
+              <tbody className="divide-y divide-white/10 bg-transparent">
                 {userPlansLoading ? (
                   <TableSkeletonRows columns={6} />
                 ) : isUserPlansError ? (
@@ -498,20 +498,20 @@ export default function AdminPlansPage() {
                   <TableEmptyRow columns={6} title={t('userPlans.empty')} />
                 ) : (
                   userPlans.items.map((plan) => (
-                    <tr key={plan.id} className="hover:bg-gray-50">
-                      <td className="px-6 py-4 text-sm text-gray-700">
+                    <tr key={plan.id} className="hover:bg-white/7">
+                      <td className="px-6 py-4 text-sm text-text-primary">
                         {plan.userEmail || plan.userFullName || plan.userId}
                       </td>
-                      <td className="px-6 py-4 text-sm text-gray-600">
+                      <td className="px-6 py-4 text-sm text-text-muted">
                         {plan.planName || '-'}
                       </td>
                       <td className="px-6 py-4 text-sm">
                         <Badge variant="outline">{plan.status ?? '-'}</Badge>
                       </td>
-                      <td className="px-6 py-4 text-sm text-gray-600">
+                      <td className="px-6 py-4 text-sm text-text-muted">
                         {plan.expiresAt ? new Date(plan.expiresAt).toLocaleString() : '-'}
                       </td>
-                      <td className="px-6 py-4 text-sm text-gray-600">
+                      <td className="px-6 py-4 text-sm text-text-muted">
                         {plan.includedCreditsUsed ?? 0}/{plan.includedCredits ?? 0}
                       </td>
                       <td className="px-6 py-4 text-right text-sm">
@@ -555,7 +555,7 @@ export default function AdminPlansPage() {
             </table>
           </div>
           <div className="flex items-center justify-between pt-4">
-            <div className="text-xs text-gray-500">
+            <div className="text-xs text-text-muted">
               {t('userPlans.pagination', { page, total: userPlans?.totalCount ?? 0 })}
             </div>
             <div className="flex items-center gap-2">
@@ -581,21 +581,21 @@ export default function AdminPlansPage() {
       </Card>
 
       {viewPlan && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4" onClick={() => setViewPlan(null)}>
-          <div className="w-full max-w-4xl rounded-xl bg-white p-6 shadow-xl" onClick={(event) => event.stopPropagation()}>
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/70 backdrop-blur-sm p-4" onClick={() => setViewPlan(null)}>
+          <div className="w-full max-w-4xl rounded-xl border border-white/12 bg-[rgba(8,16,30,0.98)] p-6 shadow-[0_30px_80px_rgba(0,0,0,0.48)]" onClick={(event) => event.stopPropagation()}>
             <div className="mb-4 flex items-center justify-between">
-              <h3 className="text-lg font-semibold text-gray-900">{t('definitions.details.title')}</h3>
+              <h3 className="text-lg font-semibold text-text-primary">{t('definitions.details.title')}</h3>
               <button
                 type="button"
                 onClick={() => setViewPlan(null)}
-                className="rounded-md p-1 text-gray-400 hover:bg-gray-100 hover:text-gray-700"
+                className="rounded-md p-1 text-text-muted hover:bg-white/10 hover:text-text-secondary"
                 aria-label={tCommonButtons('close')}
               >
                 <X className="h-4 w-4" />
               </button>
             </div>
-            <p className="mb-3 text-sm text-gray-600">{viewPlan.planName || t('definitions.unknown')}</p>
-            <pre className="max-h-[60vh] overflow-auto rounded-lg border border-gray-200 bg-gray-50 p-4 text-xs leading-6 text-gray-800">
+            <p className="mb-3 text-sm text-text-muted">{viewPlan.planName || t('definitions.unknown')}</p>
+            <pre className="max-h-[60vh] overflow-auto rounded-lg border border-white/10 bg-white/5 p-4 text-xs leading-6 text-text-secondary">
               {formatDefinitionJson(viewPlan.definitionJson)}
             </pre>
             <div className="mt-4 flex justify-end">
@@ -608,12 +608,12 @@ export default function AdminPlansPage() {
       )}
 
       {isEditorOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4" onClick={() => !upsertPlanMutation.isPending && setIsEditorOpen(false)}>
-          <div className="w-full max-w-4xl rounded-xl bg-white p-6 shadow-xl" onClick={(event) => event.stopPropagation()}>
-            <h3 className="text-lg font-semibold text-gray-900">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/70 backdrop-blur-sm p-4" onClick={() => !upsertPlanMutation.isPending && setIsEditorOpen(false)}>
+          <div className="w-full max-w-4xl rounded-xl border border-white/12 bg-[rgba(8,16,30,0.98)] p-6 shadow-[0_30px_80px_rgba(0,0,0,0.48)]" onClick={(event) => event.stopPropagation()}>
+            <h3 className="text-lg font-semibold text-text-primary">
               {editorMode === 'create' ? t('definitions.editor.createTitle') : t('definitions.editor.editTitle')}
             </h3>
-            <p className="mt-1 text-sm text-gray-600">{t('definitions.editor.description')}</p>
+            <p className="mt-1 text-sm text-text-secondary">{t('definitions.editor.description')}</p>
 
             <div className="mt-4 space-y-4">
               <div>
@@ -639,7 +639,7 @@ export default function AdminPlansPage() {
                 />
               </div>
               {editorError && (
-                <p className="rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700">{editorError}</p>
+                <p className="rounded-lg border border-status-danger/25 bg-status-danger/10 px-3 py-2 text-sm text-status-danger">{editorError}</p>
               )}
             </div>
 
@@ -682,14 +682,14 @@ export default function AdminPlansPage() {
       />
 
       {viewUserPlanId && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4" onClick={() => setViewUserPlanId(null)}>
-          <div className="w-full max-w-3xl rounded-xl bg-white p-6 shadow-xl" onClick={(event) => event.stopPropagation()}>
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/70 backdrop-blur-sm p-4" onClick={() => setViewUserPlanId(null)}>
+          <div className="w-full max-w-3xl rounded-xl border border-white/12 bg-[rgba(8,16,30,0.98)] p-6 shadow-[0_30px_80px_rgba(0,0,0,0.48)]" onClick={(event) => event.stopPropagation()}>
             <div className="mb-4 flex items-center justify-between">
-              <h3 className="text-lg font-semibold text-gray-900">{t('userPlans.details.title')}</h3>
+              <h3 className="text-lg font-semibold text-text-primary">{t('userPlans.details.title')}</h3>
               <button
                 type="button"
                 onClick={() => setViewUserPlanId(null)}
-                className="rounded-md p-1 text-gray-400 hover:bg-gray-100 hover:text-gray-700"
+                className="rounded-md p-1 text-text-muted hover:bg-white/10 hover:text-text-secondary"
                 aria-label={tCommonButtons('close')}
               >
                 <X className="h-4 w-4" />
@@ -697,10 +697,10 @@ export default function AdminPlansPage() {
             </div>
 
             {viewUserPlanLoading ? (
-              <p className="text-sm text-gray-600">{t('userPlans.details.loading')}</p>
+              <p className="text-sm text-text-muted">{t('userPlans.details.loading')}</p>
             ) : isViewUserPlanError ? (
               <div className="space-y-3">
-                <p className="text-sm text-red-600">
+                <p className="text-sm text-status-danger">
                   {viewUserPlanError instanceof Error ? viewUserPlanError.message : t('userPlans.details.loadError')}
                 </p>
                 <Button variant="outline" type="button" onClick={() => refetchViewUserPlan()}>
@@ -708,28 +708,28 @@ export default function AdminPlansPage() {
                 </Button>
               </div>
             ) : !viewUserPlan ? (
-              <p className="text-sm text-gray-600">{t('userPlans.details.notFound')}</p>
+              <p className="text-sm text-text-muted">{t('userPlans.details.notFound')}</p>
             ) : (
               <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
                 <div>
-                  <p className="text-xs text-gray-500">{t('userPlans.details.fields.id')}</p>
-                  <p className="text-sm text-gray-900 break-all">{viewUserPlan.id}</p>
+                  <p className="text-xs text-text-muted">{t('userPlans.details.fields.id')}</p>
+                  <p className="text-sm text-text-primary break-all">{viewUserPlan.id}</p>
                 </div>
                 <div>
-                  <p className="text-xs text-gray-500">{t('userPlans.details.fields.userId')}</p>
-                  <p className="text-sm text-gray-900 break-all">{viewUserPlan.userId}</p>
+                  <p className="text-xs text-text-muted">{t('userPlans.details.fields.userId')}</p>
+                  <p className="text-sm text-text-primary break-all">{viewUserPlan.userId}</p>
                 </div>
                 <div>
-                  <p className="text-xs text-gray-500">{t('userPlans.details.fields.user')}</p>
-                  <p className="text-sm text-gray-900">{viewUserPlan.userEmail || viewUserPlan.userFullName || '-'}</p>
+                  <p className="text-xs text-text-muted">{t('userPlans.details.fields.user')}</p>
+                  <p className="text-sm text-text-primary">{viewUserPlan.userEmail || viewUserPlan.userFullName || '-'}</p>
                 </div>
                 <div>
-                  <p className="text-xs text-gray-500">{t('userPlans.details.fields.plan')}</p>
-                  <p className="text-sm text-gray-900">{viewUserPlan.planName || '-'}</p>
+                  <p className="text-xs text-text-muted">{t('userPlans.details.fields.plan')}</p>
+                  <p className="text-sm text-text-primary">{viewUserPlan.planName || '-'}</p>
                 </div>
                 <div>
-                  <p className="text-xs text-gray-500">{t('userPlans.details.fields.status')}</p>
-                  <p className="text-sm text-gray-900">
+                  <p className="text-xs text-text-muted">{t('userPlans.details.fields.status')}</p>
+                  <p className="text-sm text-text-primary">
                     {normalizeUserPlanStatus(viewUserPlan.status) === '1'
                       ? t('userPlans.status.active')
                       : normalizeUserPlanStatus(viewUserPlan.status) === '2'
@@ -740,20 +740,20 @@ export default function AdminPlansPage() {
                   </p>
                 </div>
                 <div>
-                  <p className="text-xs text-gray-500">{t('userPlans.details.fields.purchasedAt')}</p>
-                  <p className="text-sm text-gray-900">{viewUserPlan.purchasedAt ? new Date(viewUserPlan.purchasedAt).toLocaleString() : '-'}</p>
+                  <p className="text-xs text-text-muted">{t('userPlans.details.fields.purchasedAt')}</p>
+                  <p className="text-sm text-text-primary">{viewUserPlan.purchasedAt ? new Date(viewUserPlan.purchasedAt).toLocaleString() : '-'}</p>
                 </div>
                 <div>
-                  <p className="text-xs text-gray-500">{t('userPlans.details.fields.expiresAt')}</p>
-                  <p className="text-sm text-gray-900">{viewUserPlan.expiresAt ? new Date(viewUserPlan.expiresAt).toLocaleString() : '-'}</p>
+                  <p className="text-xs text-text-muted">{t('userPlans.details.fields.expiresAt')}</p>
+                  <p className="text-sm text-text-primary">{viewUserPlan.expiresAt ? new Date(viewUserPlan.expiresAt).toLocaleString() : '-'}</p>
                 </div>
                 <div>
-                  <p className="text-xs text-gray-500">{t('userPlans.details.fields.credits')}</p>
-                  <p className="text-sm text-gray-900">{viewUserPlan.includedCreditsUsed ?? 0}/{viewUserPlan.includedCredits ?? 0}</p>
+                  <p className="text-xs text-text-muted">{t('userPlans.details.fields.credits')}</p>
+                  <p className="text-sm text-text-primary">{viewUserPlan.includedCreditsUsed ?? 0}/{viewUserPlan.includedCredits ?? 0}</p>
                 </div>
                 <div>
-                  <p className="text-xs text-gray-500">{t('userPlans.details.fields.extraPurchaseCount')}</p>
-                  <p className="text-sm text-gray-900">{viewUserPlan.extraPurchaseCount ?? 0}</p>
+                  <p className="text-xs text-text-muted">{t('userPlans.details.fields.extraPurchaseCount')}</p>
+                  <p className="text-sm text-text-primary">{viewUserPlan.extraPurchaseCount ?? 0}</p>
                 </div>
               </div>
             )}
@@ -768,10 +768,10 @@ export default function AdminPlansPage() {
       )}
 
       {editUserPlan && editUserPlanForm && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4" onClick={() => !updateUserPlanMutation.isPending && setEditUserPlan(null)}>
-          <div className="w-full max-w-2xl rounded-xl bg-white p-6 shadow-xl" onClick={(event) => event.stopPropagation()}>
-            <h3 className="text-lg font-semibold text-gray-900">{t('userPlans.editor.title')}</h3>
-            <p className="mt-1 text-sm text-gray-600">{t('userPlans.editor.description')}</p>
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/70 backdrop-blur-sm p-4" onClick={() => !updateUserPlanMutation.isPending && setEditUserPlan(null)}>
+          <div className="w-full max-w-2xl rounded-xl border border-white/12 bg-[rgba(8,16,30,0.98)] p-6 shadow-[0_30px_80px_rgba(0,0,0,0.48)]" onClick={(event) => event.stopPropagation()}>
+            <h3 className="text-lg font-semibold text-text-primary">{t('userPlans.editor.title')}</h3>
+            <p className="mt-1 text-sm text-text-secondary">{t('userPlans.editor.description')}</p>
 
             <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2">
               <div className="space-y-1">
@@ -780,7 +780,7 @@ export default function AdminPlansPage() {
                   id="user-plan-status"
                   value={editUserPlanForm.status}
                   onChange={(event) => setEditUserPlanForm((prev) => (prev ? { ...prev, status: event.target.value } : prev))}
-                  className="h-10 w-full rounded-lg border border-gray-300 px-3 text-sm"
+                  className="h-10 w-full rounded-lg border border-white/14 bg-white/6 px-3 text-sm text-text-primary"
                   disabled={updateUserPlanMutation.isPending}
                 >
                   <option value="">{t('userPlans.editor.statusPlaceholder')}</option>
@@ -841,8 +841,8 @@ export default function AdminPlansPage() {
               </div>
             </div>
 
-            {editUserPlanError && (
-              <p className="mt-4 rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700">{editUserPlanError}</p>
+              {editUserPlanError && (
+              <p className="mt-4 rounded-lg border border-status-danger/25 bg-status-danger/10 px-3 py-2 text-sm text-status-danger">{editUserPlanError}</p>
             )}
 
             <div className="mt-6 flex justify-end gap-2">

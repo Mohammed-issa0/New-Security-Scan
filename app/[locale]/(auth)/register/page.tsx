@@ -8,8 +8,8 @@ import { useRouter } from 'next/navigation';
 import { authService } from '@/lib/auth/authService';
 import { toast } from 'sonner';
 import { useState } from 'react';
-import Link from 'next/link';
 import { ApiRequestError } from '@/lib/api/client';
+import { AuthPageShell } from '@/components/auth/AuthPageShell';
 
 export default function RegisterPage() {
   const t = useTranslations('landing.register');
@@ -66,99 +66,88 @@ export default function RegisterPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-md w-full space-y-8 bg-white p-8 rounded-xl shadow-lg border border-gray-100">
+    <AuthPageShell
+      title={t('title')}
+      subtitle={t('subtitle')}
+      footerPrefix={t('hasAccount')}
+      footerLinkLabel={t('login')}
+      footerHref={`/${locale}/login`}
+      formChildren={
         <div>
-          <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
-            {t('title')}
-          </h2>
-          <p className="mt-2 text-center text-sm text-gray-600">
-            {t('subtitle')}
-          </p>
+          <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
+            <div className="space-y-4">
+              <div>
+                <label className="mb-1 block text-sm font-medium text-text-secondary">
+                  {t('fullName')}
+                </label>
+                <input
+                  {...register('fullName')}
+                  type="text"
+                  className="appearance-none relative block w-full rounded-lg border border-cyan-400/18 bg-white/5 px-3 py-2 text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:ring-2 focus:ring-cyan-300/45 focus:border-cyan-300/70"
+                />
+                {errors.fullName && (
+                  <p className="mt-1 text-xs text-status-danger">{errors.fullName.message}</p>
+                )}
+              </div>
+              <div>
+                <label className="mb-1 block text-sm font-medium text-text-secondary">
+                  {t('email')}
+                </label>
+                <input
+                  {...register('email')}
+                  type="email"
+                  className="appearance-none relative block w-full rounded-lg border border-cyan-400/18 bg-white/5 px-3 py-2 text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:ring-2 focus:ring-cyan-300/45 focus:border-cyan-300/70"
+                />
+                {errors.email && (
+                  <p className="mt-1 text-xs text-status-danger">{errors.email.message}</p>
+                )}
+              </div>
+              <div>
+                <label className="mb-1 block text-sm font-medium text-text-secondary">
+                  {t('password')}
+                </label>
+                <input
+                  {...register('password')}
+                  type="password"
+                  className="appearance-none relative block w-full rounded-lg border border-cyan-400/18 bg-white/5 px-3 py-2 text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:ring-2 focus:ring-cyan-300/45 focus:border-cyan-300/70"
+                />
+                {errors.password && (
+                  <p className="mt-1 text-xs text-status-danger">{errors.password.message}</p>
+                )}
+                <p className="mt-1 text-xs text-text-muted">{t('passwordRules.hint')}</p>
+              </div>
+              <div>
+                <label className="mb-1 block text-sm font-medium text-text-secondary">
+                  {t('confirmPassword')}
+                </label>
+                <input
+                  {...register('confirmPassword')}
+                  type="password"
+                  className="appearance-none relative block w-full rounded-lg border border-cyan-400/18 bg-white/5 px-3 py-2 text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:ring-2 focus:ring-cyan-300/45 focus:border-cyan-300/70"
+                />
+                {errors.confirmPassword && (
+                  <p className="mt-1 text-xs text-status-danger">{errors.confirmPassword.message}</p>
+                )}
+              </div>
+            </div>
+
+            <div>
+              <button
+                type="submit"
+                disabled={loading}
+                className="group relative flex w-full justify-center rounded-lg bg-gradient-to-r from-cyan-400 via-cyan-300 to-blue-400 px-4 py-2 text-sm font-semibold text-slate-950 transition-all hover:shadow-[0_0_30px_rgba(0,209,255,0.26)] focus:outline-none focus:ring-2 focus:ring-cyan-300/50 focus:ring-offset-2 focus:ring-offset-cyber-bg disabled:opacity-50"
+              >
+                {loading ? (
+                  <div className="h-5 w-5 animate-spin rounded-full border-2 border-slate-950/80 border-t-transparent"></div>
+                ) : (
+                  t('submit')
+                )}
+              </button>
+            </div>
+          </form>
         </div>
-        <form className="mt-8 space-y-6" onSubmit={handleSubmit(onSubmit)}>
-          <div className="rounded-md shadow-sm space-y-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                {t('fullName')}
-              </label>
-              <input
-                {...register('fullName')}
-                type="text"
-                className="appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-lg focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm"
-              />
-              {errors.fullName && (
-                <p className="mt-1 text-xs text-red-600">{errors.fullName.message}</p>
-              )}
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                {t('email')}
-              </label>
-              <input
-                {...register('email')}
-                type="email"
-                className="appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-lg focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm"
-              />
-              {errors.email && (
-                <p className="mt-1 text-xs text-red-600">{errors.email.message}</p>
-              )}
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                {t('password')}
-              </label>
-              <input
-                {...register('password')}
-                type="password"
-                className="appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-lg focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm"
-              />
-              {errors.password && (
-                <p className="mt-1 text-xs text-red-600">{errors.password.message}</p>
-              )}
-              <p className="mt-1 text-xs text-gray-500">{t('passwordRules.hint')}</p>
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                {t('confirmPassword')}
-              </label>
-              <input
-                {...register('confirmPassword')}
-                type="password"
-                className="appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-lg focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm"
-              />
-              {errors.confirmPassword && (
-                <p className="mt-1 text-xs text-red-600">{errors.confirmPassword.message}</p>
-              )}
-            </div>
-          </div>
-
-          <div>
-            <button
-              type="submit"
-              disabled={loading}
-              className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-lg text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 transition-colors"
-            >
-              {loading ? (
-                <div className="h-5 w-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-              ) : (
-                t('submit')
-              )}
-            </button>
-          </div>
-
-          <div className="text-center text-sm">
-            <span className="text-gray-600">{t('hasAccount')}</span>{' '}
-            <Link
-              href={`/${locale}/login`}
-              className="font-medium text-blue-600 hover:text-blue-500"
-            >
-              {t('login')}
-            </Link>
-          </div>
-        </form>
-      </div>
-    </div>
+      }
+    />
   );
 }
 

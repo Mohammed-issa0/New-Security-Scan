@@ -10,7 +10,7 @@ import { motion, AnimatePresence } from "framer-motion"
 import { tokenStore } from "@/lib/auth/tokenStore"
 import { authService } from "@/lib/auth/authService"
 import Image from "next/image"
-import logo from "/public/imgs/logo123.png"
+import logo from "/public/imgs/logo1234.png"
 export function Navbar() {
   const [isOpen, setIsOpen] = React.useState(false)
   const [isAuthenticated, setIsAuthenticated] = React.useState(false)
@@ -61,13 +61,19 @@ export function Navbar() {
     <nav className="fixed w-full z-50 border-b border-white/8 bg-[rgba(6,11,20,0.72)] backdrop-blur-xl">
       <Container>
         <div className="flex justify-between items-center h-20">
-          <Link href={`/${locale}`} className="flex items-center gap-2">
-            <div className="p-1.5 rounded-xl text-slate-950 bg-gradient-to-br from-cyan-300 via-cyan-400 to-blue-400 shadow-glow">
-              
-              <Image src={logo} alt="Black Brains" width={20} height={20} className="h-5 w-5 rounded-md object-cover" priority />
+          <Link href={`/${locale}`} className="flex items-center gap-3">
+            <div className="flex h-11 w-11 items-center justify-center overflow-hidden rounded-xl border border-white/10 bg-white/6 shadow-[0_0_24px_rgba(0,209,255,0.16)] ring-1 ring-cyan-300/12">
+              <Image
+                src={logo}
+                alt="Black Brains"
+                width={44}
+                height={44}
+                className="h-full w-full object-contain p-1"
+                priority
+              />
             </div>
             <div className="hidden sm:block">
-              <div className="text-sm font-semibold uppercase tracking-[0.32em] text-text-muted">Black Brains</div>
+              <div className="text-sm font-semibold uppercase tracking-[0.32em] text-text-primary">Black Brains</div>
               <div className="text-xs text-text-secondary">AI Security Testing</div>
             </div>
           </Link>

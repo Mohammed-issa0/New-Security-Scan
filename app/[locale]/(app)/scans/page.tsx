@@ -5,21 +5,21 @@ import { useQuery } from '@tanstack/react-query';
 import { useTranslations, useLocale } from 'next-intl';
 import { scansService } from '@/lib/scans/scansService';
 import Link from 'next/link';
-import { Eye, Clock, Shield, AlertCircle } from 'lucide-react';
+import { Eye } from 'lucide-react';
 import { Scan } from '@/lib/api/types';
 import { TableEmptyRow, TableErrorRow, TableSkeletonRows } from '@/components/common/AsyncStates';
 
 const StatusBadge = ({ status }: { status: Scan['status'] }) => {
   const styles = {
-    Pending: 'bg-yellow-100 text-yellow-800',
-    Running: 'bg-blue-100 text-blue-800 animate-pulse',
-    Completed: 'bg-green-100 text-green-800',
-    Failed: 'bg-red-100 text-red-800',
-    Canceled: 'bg-gray-100 text-gray-800',
+    Pending: 'border border-status-warning/30 bg-status-warning/14 text-status-warning',
+    Running: 'animate-pulse border border-cyan-300/28 bg-cyan-400/14 text-cyan-200',
+    Completed: 'border border-status-success/30 bg-status-success/14 text-status-success',
+    Failed: 'border border-status-danger/30 bg-status-danger/14 text-status-danger',
+    Canceled: 'border border-white/14 bg-white/8 text-text-secondary',
   };
 
   return (
-    <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${styles[status]}`}>
+    <span className={`inline-flex rounded-full px-2 text-xs font-semibold leading-5 ${styles[status]}`}>
       {status}
     </span>
   );
@@ -37,6 +37,7 @@ export default function ScansPage() {
   }, [statusFilter, toolFilter]);
 
   const tCommon = useTranslations('common.states');
+  const tButtons = useTranslations('common.buttons');
 
   const { data: scansData, isLoading, isError, error, refetch } = useQuery({
     queryKey: ['scans', page, statusFilter, toolFilter],
@@ -60,20 +61,20 @@ export default function ScansPage() {
     <div className="space-y-6">
       <div className="flex justify-between items-center">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">{t('title')}</h1>
-          <p className="text-gray-600">{t('subtitle')}</p>
+          <h1 className="text-2xl font-bold text-text-primary">{t('title')}</h1>
+          <p className="text-text-secondary">{t('subtitle')}</p>
         </div>
         <Link
           href={`/${locale}/scans/new`}
-          className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-lg text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+          className="inline-flex items-center rounded-lg bg-gradient-to-r from-cyan-400 via-cyan-300 to-blue-400 px-4 py-2 text-sm font-semibold text-slate-950 hover:shadow-[0_0_26px_rgba(0,209,255,0.24)] focus:outline-none focus:ring-2 focus:ring-cyan-300/55 focus:ring-offset-2 focus:ring-offset-cyber-bg"
         >
-          {useTranslations('common.buttons')('startNow')}
+          {tButtons('startNow')}
         </Link>
       </div>
 
-      <div className="flex flex-col gap-3 rounded-xl border border-gray-200 bg-white p-4 sm:flex-row sm:items-center sm:justify-between">
+      <div className="app-panel flex flex-col gap-3 rounded-xl p-4 sm:flex-row sm:items-center sm:justify-between">
         <div className="space-y-2">
-          <div className="text-sm text-gray-600">{t('filters.label')}</div>
+          <div className="text-sm text-text-secondary">{t('filters.label')}</div>
           <div className="flex flex-wrap items-center gap-2">
             {(['All', 'Pending', 'Running', 'Completed', 'Failed', 'Canceled'] as const).map((status) => (
               <button
@@ -82,8 +83,8 @@ export default function ScansPage() {
                 onClick={() => setStatusFilter(status)}
                 className={`rounded-full border px-3 py-1.5 text-xs font-semibold transition ${
                   statusFilter === status
-                    ? 'border-blue-600 bg-blue-600 text-white'
-                    : 'border-gray-200 bg-white text-gray-700 hover:border-gray-300'
+                    ? 'border-cyan-300/40 bg-cyan-400/16 text-cyan-200'
+                    : 'border-white/14 bg-white/5 text-text-secondary hover:border-cyan-300/30 hover:text-text-primary'
                 }`}
               >
                 {status === 'All' ? t('filters.all') : t(`details.status.${status.toLowerCase()}`)}
@@ -92,7 +93,7 @@ export default function ScansPage() {
           </div>
         </div>
         <div className="space-y-2">
-          <div className="text-sm text-gray-600">{t('filters.toolLabel')}</div>
+          <div className="text-sm text-text-secondary">{t('filters.toolLabel')}</div>
           <div className="flex flex-wrap items-center gap-2">
             {(['All', 'zap', 'ffuf', 'nmap', 'wpscan', 'sqlmap'] as const).map((tool) => (
               <button
@@ -101,8 +102,8 @@ export default function ScansPage() {
                 onClick={() => setToolFilter(tool)}
                 className={`rounded-full border px-3 py-1.5 text-xs font-semibold uppercase transition ${
                   toolFilter === tool
-                    ? 'border-blue-600 bg-blue-600 text-white'
-                    : 'border-gray-200 bg-white text-gray-700 hover:border-gray-300'
+                    ? 'border-cyan-300/40 bg-cyan-400/16 text-cyan-200'
+                    : 'border-white/14 bg-white/5 text-text-secondary hover:border-cyan-300/30 hover:text-text-primary'
                 }`}
               >
                 {tool === 'All' ? t('filters.allTools') : tool}
@@ -112,28 +113,28 @@ export default function ScansPage() {
         </div>
       </div>
 
-      <div className="bg-white shadow overflow-hidden sm:rounded-lg border border-gray-200">
-        <table className="min-w-full divide-y divide-gray-200">
-          <thead className="bg-gray-50">
+      <div className="app-panel overflow-hidden shadow sm:rounded-lg">
+        <table className="min-w-full divide-y divide-white/10">
+          <thead className="bg-white/6">
             <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-text-muted">
                 {t('status')}
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-text-muted">
                 {t('requested')}
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-text-muted">
                 {t('started')}
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-text-muted">
                 {t('finished')}
               </th>
-              <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-6 py-3 text-right text-xs font-medium uppercase tracking-wider text-text-muted">
                 {t('actions')}
               </th>
             </tr>
           </thead>
-          <tbody className="bg-white divide-y divide-gray-200">
+          <tbody className="divide-y divide-white/10 bg-transparent">
             {isLoading ? (
               <TableSkeletonRows columns={5} />
             ) : isError ? (
@@ -148,23 +149,23 @@ export default function ScansPage() {
               <TableEmptyRow columns={5} title={t('noScans')} />
             ) : (
               (scansData?.items ?? []).map((scan) => (
-                <tr key={scan.id} className="hover:bg-gray-50">
+                <tr key={scan.id} className="hover:bg-white/6">
                   <td className="px-6 py-4 whitespace-nowrap">
                     <StatusBadge status={scan.status} />
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-text-secondary">
                     {new Date(scan.requestedAt).toLocaleString()}
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-text-secondary">
                     {scan.startedAt ? new Date(scan.startedAt).toLocaleString() : '-'}
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-text-secondary">
                     {scan.finishedAt ? new Date(scan.finishedAt).toLocaleString() : '-'}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                     <Link
                       href={`/${locale}/scans/${scan.id}`}
-                      className="text-blue-600 hover:text-blue-900 flex items-center justify-end"
+                      className="flex items-center justify-end text-cyan-300 hover:text-cyan-200"
                     >
                       <Eye className="h-5 w-5 mr-1" />
                       {t('view')}
@@ -177,13 +178,13 @@ export default function ScansPage() {
         </table>
 
         {scansData && totalPages > 1 && (
-          <div className="bg-white px-4 py-3 flex items-center justify-between border-t border-gray-200 sm:px-6">
+          <div className="flex items-center justify-between border-t border-white/10 bg-transparent px-4 py-3 sm:px-6">
             <div className="flex-1 flex justify-between sm:hidden">
               <button
                 type="button"
                 onClick={() => setPage(Math.max(1, page - 1))}
                 disabled={page === 1}
-                className="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="relative inline-flex items-center rounded-md border border-white/14 bg-white/5 px-4 py-2 text-sm font-medium text-text-secondary hover:bg-white/10 disabled:cursor-not-allowed disabled:opacity-50"
               >
                 {t('previous')}
               </button>
@@ -191,13 +192,13 @@ export default function ScansPage() {
                 type="button"
                 onClick={() => setPage(Math.min(totalPages, page + 1))}
                 disabled={page === totalPages}
-                className="ml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="relative ml-3 inline-flex items-center rounded-md border border-white/14 bg-white/5 px-4 py-2 text-sm font-medium text-text-secondary hover:bg-white/10 disabled:cursor-not-allowed disabled:opacity-50"
               >
                 {t('next')}
               </button>
             </div>
             <div className="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
-              <p className="text-sm text-gray-700">
+              <p className="text-sm text-text-secondary">
                 {t('page')} <span className="font-medium">{page}</span> {t('of')} <span className="font-medium">{totalPages}</span>
               </p>
               <div className="flex items-center gap-2">
@@ -205,7 +206,7 @@ export default function ScansPage() {
                   type="button"
                   onClick={() => setPage(Math.max(1, page - 1))}
                   disabled={page === 1}
-                  className="rounded-md border border-gray-300 px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="rounded-md border border-white/14 bg-white/5 px-3 py-2 text-sm text-text-secondary hover:bg-white/10 disabled:cursor-not-allowed disabled:opacity-50"
                 >
                   {t('previous')}
                 </button>
@@ -213,7 +214,7 @@ export default function ScansPage() {
                   type="button"
                   onClick={() => setPage(Math.min(totalPages, page + 1))}
                   disabled={page === totalPages}
-                  className="rounded-md border border-gray-300 px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="rounded-md border border-white/14 bg-white/5 px-3 py-2 text-sm text-text-secondary hover:bg-white/10 disabled:cursor-not-allowed disabled:opacity-50"
                 >
                   {t('next')}
                 </button>

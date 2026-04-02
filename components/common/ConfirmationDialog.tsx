@@ -49,23 +49,23 @@ export function ConfirmationDialog({
   const isKeywordValid = !requiresKeyword || typedKeyword.trim() === confirmationKeyword;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-900/60 p-4" onClick={onClose}>
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/70 backdrop-blur-sm p-4" onClick={onClose}>
       <div
-        className="w-full max-w-md rounded-2xl bg-white p-6 shadow-xl"
+        className="w-full max-w-md rounded-2xl border border-white/12 bg-[rgba(8,16,30,0.98)] p-6 shadow-[0_30px_80px_rgba(0,0,0,0.48)]"
         onClick={(event) => event.stopPropagation()}
         role="dialog"
         aria-modal="true"
       >
         <div className="flex items-start justify-between gap-4">
           <div className="flex items-start gap-3">
-            <div className="mt-0.5 rounded-xl bg-red-50 p-2 text-red-600">
+            <div className="mt-0.5 rounded-xl bg-status-danger/10 p-2 text-status-danger">
               <TriangleAlert className="h-5 w-5" />
             </div>
             <div>
-              <h3 className="text-lg font-semibold text-gray-900">{title}</h3>
-              <p className="mt-1 text-sm text-gray-600">{description}</p>
+              <h3 className="text-lg font-semibold text-text-primary">{title}</h3>
+              <p className="mt-1 text-sm text-text-secondary">{description}</p>
               {warningMessage && (
-                <p className="mt-2 rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-xs font-medium text-red-700">
+                <p className="mt-2 rounded-lg border border-status-danger/25 bg-status-danger/10 px-3 py-2 text-xs font-medium text-status-danger">
                   {warningMessage}
                 </p>
               )}
@@ -74,7 +74,7 @@ export function ConfirmationDialog({
           <button
             type="button"
             onClick={onClose}
-            className="rounded-md p-1 text-gray-400 hover:bg-gray-100 hover:text-gray-600"
+            className="rounded-md p-1 text-text-muted hover:bg-white/10 hover:text-text-secondary"
             aria-label={cancelLabel}
           >
             <X className="h-4 w-4" />
@@ -83,11 +83,11 @@ export function ConfirmationDialog({
 
         {requiresKeyword && (
           <div className="mt-4 space-y-1">
-            {confirmationPrompt && <p className="text-xs font-medium text-gray-600">{confirmationPrompt}</p>}
+            {confirmationPrompt && <p className="text-xs font-medium text-text-muted">{confirmationPrompt}</p>}
             <input
               value={typedKeyword}
               onChange={(event) => setTypedKeyword(event.target.value)}
-              className="h-10 w-full rounded-lg border border-gray-300 px-3 text-sm"
+              className="h-10 w-full rounded-lg border border-white/14 bg-white/6 px-3 text-sm text-text-primary placeholder:text-text-muted"
               placeholder={confirmationPlaceholder || confirmationKeyword}
               autoComplete="off"
             />

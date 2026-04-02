@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { Card, CardContent, CardHeader, Badge, Button } from '@/components/scans/ui';
+import { Card, CardContent, CardHeader, Badge, Button, Select } from '@/components/scans/ui';
 import { ClipboardList } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { adminService } from '@/lib/admin/adminService';
@@ -70,21 +70,20 @@ export default function AdminAuditLogsPage() {
       <CardContent>
         <div className="mb-4 grid grid-cols-1 gap-3 md:grid-cols-3">
           <label className="space-y-1 md:col-span-2">
-            <span className="text-xs font-medium text-gray-600">{t('filters.searchLabel')}</span>
+            <span className="text-xs font-medium text-text-secondary">{t('filters.searchLabel')}</span>
             <input
               value={search}
               onChange={(event) => setSearch(event.target.value)}
               placeholder={t('filters.searchPlaceholder')}
-              className="h-10 w-full rounded-lg border border-gray-300 px-3 text-sm"
+              className="h-10 w-full rounded-lg border border-white/14 bg-white/6 px-3 text-sm text-text-primary placeholder:text-text-muted"
             />
           </label>
 
           <label className="space-y-1">
-            <span className="text-xs font-medium text-gray-600">{t('filters.actionLabel')}</span>
-            <select
+            <span className="text-xs font-medium text-text-secondary">{t('filters.actionLabel')}</span>
+            <Select
               value={actionFilter}
               onChange={(event) => setActionFilter(event.target.value)}
-              className="h-10 w-full rounded-lg border border-gray-300 px-3 text-sm"
             >
               <option value="all">{t('filters.allActions')}</option>
               {actionOptions.map((action) => (
@@ -92,13 +91,13 @@ export default function AdminAuditLogsPage() {
                   {action}
                 </option>
               ))}
-            </select>
+            </Select>
           </label>
         </div>
 
         {hasActiveFilters && (
-          <div className="mb-4 flex items-center justify-between rounded-lg border border-blue-100 bg-blue-50 px-3 py-2">
-            <p className="text-xs text-blue-800">{t('filters.activeHint')}</p>
+          <div className="mb-4 flex items-center justify-between rounded-lg border border-cyan-400/20 bg-cyan-400/8 px-3 py-2">
+            <p className="text-xs text-cyan-200">{t('filters.activeHint')}</p>
             <Button
               variant="outline"
               size="sm"
@@ -113,27 +112,27 @@ export default function AdminAuditLogsPage() {
         )}
 
         <div className="overflow-x-auto">
-          <table className="min-w-full divide-y divide-gray-200">
-            <thead className="bg-gray-50">
+          <table className="min-w-full divide-y divide-white/10">
+            <thead className="bg-white/8">
               <tr>
-                <th className="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-text-muted">
                   {t('columns.action')}
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-text-muted">
                   {t('columns.entity')}
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-text-muted">
                   {t('columns.user')}
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-text-muted">
                   {t('columns.ip')}
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-text-muted">
                   {t('columns.timestamp')}
                 </th>
               </tr>
             </thead>
-            <tbody className="bg-white divide-y divide-gray-200">
+            <tbody className="divide-y divide-white/10 bg-transparent">
               {isLoading ? (
                 <TableSkeletonRows columns={5} />
               ) : isError ? (
@@ -147,18 +146,18 @@ export default function AdminAuditLogsPage() {
                 <TableEmptyRow columns={5} title={hasActiveFilters ? t('emptyFiltered') : t('empty')} />
               ) : (
                 filteredLogs.map((log) => (
-                  <tr key={log.id} className="hover:bg-gray-50">
+                  <tr key={log.id} className="hover:bg-white/7">
                     <td className="px-6 py-4 text-sm">
                       <Badge variant="outline">{log.action || '-'}</Badge>
                     </td>
-                    <td className="px-6 py-4 text-sm text-gray-700">
+                    <td className="px-6 py-4 text-sm text-text-secondary">
                       {log.entityName || '-'} {log.entityId ? `#${log.entityId}` : ''}
                     </td>
-                    <td className="px-6 py-4 text-sm text-gray-700">
+                    <td className="px-6 py-4 text-sm text-text-secondary">
                       {log.user?.email || log.userId || '-'}
                     </td>
-                    <td className="px-6 py-4 text-sm text-gray-600">{log.ipAddress || '-'}</td>
-                    <td className="px-6 py-4 text-sm text-gray-600">
+                    <td className="px-6 py-4 text-sm text-text-muted">{log.ipAddress || '-'}</td>
+                    <td className="px-6 py-4 text-sm text-text-muted">
                       {log.timestamp ? new Date(log.timestamp).toLocaleString() : '-'}
                     </td>
                   </tr>
@@ -169,7 +168,7 @@ export default function AdminAuditLogsPage() {
         </div>
 
         <div className="flex items-center justify-between pt-4">
-          <div className="text-xs text-gray-500">
+          <div className="text-xs text-text-muted">
             {t('pagination', { page, totalPages, total: totalCount })}
           </div>
           <div className="flex items-center gap-2">

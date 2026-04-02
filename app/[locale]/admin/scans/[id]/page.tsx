@@ -123,7 +123,7 @@ export default function AdminScanDetailsPage() {
   return (
     <div className="space-y-6">
       <div>
-        <Link href={`/${locale}/admin/scans`} className="inline-flex items-center gap-2 text-sm text-blue-600 hover:text-blue-700">
+        <Link href={`/${locale}/admin/scans`} className="inline-flex items-center gap-2 text-sm text-cyan-300 hover:text-cyan-200">
           <ArrowLeft size={16} />
           {t('details.backToList')}
         </Link>
@@ -133,8 +133,8 @@ export default function AdminScanDetailsPage() {
         <CardHeader title={t('details.title')} description={t('details.subtitle')} icon={FileSearch} />
         <CardContent>
           {isLoading ? (
-            <div className="flex items-center gap-2 text-sm text-gray-500">
-              <span className="h-5 w-5 border-2 border-blue-600 border-t-transparent rounded-full animate-spin" />
+            <div className="flex items-center gap-2 text-sm text-text-muted">
+              <span className="h-5 w-5 animate-spin rounded-full border-2 border-cyan-300 border-t-transparent" />
               {t('loading')}
             </div>
           ) : isError ? (
@@ -149,28 +149,28 @@ export default function AdminScanDetailsPage() {
             <div className="space-y-6">
               <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                 <div>
-                  <p className="text-xs text-gray-500">{t('columns.id')}</p>
-                  <p className="font-medium text-gray-900 break-all">{scan.id}</p>
+                  <p className="text-xs text-text-muted">{t('columns.id')}</p>
+                  <p className="break-all font-medium text-text-primary">{scan.id}</p>
                 </div>
                 <div>
-                  <p className="text-xs text-gray-500">{t('columns.targetId')}</p>
-                  <p className="font-medium text-gray-900 break-all">{scan.targetId || '-'}</p>
+                  <p className="text-xs text-text-muted">{t('columns.targetId')}</p>
+                  <p className="break-all font-medium text-text-primary">{scan.targetId || '-'}</p>
                 </div>
                 <div>
-                  <p className="text-xs text-gray-500">{t('columns.requestedAt')}</p>
-                  <p className="text-gray-900">{scan.requestedAt ? new Date(scan.requestedAt).toLocaleString() : '-'}</p>
+                  <p className="text-xs text-text-muted">{t('columns.requestedAt')}</p>
+                  <p className="text-text-primary">{scan.requestedAt ? new Date(scan.requestedAt).toLocaleString() : '-'}</p>
                 </div>
                 <div>
-                  <p className="text-xs text-gray-500">{t('columns.finishedAt')}</p>
-                  <p className="text-gray-900">{scan.finishedAt ? new Date(scan.finishedAt).toLocaleString() : '-'}</p>
+                  <p className="text-xs text-text-muted">{t('columns.finishedAt')}</p>
+                  <p className="text-text-primary">{scan.finishedAt ? new Date(scan.finishedAt).toLocaleString() : '-'}</p>
                 </div>
                 <div>
-                  <p className="text-xs text-gray-500">{t('details.currentStatus')}</p>
+                  <p className="text-xs text-text-muted">{t('details.currentStatus')}</p>
                   <Badge variant="outline">{scan.status || '-'}</Badge>
                 </div>
                 <div>
-                  <p className="text-xs text-gray-500">{t('details.currentFailureReason')}</p>
-                  <p className="text-gray-900">{scan.failureReason || '-'}</p>
+                  <p className="text-xs text-text-muted">{t('details.currentFailureReason')}</p>
+                  <p className="text-text-primary">{scan.failureReason || '-'}</p>
                 </div>
               </div>
 
@@ -204,8 +204,8 @@ export default function AdminScanDetailsPage() {
                 </div>
               </div>
 
-              <div className="rounded-xl border border-gray-200 p-4">
-                <h3 className="text-sm font-semibold text-gray-900">{t('details.updateSectionTitle')}</h3>
+              <div className="rounded-xl border border-white/12 bg-white/5 p-4">
+                <h3 className="text-sm font-semibold text-text-primary">{t('details.updateSectionTitle')}</h3>
                 <div className="mt-4 grid grid-cols-1 gap-4 md:grid-cols-2">
                   <div>
                     <Label htmlFor="status">{t('details.statusLabel')}</Label>
@@ -235,17 +235,17 @@ export default function AdminScanDetailsPage() {
                 </div>
               </div>
 
-              <div className="rounded-xl border border-red-200 bg-red-50 p-4">
-                <h3 className="text-sm font-semibold text-red-700">{t('details.dangerZone')}</h3>
-                <p className="mt-1 text-sm text-red-700/90">{t('details.forceFailDescription')}</p>
+              <div className="rounded-xl border border-status-danger/35 bg-status-danger/10 p-4">
+                <h3 className="text-sm font-semibold text-status-danger">{t('details.dangerZone')}</h3>
+                <p className="mt-1 text-sm text-status-danger">{t('details.forceFailDescription')}</p>
                 <div className="mt-3 space-y-2">
-                  <Label htmlFor="forceFailReason" className="text-red-700">{t('details.forceFailReasonLabel')}</Label>
+                  <Label htmlFor="forceFailReason" className="text-status-danger">{t('details.forceFailReasonLabel')}</Label>
                   <Textarea
                     id="forceFailReason"
                     value={forceFailReason}
                     onChange={(event) => setForceFailReason(event.target.value)}
                     placeholder={t('details.forceFailReasonPlaceholder')}
-                    className="border-red-200 bg-white"
+                    className="border-status-danger/40 bg-slate-950/50"
                   />
                   <div>
                     <Button
@@ -260,7 +260,7 @@ export default function AdminScanDetailsPage() {
                     </Button>
                   </div>
                 </div>
-                <p className="mt-1 text-sm text-red-700/90">{t('details.deleteDescription')}</p>
+                <p className="mt-1 text-sm text-status-danger">{t('details.deleteDescription')}</p>
                 <div className="mt-3">
                   <Button
                     type="button"

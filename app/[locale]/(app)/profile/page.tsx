@@ -107,13 +107,13 @@ export default function ProfilePage() {
     return (
       <div className="space-y-6">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">{t('title')}</h1>
-          <p className="text-gray-600">{t('subtitle')}</p>
+          <h1 className="text-2xl font-bold text-text-primary">{t('title')}</h1>
+          <p className="text-text-secondary">{t('subtitle')}</p>
         </div>
         <Card>
           <CardContent>
             <div className="flex items-center justify-center py-12">
-              <div className="h-8 w-8 border-2 border-blue-600 border-t-transparent rounded-full animate-spin" />
+              <div className="h-8 w-8 animate-spin rounded-full border-2 border-cyan-300 border-t-transparent" />
             </div>
           </CardContent>
         </Card>
@@ -125,8 +125,8 @@ export default function ProfilePage() {
     return (
       <div className="space-y-6">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">{t('title')}</h1>
-          <p className="text-gray-600">{t('subtitle')}</p>
+          <h1 className="text-2xl font-bold text-text-primary">{t('title')}</h1>
+          <p className="text-text-secondary">{t('subtitle')}</p>
         </div>
         <Alert variant="error" title={t('messages.loadError')}>
           <div className="flex items-center justify-between gap-4">
@@ -144,8 +144,8 @@ export default function ProfilePage() {
     return (
       <div className="space-y-6">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">{t('title')}</h1>
-          <p className="text-gray-600">{t('subtitle')}</p>
+          <h1 className="text-2xl font-bold text-text-primary">{t('title')}</h1>
+          <p className="text-text-secondary">{t('subtitle')}</p>
         </div>
         <Alert variant="info" title={t('messages.empty')}>
           {t('messages.emptyDesc')}
@@ -157,8 +157,8 @@ export default function ProfilePage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-gray-900">{t('title')}</h1>
-        <p className="text-gray-600">{t('subtitle')}</p>
+        <h1 className="text-2xl font-bold text-text-primary">{t('title')}</h1>
+        <p className="text-text-secondary">{t('subtitle')}</p>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -199,7 +199,7 @@ export default function ProfilePage() {
                     placeholder={t('placeholders.name')}
                   />
                   {fieldError && (
-                    <p className="text-red-500 text-xs mt-1 flex items-center gap-1">
+                    <p className="mt-1 flex items-center gap-1 text-xs text-status-danger">
                       <AlertCircle size={12} />
                       {fieldError}
                     </p>
@@ -210,7 +210,7 @@ export default function ProfilePage() {
                   <Label htmlFor="email">{t('fields.email')}</Label>
                   <div className="relative">
                     <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                      <Mail className="h-4 w-4 text-gray-400" />
+                      <Mail className="h-4 w-4 text-text-muted" />
                     </div>
                     <Input
                       id="email"
@@ -239,22 +239,22 @@ export default function ProfilePage() {
           />
           <CardContent className="space-y-4">
             <div className="flex items-center justify-between text-sm">
-              <span className="text-gray-500">{t('labels.status')}</span>
+              <span className="text-text-secondary">{t('labels.status')}</span>
               <Badge variant={profile.isActive ? 'success' : 'warning'}>
                 {profile.isActive ? t('labels.active') : t('labels.inactive')}
               </Badge>
             </div>
             <div className="flex items-center justify-between text-sm">
-              <span className="text-gray-500">{t('labels.createdAt')}</span>
-              <span className="font-medium text-gray-900">{formatDate(profile.createdAt)}</span>
+              <span className="text-text-secondary">{t('labels.createdAt')}</span>
+              <span className="font-medium text-text-primary">{formatDate(profile.createdAt)}</span>
             </div>
             <div className="flex items-center justify-between text-sm">
-              <span className="text-gray-500">{t('labels.lastLogin')}</span>
-              <span className="font-medium text-gray-900">{formatDate(profile.lastLoginAt)}</span>
+              <span className="text-text-secondary">{t('labels.lastLogin')}</span>
+              <span className="font-medium text-text-primary">{formatDate(profile.lastLoginAt)}</span>
             </div>
             <div className="flex items-center justify-between text-sm">
-              <span className="text-gray-500">{t('labels.roles')}</span>
-              <span className="font-medium text-gray-900 text-right">
+              <span className="text-text-secondary">{t('labels.roles')}</span>
+              <span className="text-right font-medium text-text-primary">
                 {profile.roles?.length ? profile.roles.join(', ') : t('labels.rolesEmpty')}
               </span>
             </div>
@@ -271,7 +271,7 @@ export default function ProfilePage() {
         <CardContent className="space-y-4">
           {isPlanLoading && (
             <div className="flex items-center justify-center py-8">
-              <div className="h-8 w-8 border-2 border-blue-600 border-t-transparent rounded-full animate-spin" />
+              <div className="h-8 w-8 animate-spin rounded-full border-2 border-cyan-300 border-t-transparent" />
             </div>
           )}
 
@@ -295,48 +295,48 @@ export default function ProfilePage() {
           {!isPlanLoading && !isPlanError && activePlan && (
             <div className="space-y-5">
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div className="rounded-xl border border-gray-100 p-4">
-                  <p className="text-xs font-semibold uppercase text-gray-400">{t('plan.labels.name')}</p>
-                  <p className="mt-2 text-lg font-semibold text-gray-900">{activePlan.planName || t('labels.notAvailable')}</p>
+                <div className="rounded-xl border border-white/12 bg-white/4 p-4">
+                  <p className="text-xs font-semibold uppercase text-text-muted">{t('plan.labels.name')}</p>
+                  <p className="mt-2 text-lg font-semibold text-text-primary">{activePlan.planName || t('labels.notAvailable')}</p>
                 </div>
-                <div className="rounded-xl border border-gray-100 p-4">
-                  <p className="text-xs font-semibold uppercase text-gray-400">{t('plan.labels.expiresAt')}</p>
-                  <p className="mt-2 text-sm font-semibold text-gray-900">{formatDate(activePlan.expiresAt)}</p>
+                <div className="rounded-xl border border-white/12 bg-white/4 p-4">
+                  <p className="text-xs font-semibold uppercase text-text-muted">{t('plan.labels.expiresAt')}</p>
+                  <p className="mt-2 text-sm font-semibold text-text-primary">{formatDate(activePlan.expiresAt)}</p>
                 </div>
-                <div className="rounded-xl border border-gray-100 p-4">
-                  <p className="text-xs font-semibold uppercase text-gray-400">{t('plan.labels.purchasedAt')}</p>
-                  <p className="mt-2 text-sm font-semibold text-gray-900">{formatDate(activePlan.purchasedAt)}</p>
+                <div className="rounded-xl border border-white/12 bg-white/4 p-4">
+                  <p className="text-xs font-semibold uppercase text-text-muted">{t('plan.labels.purchasedAt')}</p>
+                  <p className="mt-2 text-sm font-semibold text-text-primary">{formatDate(activePlan.purchasedAt)}</p>
                 </div>
               </div>
 
               <div className="space-y-2">
                 <div className="flex items-center justify-between text-sm">
-                  <span className="text-gray-500">{t('plan.labels.creditsUsage')}</span>
-                  <span className="font-medium text-gray-900">
+                  <span className="text-text-secondary">{t('plan.labels.creditsUsage')}</span>
+                  <span className="font-medium text-text-primary">
                     {usedCredits} / {totalCredits}
                   </span>
                 </div>
-                <div className="h-2 rounded-full bg-gray-100 overflow-hidden">
-                  <div className="h-2 bg-blue-600" style={{ width: `${usedPercent}%` }} />
+                <div className="h-2 overflow-hidden rounded-full bg-white/10">
+                  <div className="h-2 bg-cyan-300" style={{ width: `${usedPercent}%` }} />
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-3 text-sm">
                   <div className="flex items-center justify-between">
-                    <span className="text-gray-500">{t('plan.labels.remaining')}</span>
-                    <span className="font-semibold text-gray-900">{remainingCredits}</span>
+                    <span className="text-text-secondary">{t('plan.labels.remaining')}</span>
+                    <span className="font-semibold text-text-primary">{remainingCredits}</span>
                   </div>
                   <div className="flex items-center justify-between">
-                    <span className="text-gray-500">{t('plan.labels.extraCredits')}</span>
-                    <span className="font-semibold text-gray-900">{activePlan.extraCreditsAvailable}</span>
+                    <span className="text-text-secondary">{t('plan.labels.extraCredits')}</span>
+                    <span className="font-semibold text-text-primary">{activePlan.extraCreditsAvailable}</span>
                   </div>
                   <div className="flex items-center justify-between">
-                    <span className="text-gray-500">{t('plan.labels.extraPurchases')}</span>
-                    <span className="font-semibold text-gray-900">{activePlan.extraPurchaseCount}</span>
+                    <span className="text-text-secondary">{t('plan.labels.extraPurchases')}</span>
+                    <span className="font-semibold text-text-primary">{activePlan.extraPurchaseCount}</span>
                   </div>
                 </div>
               </div>
 
               <div className="flex items-center justify-between text-sm">
-                <span className="text-gray-500">{t('plan.labels.canBuyExtra')}</span>
+                <span className="text-text-secondary">{t('plan.labels.canBuyExtra')}</span>
                 <Badge variant={activePlan.canBuyExtraCredit ? 'success' : 'warning'}>
                   {activePlan.canBuyExtraCredit ? t('plan.labels.allowed') : t('plan.labels.blocked')}
                 </Badge>
