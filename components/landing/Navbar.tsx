@@ -9,7 +9,8 @@ import { LanguageSwitcher } from "../layout/LanguageSwitcher"
 import { motion, AnimatePresence } from "framer-motion"
 import { tokenStore } from "@/lib/auth/tokenStore"
 import { authService } from "@/lib/auth/authService"
-
+import Image from "next/image"
+import logo from "/public/imgs/logo123.png"
 export function Navbar() {
   const [isOpen, setIsOpen] = React.useState(false)
   const [isAuthenticated, setIsAuthenticated] = React.useState(false)
@@ -57,48 +58,52 @@ export function Navbar() {
   }
 
   return (
-    <nav className="fixed w-full z-50 bg-white/80 backdrop-blur-md border-b border-gray-100">
+    <nav className="fixed w-full z-50 border-b border-white/8 bg-[rgba(6,11,20,0.72)] backdrop-blur-xl">
       <Container>
         <div className="flex justify-between items-center h-20">
           <Link href={`/${locale}`} className="flex items-center gap-2">
-            <div className="p-1.5 bg-blue-600 rounded-lg text-white">
-              <Shield size={22} fill="currentColor" />
+            <div className="p-1.5 rounded-xl text-slate-950 bg-gradient-to-br from-cyan-300 via-cyan-400 to-blue-400 shadow-glow">
+              
+              <Image src={logo} alt="Black Brains" width={20} height={20} className="h-5 w-5 rounded-md object-cover" priority />
             </div>
-            
+            <div className="hidden sm:block">
+              <div className="text-sm font-semibold uppercase tracking-[0.32em] text-text-muted">Black Brains</div>
+              <div className="text-xs text-text-secondary">AI Security Testing</div>
+            </div>
           </Link>
 
           {/* Desktop Nav */}
           <div className="hidden md:flex items-center gap-8">
             {!isAuthenticated ? (
               <>
-                <Link href="#features" className="text-sm font-medium text-gray-600 hover:text-blue-600 transition-colors">{t('nav.features')}</Link>
-                <Link href="#tools" className="text-sm font-medium text-gray-600 hover:text-blue-600 transition-colors">{t('nav.tools')}</Link>
-                <Link href="#plans" className="text-sm font-medium text-gray-600 hover:text-blue-600 transition-colors">{t('nav.plans')}</Link>
-                <Link href="#how-it-works" className="text-sm font-medium text-gray-600 hover:text-blue-600 transition-colors">{t('nav.howItWorks')}</Link>
+                <Link href="#features" className="text-sm font-medium text-text-secondary hover:text-cyan-300 transition-colors">{t('nav.features')}</Link>
+                <Link href="#tools" className="text-sm font-medium text-text-secondary hover:text-cyan-300 transition-colors">{t('nav.tools')}</Link>
+                <Link href="#plans" className="text-sm font-medium text-text-secondary hover:text-cyan-300 transition-colors">{t('nav.plans')}</Link>
+                <Link href="#how-it-works" className="text-sm font-medium text-text-secondary hover:text-cyan-300 transition-colors">{t('nav.howItWorks')}</Link>
               </>
             ) : (
               <>
-                <Link href={`/${locale}/scans`} className="text-sm font-medium text-gray-600 hover:text-blue-600 transition-colors flex items-center gap-1">
+                <Link href={`/${locale}/scans`} className="text-sm font-medium text-text-secondary hover:text-cyan-300 transition-colors flex items-center gap-1">
                   <History size={16} />
                   {tScans('title')}
                 </Link>
-                <Link href={`/${locale}/targets`} className="text-sm font-medium text-gray-600 hover:text-blue-600 transition-colors flex items-center gap-1">
+                <Link href={`/${locale}/targets`} className="text-sm font-medium text-text-secondary hover:text-cyan-300 transition-colors flex items-center gap-1">
                   <Target size={16} />
                   {tTargets('title')}
                 </Link>
-                <Link href={`/${locale}/jira/projects`} className="text-sm font-medium text-gray-600 hover:text-blue-600 transition-colors flex items-center gap-1">
+                <Link href={`/${locale}/jira/projects`} className="text-sm font-medium text-text-secondary hover:text-cyan-300 transition-colors flex items-center gap-1">
                   <FolderKanban size={16} />
                   {tJiraProjects('title')}
                 </Link>
-                <Link href={`/${locale}/profile`} className="text-sm font-medium text-gray-600 hover:text-blue-600 transition-colors flex items-center gap-1">
+                <Link href={`/${locale}/profile`} className="text-sm font-medium text-text-secondary hover:text-cyan-300 transition-colors flex items-center gap-1">
                   <User size={16} />
                   {t('nav.profile')}
                 </Link>
-                <Link href={`/${locale}/billing`} className="text-sm font-medium text-gray-600 hover:text-blue-600 transition-colors flex items-center gap-1">
+                <Link href={`/${locale}/billing`} className="text-sm font-medium text-text-secondary hover:text-cyan-300 transition-colors flex items-center gap-1">
                   <CreditCard size={16} />
                   {t('nav.billing')}
                 </Link>
-                <Link href={`/${locale}/plans`} className="text-sm font-medium text-gray-600 hover:text-blue-600 transition-colors">
+                <Link href={`/${locale}/plans`} className="text-sm font-medium text-text-secondary hover:text-cyan-300 transition-colors">
                   {t('nav.plans')}
                 </Link>
               </>
@@ -113,7 +118,7 @@ export function Navbar() {
                       <motion.button
                         whileHover={{ scale: 1.05 }}
                         whileTap={{ scale: 0.95 }}
-                        className="p-2.5 text-gray-600 hover:text-blue-700 hover:bg-blue-50 rounded-full transition-colors"
+                        className="p-2.5 text-text-secondary hover:text-cyan-300 hover:bg-white/5 rounded-full transition-colors"
                         title="Admin"
                       >
                         <LayoutDashboard size={20} />
@@ -124,7 +129,7 @@ export function Navbar() {
                     <motion.button 
                       whileHover={{ scale: 1.05 }}
                       whileTap={{ scale: 0.95 }}
-                      className="bg-blue-600 text-white px-5 py-2.5 rounded-full text-sm font-bold hover:bg-blue-700 transition-all flex items-center gap-2"
+                      className="bg-gradient-to-r from-cyan-400 via-cyan-300 to-blue-400 text-slate-950 px-5 py-2.5 rounded-full text-sm font-bold shadow-glow hover:shadow-[0_0_34px_rgba(0,209,255,0.28)] transition-all flex items-center gap-2"
                     >
                       {t('nav.startScanning')} 
                       <ArrowRight size={16} className={isRtl ? "rotate-180" : ""} />
@@ -132,7 +137,7 @@ export function Navbar() {
                   </Link>
                   <button 
                     onClick={handleLogout}
-                    className="p-2.5 text-gray-500 hover:text-red-600 hover:bg-red-50 rounded-full transition-colors"
+                    className="p-2.5 text-text-muted hover:text-status-danger hover:bg-status-danger/10 rounded-full transition-colors"
                     title="Logout"
                   >
                     <LogOut size={20} />
@@ -143,7 +148,7 @@ export function Navbar() {
                   <motion.button 
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
-                    className="bg-gray-900 text-white px-6 py-2.5 rounded-full text-sm font-bold hover:bg-gray-800 transition-all"
+                    className="border border-cyan-400/28 bg-white/5 text-text-primary px-6 py-2.5 rounded-full text-sm font-bold hover:bg-white/8 transition-all"
                   >
                     {t('buttons.getStarted')}
                   </motion.button>
@@ -155,7 +160,7 @@ export function Navbar() {
           {/* Mobile Toggle */}
           <div className="flex items-center gap-3 md:hidden">
             <LanguageSwitcher />
-            <button className="text-gray-900" onClick={() => setIsOpen(!isOpen)}>
+            <button className="text-text-primary" onClick={() => setIsOpen(!isOpen)}>
               {isOpen ? <X /> : <Menu />}
             </button>
           </div>
@@ -172,35 +177,35 @@ export function Navbar() {
             >
               {!isAuthenticated ? (
                 <>
-                  <Link href="#features" className="block text-base font-medium text-gray-600 px-2 py-2">{t('nav.features')}</Link>
-                  <Link href="#tools" className="block text-base font-medium text-gray-600 px-2 py-2">{t('nav.tools')}</Link>
-                  <Link href={`/${locale}/plans`} className="block text-base font-medium text-gray-600 px-2 py-2">{t('nav.plans')}</Link>
-                  <Link href="#how-it-works" className="block text-base font-medium text-gray-600 px-2 py-2">{t('nav.howItWorks')}</Link>
-                  <Link href={`/${locale}/login`} className="block bg-blue-600 text-white px-4 py-3 rounded-xl text-center font-bold">
+                    <Link href="#features" className="block text-base font-medium text-text-secondary px-2 py-2">{t('nav.features')}</Link>
+                    <Link href="#tools" className="block text-base font-medium text-text-secondary px-2 py-2">{t('nav.tools')}</Link>
+                    <Link href={`/${locale}/plans`} className="block text-base font-medium text-text-secondary px-2 py-2">{t('nav.plans')}</Link>
+                    <Link href="#how-it-works" className="block text-base font-medium text-text-secondary px-2 py-2">{t('nav.howItWorks')}</Link>
+                    <Link href={`/${locale}/login`} className="block bg-gradient-to-r from-cyan-400 via-cyan-300 to-blue-400 text-slate-950 px-4 py-3 rounded-xl text-center font-bold shadow-glow">
                     {t('buttons.getStarted')}
                   </Link>
                 </>
               ) : (
                 <>
                   {isAdmin && (
-                    <Link href={`/${locale}/admin`} className="block text-base font-medium text-gray-600 px-2 py-2">
+                      <Link href={`/${locale}/admin`} className="block text-base font-medium text-text-secondary px-2 py-2">
                       Admin
                     </Link>
                   )}
-                  <Link href={`/${locale}/scans`} className="block text-base font-medium text-gray-600 px-2 py-2">{tScans('title')}</Link>
-                  <Link href={`/${locale}/targets`} className="block text-base font-medium text-gray-600 px-2 py-2">{tTargets('title')}</Link>
-                  <Link href={`/${locale}/jira/projects`} className="block text-base font-medium text-gray-600 px-2 py-2">{tJiraProjects('title')}</Link>
-                  <Link href={`/${locale}/profile`} className="block text-base font-medium text-gray-600 px-2 py-2">{t('nav.profile')}</Link>
-                  <Link href={`/${locale}/billing`} className="block text-base font-medium text-gray-600 px-2 py-2">{t('nav.billing')}</Link>
-                  <Link href={`/${locale}/plans`} className="block text-base font-medium text-gray-600 px-2 py-2">{t('nav.plans')}</Link>
+                    <Link href={`/${locale}/scans`} className="block text-base font-medium text-text-secondary px-2 py-2">{tScans('title')}</Link>
+                    <Link href={`/${locale}/targets`} className="block text-base font-medium text-text-secondary px-2 py-2">{tTargets('title')}</Link>
+                    <Link href={`/${locale}/jira/projects`} className="block text-base font-medium text-text-secondary px-2 py-2">{tJiraProjects('title')}</Link>
+                    <Link href={`/${locale}/profile`} className="block text-base font-medium text-text-secondary px-2 py-2">{t('nav.profile')}</Link>
+                    <Link href={`/${locale}/billing`} className="block text-base font-medium text-text-secondary px-2 py-2">{t('nav.billing')}</Link>
+                    <Link href={`/${locale}/plans`} className="block text-base font-medium text-text-secondary px-2 py-2">{t('nav.plans')}</Link>
                  
-                  <Link href={`/${locale}/scans/new`} className="block bg-blue-600 text-white px-4 py-3 rounded-xl text-center font-bold">
+                    <Link href={`/${locale}/scans/new`} className="block bg-gradient-to-r from-cyan-400 via-cyan-300 to-blue-400 text-slate-950 px-4 py-3 rounded-xl text-center font-bold shadow-glow">
                     {t('nav.startScanning')}
                   </Link>
                   
                   <button 
                     onClick={handleLogout}
-                    className="w-full text-left px-2 py-2 text-red-600 font-medium"
+                      className="w-full text-left px-2 py-2 text-status-danger font-medium"
                   >
                     Logout
                   </button>

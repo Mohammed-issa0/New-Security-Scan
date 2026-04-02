@@ -7,6 +7,7 @@ import { Container, Section, GradientText, FeatureCard, ToolBadge } from "./ui"
 import { useTranslations, useLocale } from "next-intl"
 import { motion } from "framer-motion"
 import { buttonInteraction } from "../scans/ui"
+import { sectionReveal, sectionStagger } from "../motion/Transitions"
 
 export function Hero() {
   const t = useTranslations('landing.hero')
@@ -16,15 +17,19 @@ export function Hero() {
 
   return (
     <Section className="pt-40 pb-20 md:pt-48 md:pb-32 overflow-hidden relative">
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full -z-10 opacity-30">
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1000px] h-[600px] bg-blue-100/50 blur-[120px] rounded-full" />
-      </div>
+      <div className="absolute inset-x-0 top-0 mx-auto h-[42rem] w-[42rem] -translate-y-20 rounded-full bg-[radial-gradient(circle,rgba(0,209,255,0.16),transparent_68%)] blur-3xl" />
+      <div className="absolute inset-0 cyber-grid opacity-[0.08]" />
+
+      <motion.div initial="hidden" animate="show" variants={sectionStagger} className="absolute inset-0">
+        <motion.div variants={sectionReveal} className="absolute left-[8%] top-[18%] h-2 w-2 rounded-full bg-cyan-300 shadow-glow" />
+        <motion.div variants={sectionReveal} className="absolute right-[12%] top-[28%] h-3 w-3 rounded-full bg-blue-300 shadow-glow" />
+      </motion.div>
 
       <Container className="text-center relative">
         <motion.div 
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
-          className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-50 border border-blue-100 text-blue-700 text-xs font-bold mb-8"
+          className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-400/10 border border-cyan-400/20 text-cyan-200 text-xs font-bold mb-8 backdrop-blur"
         >
           <Zap size={14} fill="currentColor" /> {t('badge')}
         </motion.div>
@@ -33,7 +38,7 @@ export function Hero() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
-          className="text-5xl md:text-7xl font-extrabold text-gray-900 tracking-tight mb-8 leading-[1.1]"
+          className="text-5xl md:text-7xl font-extrabold text-text-primary tracking-tight mb-8 leading-[1.05]"
         >
           {t('headlinePrefix')} <br />
           <GradientText>{t('headlineGradient')}</GradientText>
@@ -43,7 +48,7 @@ export function Hero() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
-          className="max-w-2xl mx-auto text-lg md:text-xl text-gray-600 mb-10 leading-relaxed"
+          className="max-w-2xl mx-auto text-lg md:text-xl text-text-secondary mb-10 leading-relaxed"
         >
           {t('subheadline')}
         </motion.p>
@@ -57,7 +62,7 @@ export function Hero() {
           <Link href={`/${locale}/scans/new`}>
             <motion.button 
               {...buttonInteraction}
-              className="w-full sm:w-auto px-8 py-4 bg-blue-600 text-white rounded-full font-bold text-lg hover:bg-blue-700 hover:shadow-xl hover:shadow-blue-500/20 transition-all flex items-center justify-center gap-2"
+              className="w-full sm:w-auto px-8 py-4 bg-gradient-to-r from-cyan-400 via-cyan-300 to-blue-400 text-slate-950 rounded-full font-bold text-lg hover:shadow-[0_0_38px_rgba(0,209,255,0.3)] transition-all flex items-center justify-center gap-2"
             >
               {bt('startNow')} <ArrowRight size={20} className={isRtl ? "rotate-180" : ""} />
             </motion.button>
@@ -65,18 +70,24 @@ export function Hero() {
           <Link href="#plans">
             <motion.button 
               {...buttonInteraction}
-              className="w-full sm:w-auto px-8 py-4 bg-white text-gray-900 border border-gray-200 rounded-full font-bold text-lg hover:bg-gray-50 transition-all flex items-center justify-center gap-2"
+              className="w-full sm:w-auto px-8 py-4 bg-white/5 text-text-primary border border-cyan-400/22 rounded-full font-bold text-lg hover:bg-white/8 transition-all flex items-center justify-center gap-2 backdrop-blur"
             >
               <Play size={18} fill="currentColor" className={isRtl ? "rotate-180" : ""} /> {bt('viewPlans')}
             </motion.button>
           </Link>
         </motion.div>
 
-        <div className="mt-20 grid grid-cols-2 md:grid-cols-4 gap-8 max-w-4xl mx-auto opacity-50 grayscale hover:grayscale-0 transition-all duration-500">
-          <div className="flex items-center justify-center gap-2 font-bold text-gray-400"><Shield size={24} /> ISO 27001</div>
-          <div className="flex items-center justify-center gap-2 font-bold text-gray-400"><Lock size={24} /> SOC2 Type II</div>
-          <div className="flex items-center justify-center gap-2 font-bold text-gray-400"><Server size={24} /> GDPR Ready</div>
-          <div className="flex items-center justify-center gap-2 font-bold text-gray-400"><CheckCircle2 size={24} /> OWASP Compliance</div>
+        <div className="mt-20 grid grid-cols-2 md:grid-cols-4 gap-4 max-w-5xl mx-auto">
+          {[
+            { icon: Shield, label: 'ISO 27001' },
+            { icon: Lock, label: 'SOC2 Type II' },
+            { icon: Server, label: 'GDPR Ready' },
+            { icon: CheckCircle2, label: 'OWASP Compliance' },
+          ].map((item) => (
+            <div key={item.label} className="cyber-card flex items-center justify-center gap-2 rounded-2xl py-4 text-text-secondary">
+              <item.icon size={20} className="text-cyan-300" /> {item.label}
+            </div>
+          ))}
         </div>
       </Container>
     </Section>
@@ -95,11 +106,11 @@ export function Features() {
   }
   
   return (
-    <Section id="features" className="bg-gray-50/50">
+    <Section id="features" className="relative">
       <Container>
         <div className="text-center max-w-3xl mx-auto mb-20">
-          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">{t('title')}</h2>
-          <p className="text-lg text-gray-600 leading-relaxed">{t('subtitle')}</p>
+          <h2 className="text-3xl md:text-4xl font-bold text-text-primary mb-6">{t('title')}</h2>
+          <p className="text-lg text-text-secondary leading-relaxed">{t('subtitle')}</p>
         </div>
 
         <div className="grid md:grid-cols-3 gap-8">
@@ -140,14 +151,14 @@ export function Tools() {
   ]
 
   return (
-    <Section id="tools">
+    <Section id="tools" className="relative">
       <Container>
         <div className="flex flex-col md:flex-row justify-between items-end mb-16 gap-8">
           <div className="max-w-2xl">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">{t('title')}</h2>
-            <p className="text-lg text-gray-600 leading-relaxed">{t('subtitle')}</p>
+            <h2 className="text-3xl md:text-4xl font-bold text-text-primary mb-6">{t('title')}</h2>
+            <p className="text-lg text-text-secondary leading-relaxed">{t('subtitle')}</p>
           </div>
-          <Link href={`/${locale}/scans/new`} className="text-blue-600 font-bold flex items-center gap-2 hover:gap-3 transition-all">
+          <Link href={`/${locale}/scans/new`} className="text-cyan-300 font-bold flex items-center gap-2 hover:gap-3 transition-all">
             {t('viewAll')} <ArrowRight size={18} className={isRtl ? "rotate-180" : ""} />
           </Link>
         </div>
@@ -157,13 +168,13 @@ export function Tools() {
             <motion.div 
               key={tool.name} 
               whileHover={{ y: -5 }}
-              className="p-6 rounded-2xl border border-gray-100 bg-white hover:border-blue-100 transition-colors shadow-sm"
+              className="cyber-card cyber-card-hover p-6 rounded-2xl transition-colors"
             >
               <div className="flex items-center justify-between mb-4">
-                <h4 className="text-lg font-bold text-gray-900">{tool.name}</h4>
+                <h4 className="text-lg font-bold text-text-primary">{tool.name}</h4>
                 <ToolBadge>{tool.badge}</ToolBadge>
               </div>
-              <p className="text-sm text-gray-500 leading-relaxed">{tool.desc}</p>
+              <p className="text-sm text-text-secondary leading-relaxed">{tool.desc}</p>
             </motion.div>
           ))}
         </div>
