@@ -276,7 +276,7 @@ export default function ScanReportPage() {
                 {scan.status}
               </span>
               <span className="text-xs text-text-muted">•</span>
-              <span>{t('reportMeta', { date: formatDate(report.generatedAt) })}</span>
+              <span>{t('reportMeta', { date: formatDate(report?.generatedAt) })}</span>
             </div>
             <p className="mt-2 text-sm text-text-secondary">{t('subtitle')}</p>
           </div>
