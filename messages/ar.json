@@ -34,6 +34,40 @@
     }
   },
   "landing": {
+    "guidedSetup": {
+      "badge": "Guided Setup",
+      "title": "ابدأ بمساعد فحص موجّه",
+      "subtitle": "محادثة قصيرة تحوّل الهدف إلى توصية فحص جاهزة.",
+      "openButton": "فتح المساعد",
+      "targetLabel": "رابط الهدف",
+      "targetPlaceholder": "https://example.com",
+      "targetHint": "ابدأ بالرابط الذي تريد فحصه، ثم نكمل بقية التفاصيل خطوة بخطوة.",
+      "readyTitle": "جهّز جلسة موجّهة",
+      "readyDesc": "اختر الهدف وسياق الفحص، وسأبدأ لك مسار الإعداد مباشرة.",
+      "startButton": "بدء الإعداد الموجّه",
+      "openFullForm": "فتح نموذج الفحص الكامل",
+      "questionTitle": "السؤال التالي",
+      "answerPlaceholder": "اكتب إجابتك...",
+      "send": "إرسال الإجابة",
+      "recommendationTitle": "التوصية جاهزة",
+      "estimatedMinutes": "المدة المتوقعة",
+      "whatWeCheck": "ما الذي سنفحصه",
+      "toolsWithDepths": "الأدوات والعمق",
+      "createScan": "إنشاء الفحص الآن",
+      "restart": "البدء من جديد",
+      "restore": "استعادة الجلسة المحفوظة",
+      "footerHint": "يتم حفظ الجلسة محليًا حتى تتمكن من استئنافها إذا أغلقت هذه النافذة.",
+      "messages": {
+        "defaultQuestion": "ما الذي تريد ضبطه بعد ذلك؟",
+        "targetRequired": "أدخل رابط الهدف أولاً.",
+        "startError": "تعذر بدء الجلسة الموجهة الآن.",
+        "answerRequired": "يرجى كتابة إجابة قبل المتابعة.",
+        "answerError": "تعذر إرسال الإجابة الآن.",
+        "recommendationReady": "لدي الآن توصية فحص جاهزة لك.",
+        "createError": "تعذر إنشاء الفحص من هذه التوصية.",
+        "resumeError": "تعذر استعادة الجلسة تلقائيًا."
+      }
+    },
     "hero": {
       "badge": "منصة فحص موحدة",
       "headlinePrefix": "أمان مستمر",
@@ -137,12 +171,18 @@
       "title": "إنشاء حساب",
       "subtitle": "انضم إلى منصتنا للبدء في تأمين تطبيقاتك.",
       "fullName": "الاسم الكامل",
+      "fullNameHint": "اختياري عند استخدام الاسم الأول واسم العائلة. وإذا تم إدخاله فله الأولوية.",
+      "firstName": "الاسم الأول",
+      "lastName": "اسم العائلة",
       "email": "البريد الإلكتروني",
       "password": "كلمة المرور",
       "confirmPassword": "تأكيد كلمة المرور",
       "submit": "إنشاء الحساب",
       "hasAccount": "لديك حساب بالفعل؟",
       "login": "سجل الدخول هنا",
+      "nameRequired": "أدخل الاسم الكامل أو الاسم الأول واسم العائلة معًا.",
+      "splitNameRequired": "يجب إدخال الاسم الأول واسم العائلة معًا عندما يكون الاسم الكامل فارغًا.",
+      "nameTooShort": "يجب أن يكون الاسم الكامل مكونًا من حرفين على الأقل.",
       "confirmPasswordMismatch": "كلمتا المرور غير متطابقتين",
       "passwordRules": {
         "minLength": "يجب أن تتكون كلمة المرور من 8 أحرف على الأقل.",
@@ -258,6 +298,10 @@
         "view": "عرض",
         "edit": "تعديل",
         "create": "إنشاء مشروع Jira",
+        "connectOAuth": "ربط Atlassian",
+        "connectingOAuth": "جارٍ الربط...",
+        "disconnectOAuth": "فك ربط Atlassian",
+        "disconnectingOAuth": "جارٍ فك الربط...",
         "linkTarget": "ربط هدف",
         "unlinkTarget": "فك ربط هدف",
         "delete": "حذف",
@@ -332,6 +376,23 @@
       },
       "messages": {
         "loadError": "تعذر تحميل مشاريع Jira.",
+        "oauthStatusError": "تعذر تحميل حالة ربط Jira OAuth.",
+        "oauthSitesError": "تعذر تحميل مواقع Jira.",
+        "oauthProjectsError": "تعذر تحميل مشاريع الموقع المحدد.",
+        "developerSearchError": "تعذر البحث عن مطوري Jira.",
+        "developerMappedLoadError": "تعذر تحميل المطورين المربوطين.",
+        "developerVerifySuccess": "تم التحقق من المطور وربطه بنجاح.",
+        "developerVerifyError": "فشل التحقق من ربط المطور.",
+        "developerRoleUpdateSuccess": "تم تحديث دور المطور بنجاح.",
+        "developerRoleUpdateError": "فشل تحديث دور المطور.",
+        "developerDeleteSuccess": "تم حذف ربط المطور بنجاح.",
+        "developerDeleteError": "فشل حذف ربط المطور.",
+        "oauthInitiateError": "فشل بدء ربط Jira عبر OAuth.",
+        "oauthAlreadyConnected": "Jira مرتبط بالفعل. جارٍ إعادة التوجيه إلى Atlassian...",
+        "oauthDisconnectSuccess": "تم فك ربط حساب Atlassian بنجاح.",
+        "oauthDisconnectError": "فشل فك ربط حساب Atlassian.",
+        "oauthTestSuccess": "نجح اختبار الاتصال بـ Jira.",
+        "oauthTestError": "فشل اختبار الاتصال بـ Jira.",
         "requiredFields": "الاسم والرابط والمستخدم والرمز ومفتاح المشروع ونوع التذكرة حقول مطلوبة.",
         "createSuccess": "تم إنشاء مشروع Jira بنجاح.",
         "createError": "فشل إنشاء مشروع Jira.",
@@ -346,6 +407,58 @@
         "updateError": "فشل تحديث مشروع Jira.",
         "deleteSuccess": "تم حذف مشروع Jira بنجاح.",
         "deleteError": "فشل حذف مشروع Jira."
+      },
+      "oauth": {
+        "statusTitle": "حالة اتصال OAuth",
+        "loading": "جارٍ تحميل حالة الاتصال...",
+        "notConnected": "لا يوجد حساب Atlassian مرتبط.",
+        "connectedAs": "تم الربط بالحساب {email} ({name})",
+        "sitesCount": "عدد المواقع المتاحة: {count}",
+        "connectedAt": "تاريخ الربط: {date}",
+        "refresh": "تحديث",
+        "sitesTitle": "مواقع Jira المتاحة",
+        "sitePlaceholder": "اختر موقع Jira",
+        "loadingSites": "جارٍ تحميل مواقع Jira...",
+        "refreshData": "تحديث المواقع/المشاريع",
+        "testConnection": "اختبار الاتصال",
+        "testingConnection": "جارٍ الاختبار...",
+        "testSuccessSummary": "تم الاتصال بـ {siteName} (إصدار Jira: {version})",
+        "projectsTitle": "مشاريع الموقع المحدد",
+        "loadingProjects": "جارٍ تحميل المشاريع...",
+        "selectSiteFirst": "اختر موقعًا أولاً.",
+        "noProjects": "لا توجد مشاريع في هذا الموقع.",
+        "projectsColumns": {
+          "key": "المفتاح",
+          "name": "الاسم",
+          "type": "النوع"
+        }
+      },
+      "developers": {
+        "title": "ربط المطورين",
+        "subtitle": "ابحث عن مستخدمي Jira وتحقق منهم واربط أدوارًا مخصصة لاستخدامها في التعيين.",
+        "searchPlaceholder": "ابحث عن مطور Jira بالاسم أو البريد",
+        "searchHint": "اكتب حرفين على الأقل لبدء البحث.",
+        "verifyRoleLabel": "دور مخصص اختياري عند التحقق",
+        "verifyRolePlaceholder": "مثال: Backend Engineer",
+        "searchResultsTitle": "نتائج البحث",
+        "loadingSearch": "جارٍ البحث عن المطورين...",
+        "noSearchResults": "لا يوجد مطورون مطابقون لهذا البحث.",
+        "verify": "تحقق وربط",
+        "verifying": "جارٍ التحقق...",
+        "mappedTitle": "المطورون المربوطون",
+        "loadingMapped": "جارٍ تحميل المطورين المربوطين...",
+        "noMapped": "لا يوجد مطورون مربوطون حتى الآن.",
+        "saveRole": "حفظ الدور",
+        "remove": "حذف الربط",
+        "rolePlaceholder": "الدور المخصص",
+        "columns": {
+          "name": "الاسم",
+          "email": "البريد",
+          "accountType": "نوع الحساب",
+          "role": "الدور المخصص",
+          "lastVerified": "آخر تحقق",
+          "actions": "الإجراءات"
+        }
       }
     },
     "scans": {
@@ -497,6 +610,39 @@
         "subtitle": "راجع ملخص النتائج المولّد في صفحة مخصصة وواضحة.",
         "backToScan": "العودة إلى تفاصيل الفحص",
         "reportMeta": "تم التوليد {date}",
+        "asyncReport": {
+          "eyebrow": "توليد تقرير غير متزامن",
+          "title": "إنشاء تقرير جديد في الخلفية",
+          "subtitle": "قم بإدخال المهمة في الطابور، وتابع حالتها، ثم نزّل الملف الناتج عند جاهزيته.",
+          "reportMode": "وضع التقرير",
+          "outputFormats": "صيغ الإخراج",
+          "generateButton": "توليد التقرير",
+          "generating": "جارٍ التوليد...",
+          "refreshStatus": "تحديث الحالة",
+          "downloadButton": "تنزيل PDF الناتج",
+          "downloading": "جارٍ التنزيل...",
+          "generateSuccess": "بدأ توليد التقرير بنجاح.",
+          "generateError": "فشل بدء توليد التقرير.",
+          "downloadSuccess": "تم تنزيل التقرير الناتج بنجاح.",
+          "downloadError": "فشل تنزيل التقرير الناتج.",
+          "loadingStatus": "جارٍ تحميل الحالة...",
+          "polling": "جارٍ الاستعلام عن حالة مهمة التقرير حتى تصبح جاهزة.",
+          "ready": "التقرير الناتج جاهز للتنزيل.",
+          "idle": "لم تبدأ أي مهمة بعد.",
+          "noReportId": "معرّف التقرير غير متاح",
+          "reportId": "معرّف التقرير: {reportId}",
+          "modes": {
+            "standard": "قياسي",
+            "detailed": "مفصل",
+            "comprehensive": "شامل"
+          },
+          "status": {
+            "pending": "قيد الانتظار",
+            "processing": "قيد المعالجة",
+            "completed": "مكتمل",
+            "failed": "فشل"
+          }
+        },
         "nav": {
           "summary": "الملخص",
           "charts": "الرسوم",
@@ -662,6 +808,15 @@
         "label": "أداة الفحص",
         "notAllowedSuffix": "غير مسموح",
         "allowedHint": "الأدوات المسموحة في باقتك الحالية: {tools}"
+      },
+      "toolDepth": {
+        "label": "عمق الفحص",
+        "hint": "تُرسل هذه القيمة كحقل toolDepths للأداة المحددة.",
+        "options": {
+          "light": "خفيف",
+          "deep": "عميق",
+          "aggressive": "هجومي"
+        }
       },
       "target": {
         "label": "الهدف",
@@ -871,6 +1026,17 @@
           "a": "نعم، يمكن تفعيل تجربة Pro لفترة محدودة عند الطلب."
         }
       ]
+    }
+  },
+  "jiraOAuth": {
+    "title": "Jira OAuth",
+    "subtitle": "يتم هنا التعامل مع حالة الرجوع بعد الربط.",
+    "nextStep": "يمكنك المتابعة إلى صفحة مشاريع Jira للتحقق من الحالة والمواقع وربط المشاريع.",
+    "openJiraProjects": "فتح مشاريع Jira",
+    "toasts": {
+      "connected": "تم ربط حساب Atlassian بنجاح.",
+      "accessDenied": "تم إلغاء ربط Jira.",
+      "failed": "فشل ربط Jira: {error}"
     }
   },
   "billingPage": {

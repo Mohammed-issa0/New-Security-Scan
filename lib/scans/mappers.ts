@@ -33,12 +33,15 @@ export const buildPayload = (values: ScanFormValues): ScanPayload => {
     tool: values.tool,
     notes: values.notes,
     targetConfig: {
-      user_agent: values.target_config.user_agent,
+      userAgent: values.target_config.user_agent,
       headers: headersRowsToObject(values.target_config.headers),
       authentication: {
         token: values.target_config.authentication.token,
         cookies: cookiesRowsToArray(values.target_config.authentication.cookies),
       },
+    },
+    toolDepths: {
+      [values.tool]: values.tool_depth,
     },
     extraArgs: values.extra_args,
     timeoutMinutes: values.timeoutMinutes,

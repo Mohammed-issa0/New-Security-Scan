@@ -34,6 +34,40 @@
     }
   },
   "landing": {
+    "guidedSetup": {
+      "badge": "Guided Setup",
+      "title": "Start with a guided scan assistant",
+      "subtitle": "A short conversation that turns a target into a ready scan recommendation.",
+      "openButton": "Open assistant",
+      "targetLabel": "Target URL",
+      "targetPlaceholder": "https://example.com",
+      "targetHint": "Start with the URL you want to assess. You can refine the rest step by step.",
+      "readyTitle": "Prepare a guided session",
+      "readyDesc": "Choose a target, pick the scan context, and I will begin the setup flow for you.",
+      "startButton": "Start guided setup",
+      "openFullForm": "Open full scan form",
+      "questionTitle": "Next question",
+      "answerPlaceholder": "Type your answer...",
+      "send": "Send answer",
+      "recommendationTitle": "Recommendation ready",
+      "estimatedMinutes": "Estimated duration",
+      "whatWeCheck": "What we check",
+      "toolsWithDepths": "Tools and depth",
+      "createScan": "Create scan now",
+      "restart": "Start over",
+      "restore": "Restore saved session",
+      "footerHint": "Your session is saved locally so you can resume if you close this panel.",
+      "messages": {
+        "defaultQuestion": "What would you like to adjust next?",
+        "targetRequired": "Please enter a target URL first.",
+        "startError": "Unable to start the guided session right now.",
+        "answerRequired": "Please provide an answer before continuing.",
+        "answerError": "Unable to submit the answer right now.",
+        "recommendationReady": "I have a scan recommendation ready for you.",
+        "createError": "Unable to create the scan from this recommendation.",
+        "resumeError": "We could not restore the session automatically."
+      }
+    },
     "hero": {
       "badge": "Unified scanning platform",
       "headlinePrefix": "Continuous Security",
@@ -137,12 +171,18 @@
       "title": "Create Account",
       "subtitle": "Join our platform to start securing your applications.",
       "fullName": "Full Name",
+      "fullNameHint": "Optional when using first and last name. If filled, it takes priority.",
+      "firstName": "First Name",
+      "lastName": "Last Name",
       "email": "Email Address",
       "password": "Password",
       "confirmPassword": "Confirm Password",
       "submit": "Create Account",
       "hasAccount": "Already have an account?",
       "login": "Sign in here",
+      "nameRequired": "Enter a full name or both first and last name.",
+      "splitNameRequired": "Both first and last name are required when full name is empty.",
+      "nameTooShort": "Full name must be at least 2 characters.",
       "confirmPasswordMismatch": "Passwords don't match",
       "passwordRules": {
         "minLength": "Password must be at least 8 characters.",
@@ -258,6 +298,10 @@
         "view": "View",
         "edit": "Edit",
         "create": "Create Jira Project",
+        "connectOAuth": "Connect Atlassian",
+        "connectingOAuth": "Connecting...",
+        "disconnectOAuth": "Disconnect Atlassian",
+        "disconnectingOAuth": "Disconnecting...",
         "linkTarget": "Link Target",
         "unlinkTarget": "Unlink Target",
         "delete": "Delete",
@@ -332,6 +376,23 @@
       },
       "messages": {
         "loadError": "Failed to load Jira projects.",
+        "oauthStatusError": "Failed to load Jira OAuth status.",
+        "oauthSitesError": "Failed to load Jira sites.",
+        "oauthProjectsError": "Failed to load Jira projects for the selected site.",
+        "developerSearchError": "Failed to search Jira developers.",
+        "developerMappedLoadError": "Failed to load mapped developers.",
+        "developerVerifySuccess": "Developer verified and mapped successfully.",
+        "developerVerifyError": "Failed to verify developer mapping.",
+        "developerRoleUpdateSuccess": "Developer role updated successfully.",
+        "developerRoleUpdateError": "Failed to update developer role.",
+        "developerDeleteSuccess": "Developer mapping removed successfully.",
+        "developerDeleteError": "Failed to remove developer mapping.",
+        "oauthInitiateError": "Failed to start Jira OAuth connection.",
+        "oauthAlreadyConnected": "Jira is already connected. Redirecting to Atlassian authorization...",
+        "oauthDisconnectSuccess": "Atlassian account disconnected successfully.",
+        "oauthDisconnectError": "Failed to disconnect Atlassian account.",
+        "oauthTestSuccess": "Jira connection test succeeded.",
+        "oauthTestError": "Jira connection test failed.",
         "requiredFields": "Name, URL, user, token, project key, and issue type are required.",
         "createSuccess": "Jira project created successfully.",
         "createError": "Failed to create Jira project.",
@@ -346,6 +407,58 @@
         "updateError": "Failed to update Jira project.",
         "deleteSuccess": "Jira project deleted successfully.",
         "deleteError": "Failed to delete Jira project."
+      },
+      "oauth": {
+        "statusTitle": "OAuth Connection Status",
+        "loading": "Loading connection status...",
+        "notConnected": "No Atlassian account connected.",
+        "connectedAs": "Connected as {email} ({name})",
+        "sitesCount": "Sites available: {count}",
+        "connectedAt": "Connected at: {date}",
+        "refresh": "Refresh",
+        "sitesTitle": "Accessible Jira Sites",
+        "sitePlaceholder": "Select a Jira site",
+        "loadingSites": "Loading Jira sites...",
+        "refreshData": "Refresh Sites/Projects",
+        "testConnection": "Test Connection",
+        "testingConnection": "Testing...",
+        "testSuccessSummary": "Connected to {siteName} (Jira version: {version})",
+        "projectsTitle": "Projects in Selected Site",
+        "loadingProjects": "Loading projects...",
+        "selectSiteFirst": "Select a site first.",
+        "noProjects": "No projects found for this site.",
+        "projectsColumns": {
+          "key": "Key",
+          "name": "Name",
+          "type": "Type"
+        }
+      },
+      "developers": {
+        "title": "Developer Mapping",
+        "subtitle": "Search Jira users, verify identities, and map custom roles for assignment workflows.",
+        "searchPlaceholder": "Search Jira developers by name or email",
+        "searchHint": "Type at least 2 characters to search.",
+        "verifyRoleLabel": "Optional custom role for verification",
+        "verifyRolePlaceholder": "e.g. Backend Engineer",
+        "searchResultsTitle": "Search Results",
+        "loadingSearch": "Searching developers...",
+        "noSearchResults": "No developers found for this search.",
+        "verify": "Verify & Map",
+        "verifying": "Verifying...",
+        "mappedTitle": "Mapped Developers",
+        "loadingMapped": "Loading mapped developers...",
+        "noMapped": "No mapped developers yet.",
+        "saveRole": "Save Role",
+        "remove": "Remove Mapping",
+        "rolePlaceholder": "Custom role",
+        "columns": {
+          "name": "Name",
+          "email": "Email",
+          "accountType": "Account Type",
+          "role": "Custom Role",
+          "lastVerified": "Last Verified",
+          "actions": "Actions"
+        }
       }
     },
     "scans": {
@@ -497,6 +610,39 @@
         "subtitle": "Review the generated findings summary in a dedicated view.",
         "backToScan": "Back to scan details",
         "reportMeta": "Generated {date}",
+        "asyncReport": {
+          "eyebrow": "Async report generation",
+          "title": "Generate a new report in the background",
+          "subtitle": "Queue a report job, watch its status, and download the generated file when it is ready.",
+          "reportMode": "Report mode",
+          "outputFormats": "Output formats",
+          "generateButton": "Generate report",
+          "generating": "Generating...",
+          "refreshStatus": "Refresh status",
+          "downloadButton": "Download generated PDF",
+          "downloading": "Downloading...",
+          "generateSuccess": "Report generation started successfully.",
+          "generateError": "Failed to start report generation.",
+          "downloadSuccess": "Generated report downloaded successfully.",
+          "downloadError": "Failed to download the generated report.",
+          "loadingStatus": "Loading status...",
+          "polling": "Polling the report job until it is ready.",
+          "ready": "The generated report is ready for download.",
+          "idle": "No async job started yet.",
+          "noReportId": "Report ID unavailable",
+          "reportId": "Report ID: {reportId}",
+          "modes": {
+            "standard": "Standard",
+            "detailed": "Detailed",
+            "comprehensive": "Comprehensive"
+          },
+          "status": {
+            "pending": "Pending",
+            "processing": "Processing",
+            "completed": "Completed",
+            "failed": "Failed"
+          }
+        },
         "nav": {
           "summary": "Summary",
           "charts": "Charts",
@@ -662,6 +808,15 @@
         "label": "Scanning Tool",
         "notAllowedSuffix": "Not allowed",
         "allowedHint": "Your current plan allows: {tools}"
+      },
+      "toolDepth": {
+        "label": "Scan Depth",
+        "hint": "This value is sent as toolDepths for the selected tool.",
+        "options": {
+          "light": "Light",
+          "deep": "Deep",
+          "aggressive": "Aggressive"
+        }
       },
       "target": {
         "label": "Target",
@@ -871,6 +1026,17 @@
           "a": "Yes, we can activate a time-limited Pro trial on request."
         }
       ]
+    }
+  },
+  "jiraOAuth": {
+    "title": "Jira OAuth",
+    "subtitle": "Connection callback status is handled here.",
+    "nextStep": "You can continue in Jira Projects to verify status, sites, and project mappings.",
+    "openJiraProjects": "Open Jira Projects",
+    "toasts": {
+      "connected": "Atlassian account connected successfully.",
+      "accessDenied": "Jira connection was canceled.",
+      "failed": "Jira connection failed: {error}"
     }
   },
   "billingPage": {

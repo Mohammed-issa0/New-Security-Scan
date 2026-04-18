@@ -7,6 +7,9 @@ import type {
   AiScanConfigurationResponse,
   AiPostScanReportRequest,
   AiPostScanReportResponse,
+  GenerateScanReportRequest,
+  GenerateReportResponse,
+  ReportStatusResponse,
 } from '../api/types';
 
 const isTransientGatewayError = (error: unknown) =>
@@ -67,6 +70,15 @@ export const scansService = {
   // Reports
   async getReport(scanId: string) {
     return endpoints.reports.get(scanId);
+  },
+  async generateReport(scanId: string, data: GenerateScanReportRequest) {
+    return endpoints.reports.generate(scanId, data);
+  },
+  async getGeneratedReportStatus(reportId: string) {
+    return endpoints.reports.status(reportId);
+  },
+  async downloadGeneratedReport(reportId: string, format: string = 'Pdf') {
+    return endpoints.reports.download(reportId, format);
   },
 
   // AI

@@ -18,7 +18,9 @@ export default function RegisterPage() {
   const [loading, setLoading] = useState(false);
 
   const registerSchema = z.object({
-    fullName: z.string().min(2),
+    fullName: z.string().trim().optional().or(z.literal('')),
+    firstName: z.string().trim().optional().or(z.literal('')),
+    lastName: z.string().trim().optional().or(z.literal('')),
     email: z.string().email(),
     password: z
       .string()
@@ -27,9 +29,37 @@ export default function RegisterPage() {
       .regex(/[a-z]/, t('passwordRules.lowercase'))
       .regex(/[^a-zA-Z0-9]/, t('passwordRules.special')),
     confirmPassword: z.string().min(8),
-  }).refine((data) => data.password === data.confirmPassword, {
-    message: t('confirmPasswordMismatch'),
-    path: ['confirmPassword'],
+  }).superRefine((data, ctx) => {
+    const fullName = data.fullName?.trim();
+    const firstName = data.firstName?.trim();
+    const lastName = data.lastName?.trim();
+    const hasSplitName = !!firstName || !!lastName;
+
+    if (data.password !== data.confirmPassword) {
+      ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('confirmPasswordMismatch'), path: ['confirmPassword'] });
+    }
+
+    if (!fullName && !hasSplitName) {
+      const message = t('nameRequired');
+      ctx.addIssue({ code: z.ZodIssueCode.custom, message, path: ['fullName'] });
+      ctx.addIssue({ code: z.ZodIssueCode.custom, message, path: ['firstName'] });
+      ctx.addIssue({ code: z.ZodIssueCode.custom, message, path: ['lastName'] });
+      return;
+    }
+
+    if (!fullName && (!!firstName !== !!lastName)) {
+      const message = t('splitNameRequired');
+      if (!firstName) {
+        ctx.addIssue({ code: z.ZodIssueCode.custom, message, path: ['firstName'] });
+      }
+      if (!lastName) {
+        ctx.addIssue({ code: z.ZodIssueCode.custom, message, path: ['lastName'] });
+      }
+    }
+
+    if (fullName && fullName.length < 2) {
+      ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('nameTooShort'), path: ['fullName'] });
+    }
   });
 
   type RegisterFormValues = z.infer<typeof registerSchema>;
@@ -46,8 +76,14 @@ export default function RegisterPage() {
   const onSubmit = async (data: RegisterFormValues) => {
     setLoading(true);
     try {
+      const fullName = data.fullName?.trim();
+      const firstName = data.firstName?.trim();
+      const lastName = data.lastName?.trim();
+
       await authService.register({
-        fullName: data.fullName,
+        fullName: fullName || undefined,
+        firstName: fullName ? undefined : firstName || undefined,
+        lastName: fullName ? undefined : lastName || undefined,
         email: data.email,
         password: data.password,
       });
@@ -88,6 +124,35 @@ export default function RegisterPage() {
                 {errors.fullName && (
                   <p className="mt-1 text-xs text-status-danger">{errors.fullName.message}</p>
                 )}
+                <p className="mt-1 text-xs text-text-muted">{t('fullNameHint')}</p>
+              </div>
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                <div>
+                  <label className="mb-1 block text-sm font-medium text-text-secondary">
+                    {t('firstName')}
+                  </label>
+                  <input
+                    {...register('firstName')}
+                    type="text"
+                    className="appearance-none relative block w-full rounded-lg border border-cyan-400/18 bg-white/5 px-3 py-2 text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:ring-2 focus:ring-cyan-300/45 focus:border-cyan-300/70"
+                  />
+                  {errors.firstName && (
+                    <p className="mt-1 text-xs text-status-danger">{errors.firstName.message}</p>
+                  )}
+                </div>
+                <div>
+                  <label className="mb-1 block text-sm font-medium text-text-secondary">
+                    {t('lastName')}
+                  </label>
+                  <input
+                    {...register('lastName')}
+                    type="text"
+                    className="appearance-none relative block w-full rounded-lg border border-cyan-400/18 bg-white/5 px-3 py-2 text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:ring-2 focus:ring-cyan-300/45 focus:border-cyan-300/70"
+                  />
+                  {errors.lastName && (
+                    <p className="mt-1 text-xs text-status-danger">{errors.lastName.message}</p>
+                  )}
+                </div>
               </div>
               <div>
                 <label className="mb-1 block text-sm font-medium text-text-secondary">

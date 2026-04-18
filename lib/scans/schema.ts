@@ -4,7 +4,8 @@ export const scanFormSchema = z.object({
   name: z.string().min(1, 'Scan name is required'),
   targetId: z.string().min(1, 'Target is required'),
   targets: z.string().min(1, 'At least one target URL is required'),
-  tool: z.enum(['ffuf', 'nmap', 'zap', 'wpscan', 'sqlmap']),
+  tool: z.enum(['ffuf', 'nmap', 'zap', 'wpscan', 'sqlmap', 'xss', 'ssl']),
+  tool_depth: z.enum(['light', 'deep', 'aggressive']).default('light'),
   scopeSigned: z.boolean(),
   timeoutMinutes: z.preprocess(
     (value) => (value === '' || value === null || value === undefined ? undefined : Number(value)),

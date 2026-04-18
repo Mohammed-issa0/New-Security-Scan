@@ -1,4 +1,5 @@
 import { endpoints } from '../api/endpoints';
+import type { RegisterRequest } from '../api/types';
 import { tokenStore } from './tokenStore';
 import { clearSensitiveBrowserData, notifySessionEnded, redirectToLogin } from './session';
 
@@ -38,7 +39,7 @@ export const authService = {
     };
   },
 
-  async register(data: any) {
+  async register(data: RegisterRequest) {
     const response = await endpoints.auth.register(data) as AuthResponse;
     assertAuthResponse(response);
     tokenStore.setTokens({

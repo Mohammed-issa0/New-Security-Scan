@@ -87,6 +87,7 @@ export interface PlanDefinitionResponse {
 
 export interface PlanDefinitionBody {
   plan_name?: string | null;
+  max_concurrent_scans?: number;
   [key: string]: unknown;
 }
 

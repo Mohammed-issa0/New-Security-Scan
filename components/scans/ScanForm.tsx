@@ -52,6 +52,8 @@ const TOOL_OPTIONS = [
   { value: 'zap', label: 'zap - OWASP ZAP' },
   { value: 'wpscan', label: 'wpscan - WordPress Security' },
   { value: 'sqlmap', label: 'sqlmap - SQL Injection' },
+  { value: 'xss', label: 'xss - Cross-Site Scripting' },
+  { value: 'ssl', label: 'ssl - TLS / Certificate Checks' },
 ] as const;
 
 const TARGET_TYPE_OPTIONS = [
@@ -128,6 +130,7 @@ export default function ScanForm() {
     defaultValues: {
       targetId: '',
       tool: 'nmap',
+      tool_depth: 'light',
       scopeSigned: true,
       timeoutMinutes: undefined,
       target_config: {
@@ -413,7 +416,7 @@ export default function ScanForm() {
     >
       <form id="scan-form" onSubmit={handleSubmit(onSubmit)} className="lg:col-span-8 space-y-8">
 
-        <Card className="border-violet-200 bg-violet-50/30">
+        <Card className="border-cyan-400/18 bg-cyan-400/5">
           <CardHeader
             icon={Bot}
             title={t('sections.aiAssistant.title')}
@@ -506,7 +509,7 @@ export default function ScanForm() {
                 <div className="flex items-center justify-between">
                   <Label>{t('sections.aiAssistant.rawResponse')}</Label>
                 </div>
-                <pre className="max-h-72 overflow-auto rounded-lg border border-violet-200 bg-white p-3 text-xs text-gray-700">{aiRawResponse}</pre>
+                <pre className="max-h-72 overflow-auto rounded-lg border border-cyan-400/20 bg-cyber-bg/80 p-3 text-xs text-text-secondary">{aiRawResponse}</pre>
               </div>
             )}
           </CardContent>
@@ -527,8 +530,8 @@ export default function ScanForm() {
                   {...register('name')} 
                   placeholder={t('fields.name.placeholder')} 
                 />
-                {errors.name && <p className="text-red-500 text-xs mt-1 flex items-center gap-1"><AlertCircle size={12} /> {errors.name.message}</p>}
-                <p className="text-[11px] text-gray-400">{t('fields.name.hint')}</p>
+                {errors.name && <p className="text-status-danger text-xs mt-1 flex items-center gap-1"><AlertCircle size={12} /> {errors.name.message}</p>}
+                <p className="text-[11px] text-text-muted">{t('fields.name.hint')}</p>
               </div>
               <div className="space-y-1.5">
                 <Label required>{t('fields.tool.label')}</Label>
@@ -542,10 +545,19 @@ export default function ScanForm() {
                     );
                   })}
                 </Select>
-                {errors.tool && <p className="text-red-500 text-xs mt-1 flex items-center gap-1"><AlertCircle size={12} /> {errors.tool.message}</p>}
+                {errors.tool && <p className="text-status-danger text-xs mt-1 flex items-center gap-1"><AlertCircle size={12} /> {errors.tool.message}</p>}
                 {allowedTools && (
-                  <p className="text-[11px] text-gray-400">{t('fields.tool.allowedHint', { tools: selectableTools.map((tool) => tool.value).join(', ') })}</p>
+                  <p className="text-[11px] text-text-muted">{t('fields.tool.allowedHint', { tools: selectableTools.map((tool) => tool.value).join(', ') })}</p>
                 )}
+              </div>
+              <div className="space-y-1.5">
+                <Label>{t('fields.toolDepth.label')}</Label>
+                <Select {...register('tool_depth')}>
+                  <option value="light">{t('fields.toolDepth.options.light')}</option>
+                  <option value="deep">{t('fields.toolDepth.options.deep')}</option>
+                  <option value="aggressive">{t('fields.toolDepth.options.aggressive')}</option>
+                </Select>
+                <p className="text-[11px] text-text-muted">{t('fields.toolDepth.hint')}</p>
               </div>
             </div>
 
@@ -558,14 +570,14 @@ export default function ScanForm() {
                     <option key={target.id} value={target.id}>{target.url}</option>
                   ))}
                 </Select>
-                {errors.targetId && <p className="text-red-500 text-xs mt-1 flex items-center gap-1"><AlertCircle size={12} /> {errors.targetId.message}</p>}
-                <p className="text-[11px] text-gray-400">{t('fields.target.hint')}</p>
+                {errors.targetId && <p className="text-status-danger text-xs mt-1 flex items-center gap-1"><AlertCircle size={12} /> {errors.targetId.message}</p>}
+                <p className="text-[11px] text-text-muted">{t('fields.target.hint')}</p>
               </div>
               <div className="space-y-1.5">
                 <Label>{t('fields.scopeSigned.label')}</Label>
-                <label className="flex items-center space-x-3 rtl:space-x-reverse h-11 rounded-lg border border-gray-200 bg-gray-50/30 px-3">
+                <label className="flex items-center space-x-3 rtl:space-x-reverse h-11 rounded-lg border border-cyan-400/18 bg-white/5 px-3">
                   <Checkbox {...register('scopeSigned')} />
-                  <span className="text-sm text-gray-700">{t('fields.scopeSigned.hint')}</span>
+                  <span className="text-sm text-text-secondary">{t('fields.scopeSigned.hint')}</span>
                 </label>
               </div>
             </div>
@@ -580,8 +592,8 @@ export default function ScanForm() {
                   {...register('timeoutMinutes')}
                   placeholder={t('fields.timeoutMinutes.placeholder')}
                 />
-                {errors.timeoutMinutes && <p className="text-red-500 text-xs mt-1 flex items-center gap-1"><AlertCircle size={12} /> {errors.timeoutMinutes.message}</p>}
-                <p className="text-[11px] text-gray-400">
+                {errors.timeoutMinutes && <p className="text-status-danger text-xs mt-1 flex items-center gap-1"><AlertCircle size={12} /> {errors.timeoutMinutes.message}</p>}
+                <p className="text-[11px] text-text-muted">
                   {planMaxRuntimeMinutes
                     ? t('fields.timeoutMinutes.planHint', { max: planMaxRuntimeMinutes })
                     : t('fields.timeoutMinutes.hint')}
@@ -611,7 +623,7 @@ export default function ScanForm() {
 
             <div className="space-y-1.5">
               <input type="hidden" {...register('targets')} />
-              {errors.targets && <p className="text-red-500 text-xs mt-1 flex items-center gap-1"><AlertCircle size={12} /> {errors.targets.message}</p>}
+              {errors.targets && <p className="text-status-danger text-xs mt-1 flex items-center gap-1"><AlertCircle size={12} /> {errors.targets.message}</p>}
             </div>
 
             <div className="space-y-1.5">
@@ -637,13 +649,13 @@ export default function ScanForm() {
               <div className="space-y-1.5">
                 <Label>{t('fields.userAgent.label')}</Label>
                 <Input {...register('target_config.user_agent')} placeholder={t('fields.userAgent.placeholder')} />
-                <p className="text-[11px] text-gray-400">{t('fields.userAgent.hint')}</p>
+                <p className="text-[11px] text-text-muted">{t('fields.userAgent.hint')}</p>
               </div>
               {isAuthScanningAllowed ? (
                 <div className="space-y-1.5">
                   <Label>{t('fields.authToken.label')}</Label>
                   <Input {...register('target_config.authentication.token')} placeholder={t('fields.authToken.placeholder')} />
-                  <p className="text-[11px] text-gray-400">{t('fields.authToken.hint')}</p>
+                  <p className="text-[11px] text-text-muted">{t('fields.authToken.hint')}</p>
                 </div>
               ) : (
                 <Alert variant="warning" title={t('fields.authToken.blockedTitle')}>
@@ -652,7 +664,7 @@ export default function ScanForm() {
               )}
             </div>
 
-            <div className="grid grid-cols-1 gap-8 pt-4 border-t border-gray-50">
+            <div className="grid grid-cols-1 gap-8 pt-4 border-t border-white/10">
               <KeyValueEditor
                 name="target_config.headers"
                 title={t('fields.headers.title')}
@@ -679,7 +691,7 @@ export default function ScanForm() {
         </Card>
 
         {/* 3) Tool-Specific Configuration */}
-        <Card className="border-blue-100 bg-blue-50/10">
+        <Card className="border-cyan-400/18 bg-cyan-400/5">
           <CardHeader 
             icon={Cpu} 
             title={t('sections.toolConfig.title', { tool: selectedTool.toUpperCase() })}
@@ -704,14 +716,14 @@ export default function ScanForm() {
                         <option value="api">{t('fields.zap.scanType.api')}</option>
                       </Select>
                       {formValues.zap_config?.['scan-type'] === 'api' && (
-                        <p className="text-[11px] text-blue-600 font-medium mt-1">{t('fields.zap.scanType.apiHint')}</p>
+                        <p className="text-[11px] text-cyan-300 font-medium mt-1">{t('fields.zap.scanType.apiHint')}</p>
                       )}
                     </div>
                     <div className="flex items-center space-x-3 rtl:space-x-reverse pt-8">
                       <Checkbox id="ajax" {...register('zap_config.ajax' as any)} />
                       <div>
                         <Label className="mb-0" htmlFor="ajax">{t('fields.zap.ajax.label')}</Label>
-                        <p className="text-[11px] text-gray-400">{t('fields.zap.ajax.hint')}</p>
+                        <p className="text-[11px] text-text-muted">{t('fields.zap.ajax.hint')}</p>
                       </div>
                     </div>
                   </div>
@@ -738,7 +750,7 @@ export default function ScanForm() {
                       <Checkbox id="recursion" {...register('ffuf_config.recursion' as any)} />
                       <div>
                         <Label className="mb-0" htmlFor="recursion">{t('fields.ffuf.recursion.label')}</Label>
-                        <p className="text-[11px] text-gray-400">{t('fields.ffuf.recursion.hint')}</p>
+                        <p className="text-[11px] text-text-muted">{t('fields.ffuf.recursion.hint')}</p>
                       </div>
                     </div>
                   </div>
@@ -754,7 +766,7 @@ export default function ScanForm() {
                   </div>
                   <Alert variant="info">
                     <div className="flex items-center gap-2">
-                      <Zap size={16} className="text-blue-600" />
+                      <Zap size={16} className="text-cyan-300" />
                       <p className="text-xs">
                         {t('fields.ffuf.proTip')}
                       </p>
@@ -766,27 +778,27 @@ export default function ScanForm() {
 
             {(selectedTool === 'nmap' || selectedTool === 'wpscan' || selectedTool === 'sqlmap') && (
               <div className="text-center py-8">
-                <p className="text-sm text-gray-500 italic">No additional configuration for {selectedTool} is required at this stage.</p>
+                <p className="text-sm text-text-muted italic">No additional configuration for {selectedTool} is required at this stage.</p>
               </div>
             )}
           </CardContent>
         </Card>
 
         {/* 4) Advanced Settings */}
-        <div className="border border-gray-100 rounded-2xl overflow-hidden transition-all duration-300">
+        <div className="border border-white/12 rounded-2xl overflow-hidden transition-all duration-300">
           <button 
             type="button" 
             onClick={() => setShowAdvanced(!showAdvanced)}
-            className={`w-full flex items-center justify-between p-6 transition-colors ${showAdvanced ? 'bg-gray-50' : 'bg-white hover:bg-gray-50'}`}
+            className={`w-full flex items-center justify-between p-6 transition-colors ${showAdvanced ? 'bg-white/8' : 'bg-white/5 hover:bg-white/10'}`}
           >
             <div className="flex items-center gap-3">
-              <div className="p-2 bg-gray-100 text-gray-600 rounded-lg"><Terminal size={18} /></div>
+              <div className="p-2 bg-white/10 text-cyan-300 border border-cyan-400/20 rounded-lg"><Terminal size={18} /></div>
               <div className="text-left">
-                <h3 className="text-sm font-bold text-gray-900">{t('sections.advanced.title')}</h3>
-                <p className="text-[11px] text-gray-500">{t('sections.advanced.desc')}</p>
+                <h3 className="text-sm font-bold text-text-primary">{t('sections.advanced.title')}</h3>
+                <p className="text-[11px] text-text-muted">{t('sections.advanced.desc')}</p>
               </div>
             </div>
-            <ChevronDown size={20} className={`text-gray-400 transition-transform duration-300 ${showAdvanced ? 'rotate-180' : ''}`} />
+            <ChevronDown size={20} className={`text-text-muted transition-transform duration-300 ${showAdvanced ? 'rotate-180' : ''}`} />
           </button>
           
           <AnimatePresence>
@@ -795,9 +807,9 @@ export default function ScanForm() {
                 initial={{ height: 0, opacity: 0 }}
                 animate={{ height: 'auto', opacity: 1 }}
                 exit={{ height: 0, opacity: 0 }}
-                className="overflow-hidden border-t border-gray-100"
+                className="overflow-hidden border-t border-white/10"
               >
-                <CardContent className="bg-white space-y-4">
+                <CardContent className="bg-transparent space-y-4">
                   <div className="space-y-1.5">
                     <Label>{t('fields.extraArgs.label')}</Label>
                     <Input {...register('extra_args')} placeholder={t('fields.extraArgs.placeholder')} />
@@ -817,13 +829,13 @@ export default function ScanForm() {
         </div>
 
         {/* 5) CAPTCHA Handling */}
-        <Card className={`transition-colors duration-300 ${hasCaptcha ? 'border-orange-200 bg-orange-50/20' : ''}`}>
+        <Card className={`transition-colors duration-300 ${hasCaptcha ? 'border-status-warning/35 bg-status-warning/10' : ''}`}>
           <CardContent className="p-6">
             <div className="flex items-center space-x-3 rtl:space-x-reverse">
               <Checkbox id="captcha" {...register('has_captcha')} />
               <div>
                 <Label className="mb-0" htmlFor="captcha">{t('sections.captcha.title')}</Label>
-                <p className="text-[11px] text-gray-500">{t('sections.captcha.desc')}</p>
+                <p className="text-[11px] text-text-muted">{t('sections.captcha.desc')}</p>
               </div>
             </div>
             
@@ -852,7 +864,7 @@ export default function ScanForm() {
       </form>
 
       <aside className="lg:col-span-4 lg:sticky lg:top-28 space-y-6">
-        <Card className="border-blue-600 shadow-xl shadow-blue-500/10">
+        <Card className="border-cyan-400/28 shadow-[0_18px_50px_rgba(0,209,255,0.16)]">
           <CardContent className="p-6">
             <ScanSummary 
               values={formValues as ScanFormValues}

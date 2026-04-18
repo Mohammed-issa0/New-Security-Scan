@@ -4,6 +4,7 @@ import { HowItWorks, AuthHighlight, TrustSection } from '@/components/landing/Se
 import { Personas, FinalCTA, Footer } from '@/components/landing/FinalSections';
 import { LandingAtmosphere } from '@/components/landing/Atmosphere';
 import { PlansPageContent } from '@/components/plans/PlansPageContent';
+import { FloatingAssistant } from '@/components/guided-setup/FloatingAssistant';
 import { setRequestLocale } from 'next-intl/server';
 import { Suspense } from 'react';
 
@@ -33,6 +34,7 @@ export default function LandingPage({ params: { locale } }: { params: { locale: 
         <FinalCTA />
       </div>
       <Footer />
+      <FloatingAssistant />
     </main>
   );
 }

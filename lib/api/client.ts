@@ -118,7 +118,7 @@ async function apiFetch(endpoint: string, options: RequestInit = {}, responseTyp
     throw new ApiRequestError(response.status, errorData);
   }
 
-  if (response.status === 204 || response.status === 202) {
+  if (response.status === 204) {
     return null;
   }
 

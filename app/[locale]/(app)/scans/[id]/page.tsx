@@ -516,12 +516,12 @@ export default function ScanDetailsPage() {
             {formatDate(scan.finishedAt)}
           </div>
         </div>
-        <div className="bg-white p-4 rounded-xl border border-gray-200 shadow-sm">
-          <div className="flex items-center text-gray-500 text-sm mb-1">
+        <div className="rounded-xl border border-white/14 bg-white/6 p-4 shadow-sm">
+          <div className="mb-1 flex items-center text-sm text-text-secondary">
             <AlertCircle className="h-4 w-4 mr-2" />
             {td('vulnerabilitiesCountLabel')}
           </div>
-          <div className="text-lg font-semibold">
+          <div className="text-lg font-semibold text-text-primary">
             {vulnerabilities?.length || 0}
           </div>
         </div>

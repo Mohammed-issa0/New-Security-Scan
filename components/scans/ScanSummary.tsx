@@ -26,47 +26,48 @@ export function ScanSummary({ values, isSubmitting, credits, onPreviewJson }: Sc
     <div className="space-y-6">
       <div className="space-y-4">
         <div className="flex items-center justify-between">
-          <h3 className="text-lg font-bold text-gray-900">{t('title')}</h3>
+          <h3 className="text-lg font-bold text-text-primary">{t('title')}</h3>
           <Badge variant={targetCount > 0 ? 'success' : 'outline'}>
             {t('targetsCount', { count: targetCount })}
           </Badge>
         </div>
 
         <div className="space-y-3">
-          <div className="flex items-center gap-3 p-3 rounded-xl bg-gray-50 border border-gray-100">
-            <Shield size={18} className="text-blue-600" />
+          <div className="flex items-center gap-3 p-3 rounded-xl bg-white/6 border border-cyan-400/14">
+            <Shield size={18} className="text-cyan-300" />
             <div className="flex-1 min-w-0">
-              <p className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">{t('scanName')}</p>
-              <p className="text-sm font-semibold text-gray-900 truncate">
+              <p className="text-[10px] font-bold text-text-muted uppercase tracking-wider">{t('scanName')}</p>
+              <p className="text-sm font-semibold text-text-primary truncate">
                 {values.name || t('untitled')}
               </p>
             </div>
           </div>
 
-          <div className="flex items-center gap-3 p-3 rounded-xl bg-gray-50 border border-gray-100">
-            <Target size={18} className="text-blue-600" />
+          <div className="flex items-center gap-3 p-3 rounded-xl bg-white/6 border border-cyan-400/14">
+            <Target size={18} className="text-cyan-300" />
             <div className="flex-1 min-w-0">
-              <p className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Tool</p>
+              <p className="text-[10px] font-bold text-text-muted uppercase tracking-wider">Tool</p>
               <Badge className="mt-0.5 uppercase font-bold">{values.tool}</Badge>
+              <p className="mt-1 text-[11px] text-text-muted">{values.tool_depth}</p>
             </div>
           </div>
 
-          <div className="flex items-center gap-3 p-3 rounded-xl bg-gray-50 border border-gray-100">
-            <Key size={18} className="text-blue-600" />
+          <div className="flex items-center gap-3 p-3 rounded-xl bg-white/6 border border-cyan-400/14">
+            <Key size={18} className="text-cyan-300" />
             <div className="flex-1 min-w-0">
-              <p className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">{t('auth')}</p>
-              <p className="text-xs font-medium text-gray-600">
+              <p className="text-[10px] font-bold text-text-muted uppercase tracking-wider">{t('auth')}</p>
+              <p className="text-xs font-medium text-text-secondary">
                 {hasAuth ? 'Enabled' : t('noAuth')}
               </p>
             </div>
           </div>
 
           {values.tool === 'zap' && values.zap_config && (
-            <div className="flex items-center gap-3 p-3 rounded-xl bg-blue-50/50 border border-blue-100">
-              <Settings2 size={18} className="text-blue-600" />
+            <div className="flex items-center gap-3 p-3 rounded-xl bg-cyan-400/8 border border-cyan-400/20">
+              <Settings2 size={18} className="text-cyan-300" />
               <div className="flex-1 min-w-0">
-                <p className="text-[10px] font-bold text-blue-400 uppercase tracking-wider">{t('zapConfig')}</p>
-                <p className="text-xs font-medium text-blue-700">
+                <p className="text-[10px] font-bold text-cyan-300 uppercase tracking-wider">{t('zapConfig')}</p>
+                <p className="text-xs font-medium text-text-secondary">
                   {values.zap_config['scan-type']} spider {values.zap_config.ajax ? '+ ajax' : ''}
                 </p>
               </div>
@@ -87,12 +88,12 @@ export function ScanSummary({ values, isSubmitting, credits, onPreviewJson }: Sc
       )}
 
       {isSharedMode && credits === 0 && (
-        <div className="p-4 bg-red-50 border border-red-100 rounded-xl space-y-3">
-          <div className="flex items-center gap-2 text-red-700">
+        <div className="p-4 bg-status-danger/12 border border-status-danger/28 rounded-xl space-y-3">
+          <div className="flex items-center gap-2 text-status-danger">
             <AlertTriangle size={16} />
             <span className="text-sm font-bold">{t('creditsError')}</span>
           </div>
-          <p className="text-xs text-red-600 leading-relaxed">
+          <p className="text-xs text-status-danger leading-relaxed">
             {t('creditsDesc')}
           </p>
           <Button variant="danger" size="sm" className="w-full text-xs h-9">
@@ -105,7 +106,7 @@ export function ScanSummary({ values, isSubmitting, credits, onPreviewJson }: Sc
         <Button 
           type="submit" 
           form="scan-form"
-          className="w-full shadow-lg shadow-blue-500/20 py-6 h-auto text-lg"
+          className="w-full shadow-lg shadow-cyan-400/20 py-6 h-auto text-lg"
           disabled={isSubmitting || (isSharedMode && credits === 0)}
         >
           {isSubmitting ? (
@@ -128,7 +129,7 @@ export function ScanSummary({ values, isSubmitting, credits, onPreviewJson }: Sc
           type="button"
           variant="ghost" 
           onClick={onPreviewJson}
-          className="w-full gap-2 text-gray-500 hover:text-blue-600 h-10 text-xs font-bold"
+          className="w-full gap-2 text-text-muted hover:text-cyan-300 h-10 text-xs font-bold"
         >
           <Code size={14} /> {t('previewJson')}
         </Button>

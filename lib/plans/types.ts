@@ -22,6 +22,8 @@ export interface PlanPublicResponse {
   currency?: string | null;
   includedScanCredits: number;
   maxRuntimeMinutes: number;
+  maxConcurrentScans?: number;
+  max_concurrent_scans?: number;
   enabledTools?: string[] | null;
   allowed_tools?: string[] | null;
   max_runtime_minutes?: number;

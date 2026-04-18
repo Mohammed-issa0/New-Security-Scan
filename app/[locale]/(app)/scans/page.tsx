@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { useTranslations, useLocale } from 'next-intl';
 import { scansService } from '@/lib/scans/scansService';
@@ -54,6 +54,19 @@ export default function ScansPage() {
       return hasActiveScans ? 5000 : false;
     },
   });
+
+  const filteredScans = useMemo(() => {
+    const items = scansData?.items ?? [];
+
+    return items.filter((scan) => {
+      const statusMatches = statusFilter === 'All' || scan.status === statusFilter;
+      const toolMatches =
+        toolFilter === 'All' ||
+        (Array.isArray(scan.toolNames) && scan.toolNames.some((tool) => tool.toLowerCase() === toolFilter));
+
+      return statusMatches && toolMatches;
+    });
+  }, [scansData?.items, statusFilter, toolFilter]);
 
   const totalPages = scansData?.totalPages ?? (scansData ? Math.max(1, Math.ceil(scansData.totalCount / scansData.pageSize)) : 1);
 
@@ -145,10 +158,10 @@ export default function ScansPage() {
                 retryLabel={tCommon('retry')}
                 onRetry={() => refetch()}
               />
-            ) : (scansData?.items?.length ?? 0) === 0 ? (
+            ) : filteredScans.length === 0 ? (
               <TableEmptyRow columns={5} title={t('noScans')} />
             ) : (
-              (scansData?.items ?? []).map((scan) => (
+              filteredScans.map((scan) => (
                 <tr key={scan.id} className="hover:bg-white/6">
                   <td className="px-6 py-4 whitespace-nowrap">
                     <StatusBadge status={scan.status} />

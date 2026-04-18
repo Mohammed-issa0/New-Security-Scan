@@ -1,4 +1,5 @@
-export type Tool = 'ffuf' | 'nmap' | 'zap' | 'wpscan' | 'sqlmap';
+export type Tool = 'ffuf' | 'nmap' | 'zap' | 'wpscan' | 'sqlmap' | 'xss' | 'ssl';
+export type ScanDepth = 'light' | 'deep' | 'aggressive';
 
 export interface HeaderRow {
   name: string;
@@ -26,6 +27,7 @@ export interface ScanFormValues {
       cookies: CookieRow[];
     };
   };
+  tool_depth: ScanDepth;
   zap_config?: {
     'scan-type': 'baseline' | 'full' | 'api';
     ajax: boolean;
@@ -47,7 +49,7 @@ export interface ScanPayload {
   tool: Tool;
   notes?: string;
   targetConfig?: {
-    user_agent?: string;
+    userAgent?: string;
     headers?: Record<string, string>;
     authentication?: {
       token?: string;
@@ -55,6 +57,7 @@ export interface ScanPayload {
     };
   };
   toolConfig?: Record<string, any>;
+  toolDepths?: Record<string, ScanDepth>;
   extraArgs?: string;
   timeoutMinutes?: number;
 }

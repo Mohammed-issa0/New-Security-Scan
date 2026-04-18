@@ -1517,6 +1517,844 @@
         }
       }
     },
+    "/api/extension/scan": {
+      "post": {
+        "tags": [
+          "ExtensionScan"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ExtensionScanRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ExtensionScanRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/ExtensionScanRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "202": {
+            "description": "Accepted",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExtensionScanQueuedResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExtensionScanQueuedResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExtensionScanQueuedResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/extension/scan/{scanId}": {
+      "get": {
+        "tags": [
+          "ExtensionScan"
+        ],
+        "parameters": [
+          {
+            "name": "scanId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExtensionScanStatusResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExtensionScanStatusResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExtensionScanStatusResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/guided-setup": {
+      "post": {
+        "tags": [
+          "GuidedSetup"
+        ],
+        "summary": "Start a new guided setup session and receive the first question.",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/StartGuidedSetupRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/StartGuidedSetupRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/StartGuidedSetupRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/StartGuidedSetupResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StartGuidedSetupResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StartGuidedSetupResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/guided-setup/{sessionId}/answer": {
+      "post": {
+        "tags": [
+          "GuidedSetup"
+        ],
+        "summary": "Submit an answer to the current question and advance the wizard.\r\nReturns either the next question or the final scan recommendation.",
+        "parameters": [
+          {
+            "name": "sessionId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AnswerGuidedSetupRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AnswerGuidedSetupRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/AnswerGuidedSetupRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/GuidedSetupStepResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GuidedSetupStepResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GuidedSetupStepResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/guided-setup/{sessionId}": {
+      "get": {
+        "tags": [
+          "GuidedSetup"
+        ],
+        "summary": "Get the current state of a guided setup session (for resume / display).",
+        "parameters": [
+          {
+            "name": "sessionId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/GuidedSetupSessionResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GuidedSetupSessionResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GuidedSetupSessionResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/guided-setup/{sessionId}/create-scan": {
+      "post": {
+        "tags": [
+          "GuidedSetup"
+        ],
+        "summary": "Create a real scan from a completed session's recommendation.\r\nThe session must be in Complete status.",
+        "parameters": [
+          {
+            "name": "sessionId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateScanFromRecommendationRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateScanFromRecommendationRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateScanFromRecommendationRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreateScanFromRecommendationResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreateScanFromRecommendationResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreateScanFromRecommendationResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/jira/oauth/initiate": {
+      "get": {
+        "tags": [
+          "JiraOAuth"
+        ],
+        "summary": "Returns the Atlassian OAuth authorization URL.\r\nThe frontend should redirect the user's browser to this URL.",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/JiraOAuthInitiateResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JiraOAuthInitiateResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JiraOAuthInitiateResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/jira/oauth/callback": {
+      "get": {
+        "tags": [
+          "JiraOAuth"
+        ],
+        "summary": "Handles the OAuth callback from Atlassian.\r\nThis endpoint is hit by the user's browser as a redirect from Atlassian — no JWT is present.\r\nSecurity is provided entirely by the encrypted, time-limited state parameter.\r\nOn success, redirects the browser to /settings/jira?connected=true.\r\nOn failure, redirects to /settings/jira?error=...",
+        "parameters": [
+          {
+            "name": "code",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "state",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "error",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/v1/jira/oauth/status": {
+      "get": {
+        "tags": [
+          "JiraOAuth"
+        ],
+        "summary": "Returns the current Atlassian OAuth connection status for the authenticated user.",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/JiraOAuthStatusResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JiraOAuthStatusResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JiraOAuthStatusResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/jira/oauth/disconnect": {
+      "delete": {
+        "tags": [
+          "JiraOAuth"
+        ],
+        "summary": "Disconnects the Atlassian OAuth integration (removes stored tokens).",
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/v1/jira/oauth/sites": {
+      "get": {
+        "tags": [
+          "JiraOAuth"
+        ],
+        "summary": "Returns all Jira sites accessible by the connected Atlassian account.",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/JiraAccessibleSite"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/JiraAccessibleSite"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/JiraAccessibleSite"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/jira/oauth/projects": {
+      "get": {
+        "tags": [
+          "JiraOAuth"
+        ],
+        "summary": "Returns all Jira projects for a specific site (cloudId).",
+        "parameters": [
+          {
+            "name": "cloudId",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/JiraProjectSummary"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/JiraProjectSummary"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/JiraProjectSummary"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/jira/oauth/test-connection": {
+      "post": {
+        "tags": [
+          "JiraOAuth"
+        ],
+        "summary": "Performs a live connectivity test against the specified Jira site.",
+        "parameters": [
+          {
+            "name": "cloudId",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/JiraConnectionTestResult"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JiraConnectionTestResult"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JiraConnectionTestResult"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/jira/oauth/developers/search": {
+      "get": {
+        "tags": [
+          "JiraOAuth"
+        ],
+        "summary": "Searches for Jira users by display name or email fragment on a specific site.",
+        "parameters": [
+          {
+            "name": "cloudId",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "q",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/JiraDeveloperSearchResult"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/JiraDeveloperSearchResult"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/JiraDeveloperSearchResult"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/jira/oauth/developers/verify": {
+      "post": {
+        "tags": [
+          "JiraOAuth"
+        ],
+        "summary": "Verifies a Jira account exists on the site and creates/updates a local developer mapping.",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/VerifyDeveloperRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/VerifyDeveloperRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/VerifyDeveloperRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/JiraDeveloperProfileResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JiraDeveloperProfileResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JiraDeveloperProfileResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/jira/oauth/developers": {
+      "get": {
+        "tags": [
+          "JiraOAuth"
+        ],
+        "summary": "Returns all locally mapped developer profiles for the authenticated user.",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/JiraDeveloperProfileResponse"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/JiraDeveloperProfileResponse"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/JiraDeveloperProfileResponse"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/jira/oauth/developers/{jiraAccountId}/role": {
+      "put": {
+        "tags": [
+          "JiraOAuth"
+        ],
+        "summary": "Updates the custom role label for an existing developer mapping.",
+        "parameters": [
+          {
+            "name": "jiraAccountId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateDeveloperRoleRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateDeveloperRoleRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateDeveloperRoleRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/JiraDeveloperProfileResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JiraDeveloperProfileResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JiraDeveloperProfileResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/jira/oauth/developers/{jiraAccountId}": {
+      "delete": {
+        "tags": [
+          "JiraOAuth"
+        ],
+        "summary": "Soft-deletes a developer mapping.",
+        "parameters": [
+          {
+            "name": "jiraAccountId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
     "/api/v1/jira-projects": {
       "post": {
         "tags": [
@@ -1948,6 +2786,134 @@
             "schema": {
               "type": "string",
               "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/v1/reports/{scanId}/generate": {
+      "post": {
+        "tags": [
+          "Reports"
+        ],
+        "parameters": [
+          {
+            "name": "scanId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GenerateScanReportRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GenerateScanReportRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/GenerateScanReportRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "202": {
+            "description": "Accepted",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/GenerateReportResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GenerateReportResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GenerateReportResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/reports/generated/{reportId}/status": {
+      "get": {
+        "tags": [
+          "Reports"
+        ],
+        "parameters": [
+          {
+            "name": "reportId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReportStatusResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReportStatusResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReportStatusResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/reports/generated/{reportId}/download": {
+      "get": {
+        "tags": [
+          "Reports"
+        ],
+        "parameters": [
+          {
+            "name": "reportId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "format",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "default": "Pdf"
             }
           }
         ],
@@ -2481,6 +3447,170 @@
           },
           "400": {
             "description": "Bad Request",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/internal/scans/{scanId}/findings": {
+      "get": {
+        "tags": [
+          "Scans"
+        ],
+        "summary": "INTERNAL ONLY: Get raw findings for a scan (for report generation microservice).\r\nRequires X-Internal-Service-Token header.",
+        "parameters": [
+          {
+            "name": "scanId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "tenantId",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": { }
+              },
+              "application/json": {
+                "schema": { }
+              },
+              "text/json": {
+                "schema": { }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/internal/scans/{scanId}/trend": {
+      "get": {
+        "tags": [
+          "Scans"
+        ],
+        "summary": "INTERNAL ONLY: Get trend data for a scan (for report generation microservice).\r\nRequires X-Internal-Service-Token header.",
+        "parameters": [
+          {
+            "name": "scanId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "tenantId",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": { }
+              },
+              "application/json": {
+                "schema": { }
+              },
+              "text/json": {
+                "schema": { }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
             "content": {
               "text/plain": {
                 "schema": {
@@ -3080,6 +4210,25 @@
         },
         "additionalProperties": false
       },
+      "AnswerGuidedSetupRequest": {
+        "type": "object",
+        "properties": {
+          "questionId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "questionText": {
+            "type": "string",
+            "nullable": true
+          },
+          "answer": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false,
+        "description": "Submit an answer to the current question."
+      },
       "AuditLog": {
         "type": "object",
         "properties": {
@@ -3207,20 +4356,29 @@
             "type": "string",
             "nullable": true
           },
-          "url": {
+          "jiraBaseUrl": {
             "type": "string",
+            "description": "Base URL of the Jira instance (e.g. https://yourcompany.atlassian.net).",
             "nullable": true
           },
-          "user": {
+          "jiraUser": {
             "type": "string",
+            "description": "Jira user email address used for API authentication.",
             "nullable": true
           },
-          "token": {
+          "jiraAuthToken": {
             "type": "string",
+            "description": "Jira API token for the above user.",
             "nullable": true
           },
-          "projectKey": {
+          "jiraProjectKey": {
             "type": "string",
+            "description": "Jira project key (e.g. \"PROJ\").",
+            "nullable": true
+          },
+          "jiraAuthTokenType": {
+            "type": "string",
+            "description": "Optional — token type hint (e.g. \"Bearer\", \"Basic\"). Informational only.",
             "nullable": true
           },
           "teamRoles": {
@@ -3277,6 +4435,38 @@
         "properties": {
           "planName": {
             "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "CreateScanFromRecommendationRequest": {
+        "type": "object",
+        "properties": {
+          "targetUrl": {
+            "type": "string",
+            "description": "Optional override for the target URL.\r\nDefaults to the URL stored in the session.",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "CreateScanFromRecommendationResponse": {
+        "type": "object",
+        "properties": {
+          "scanId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "targetUrl": {
+            "type": "string",
+            "nullable": true
+          },
+          "tools": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
             "nullable": true
           }
         },
@@ -3491,6 +4681,134 @@
         "additionalProperties": false,
         "description": "Response containing estimated finish time information for a scan job."
       },
+      "ExtensionScanQueuedResponse": {
+        "type": "object",
+        "properties": {
+          "scan_id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "status": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "ExtensionScanReportResponse": {
+        "type": "object",
+        "properties": {
+          "pdf": {
+            "type": "string",
+            "nullable": true
+          },
+          "json": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "ExtensionScanRequest": {
+        "type": "object",
+        "properties": {
+          "source": {
+            "type": "string",
+            "nullable": true
+          },
+          "extension_version": {
+            "type": "string",
+            "nullable": true
+          },
+          "url": {
+            "type": "string",
+            "nullable": true
+          },
+          "origin": {
+            "type": "string",
+            "nullable": true
+          },
+          "path": {
+            "type": "string",
+            "nullable": true
+          },
+          "method": {
+            "type": "string",
+            "nullable": true
+          },
+          "headers": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            },
+            "nullable": true
+          },
+          "forms": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": { }
+            },
+            "nullable": true
+          },
+          "inputs": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": { }
+            },
+            "nullable": true
+          },
+          "links": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "nullable": true
+          },
+          "scripts": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "nullable": true
+          },
+          "tech_fingerprint": {
+            "type": "object",
+            "additionalProperties": {
+              "nullable": true
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "ExtensionScanStatusResponse": {
+        "type": "object",
+        "properties": {
+          "scan_id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "status": {
+            "type": "string",
+            "nullable": true
+          },
+          "progress": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "risk_score": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "report": {
+            "$ref": "#/components/schemas/ExtensionScanReportResponse"
+          }
+        },
+        "additionalProperties": false
+      },
       "ExtraCreditResponse": {
         "type": "object",
         "properties": {
@@ -3566,6 +4884,49 @@
         },
         "additionalProperties": false
       },
+      "GenerateReportResponse": {
+        "type": "object",
+        "properties": {
+          "reportId": {
+            "type": "string",
+            "nullable": true
+          },
+          "jobId": {
+            "type": "string",
+            "nullable": true
+          },
+          "status": {
+            "type": "string",
+            "nullable": true
+          },
+          "idempotencyKey": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "GenerateScanReportRequest": {
+        "type": "object",
+        "properties": {
+          "reportMode": {
+            "type": "string",
+            "nullable": true
+          },
+          "outputFormats": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "nullable": true
+          },
+          "idempotencyKey": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
       "GrantPlanRequest": {
         "type": "object",
         "properties": {
@@ -3575,6 +4936,274 @@
           },
           "planName": {
             "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "GuidedSetupAnswerRecord": {
+        "type": "object",
+        "properties": {
+          "question_id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "question_text": {
+            "type": "string",
+            "nullable": true
+          },
+          "answer": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false,
+        "description": "Stored per-answer record (serialised into GuidedSetupSession.AnswersJson)."
+      },
+      "GuidedSetupQuestion": {
+        "type": "object",
+        "properties": {
+          "question_id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "text": {
+            "type": "string",
+            "nullable": true
+          },
+          "hint": {
+            "type": "string",
+            "nullable": true
+          },
+          "input_type": {
+            "type": "string",
+            "nullable": true
+          },
+          "choices": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/QuestionChoice"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "GuidedSetupSessionResponse": {
+        "type": "object",
+        "properties": {
+          "sessionId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "status": {
+            "type": "string",
+            "nullable": true
+          },
+          "targetUrl": {
+            "type": "string",
+            "nullable": true
+          },
+          "answers": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/GuidedSetupAnswerRecord"
+            },
+            "nullable": true
+          },
+          "recommendation": {
+            "$ref": "#/components/schemas/ScanRecommendation"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "expiresAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "additionalProperties": false
+      },
+      "GuidedSetupStepResponse": {
+        "type": "object",
+        "properties": {
+          "sessionId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "stepType": {
+            "type": "string",
+            "description": "\"question\" or \"recommendation\"",
+            "nullable": true
+          },
+          "question": {
+            "$ref": "#/components/schemas/GuidedSetupQuestion"
+          },
+          "recommendation": {
+            "$ref": "#/components/schemas/ScanRecommendation"
+          }
+        },
+        "additionalProperties": false
+      },
+      "JiraAccessibleSite": {
+        "type": "object",
+        "properties": {
+          "cloudId": {
+            "type": "string",
+            "nullable": true
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "url": {
+            "type": "string",
+            "nullable": true
+          },
+          "avatarUrl": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "JiraConnectionTestResult": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "errorMessage": {
+            "type": "string",
+            "nullable": true
+          },
+          "cloudId": {
+            "type": "string",
+            "nullable": true
+          },
+          "siteName": {
+            "type": "string",
+            "nullable": true
+          },
+          "jiraVersion": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "JiraDeveloperProfileResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "jiraAccountId": {
+            "type": "string",
+            "nullable": true
+          },
+          "jiraDisplayName": {
+            "type": "string",
+            "nullable": true
+          },
+          "jiraEmail": {
+            "type": "string",
+            "nullable": true
+          },
+          "customRole": {
+            "type": "string",
+            "nullable": true
+          },
+          "accountType": {
+            "type": "string",
+            "nullable": true
+          },
+          "isActive": {
+            "type": "boolean"
+          },
+          "lastVerifiedAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "additionalProperties": false
+      },
+      "JiraDeveloperSearchResult": {
+        "type": "object",
+        "properties": {
+          "accountId": {
+            "type": "string",
+            "nullable": true
+          },
+          "displayName": {
+            "type": "string",
+            "nullable": true
+          },
+          "emailAddress": {
+            "type": "string",
+            "nullable": true
+          },
+          "accountType": {
+            "type": "string",
+            "nullable": true
+          },
+          "avatarUrl": {
+            "type": "string",
+            "nullable": true
+          },
+          "alreadyMapped": {
+            "type": "boolean"
+          },
+          "existingCustomRole": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "JiraOAuthInitiateResponse": {
+        "type": "object",
+        "properties": {
+          "authorizationUrl": {
+            "type": "string",
+            "nullable": true
+          },
+          "alreadyConnected": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": false
+      },
+      "JiraOAuthStatusResponse": {
+        "type": "object",
+        "properties": {
+          "connected": {
+            "type": "boolean"
+          },
+          "atlassianEmail": {
+            "type": "string",
+            "nullable": true
+          },
+          "atlassianDisplayName": {
+            "type": "string",
+            "nullable": true
+          },
+          "atlassianAccountId": {
+            "type": "string",
+            "nullable": true
+          },
+          "sites": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/JiraAccessibleSite"
+            },
+            "nullable": true
+          },
+          "connectedAt": {
+            "type": "string",
+            "format": "date-time",
             "nullable": true
           }
         },
@@ -3738,6 +5367,28 @@
           "totalCount": {
             "type": "integer",
             "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "JiraProjectSummary": {
+        "type": "object",
+        "properties": {
+          "key": {
+            "type": "string",
+            "nullable": true
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "projectTypeKey": {
+            "type": "string",
+            "nullable": true
+          },
+          "avatarUrl": {
+            "type": "string",
+            "nullable": true
           }
         },
         "additionalProperties": false
@@ -4028,6 +5679,11 @@
             "description": "Plan expires N months after purchase (default: 6).",
             "format": "int32"
           },
+          "max_concurrent_scans": {
+            "type": "integer",
+            "description": "Maximum number of simultaneously active (Pending or Running) scans. 0 = unlimited.",
+            "format": "int32"
+          },
           "allowed_tools": {
             "type": "array",
             "items": {
@@ -4276,6 +5932,20 @@
         },
         "additionalProperties": false
       },
+      "QuestionChoice": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": "string",
+            "nullable": true
+          },
+          "label": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
       "QueueItemResponse": {
         "type": "object",
         "properties": {
@@ -4372,6 +6042,17 @@
         "properties": {
           "fullName": {
             "type": "string",
+            "description": "Full display name. Alternatively supply FirstName + LastName.",
+            "nullable": true
+          },
+          "firstName": {
+            "type": "string",
+            "description": "Optional — combined with LastName when FullName is absent.",
+            "nullable": true
+          },
+          "lastName": {
+            "type": "string",
+            "description": "Optional — combined with FirstName when FullName is absent.",
             "nullable": true
           },
           "email": {
@@ -4409,6 +6090,34 @@
           "queuePosition": {
             "type": "integer",
             "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "ReportStatusResponse": {
+        "type": "object",
+        "properties": {
+          "reportId": {
+            "type": "string",
+            "nullable": true
+          },
+          "status": {
+            "type": "string",
+            "nullable": true
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "errorMessage": {
+            "type": "string",
+            "nullable": true
           }
         },
         "additionalProperties": false
@@ -4696,6 +6405,38 @@
           },
           "report": {
             "$ref": "#/components/schemas/ScanReportResponse"
+          }
+        },
+        "additionalProperties": false
+      },
+      "ScanRecommendation": {
+        "type": "object",
+        "properties": {
+          "plain_summary": {
+            "type": "string",
+            "nullable": true
+          },
+          "what_we_check": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "nullable": true
+          },
+          "estimated_minutes": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "confidence": {
+            "type": "string",
+            "nullable": true
+          },
+          "tools_with_depths": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ToolDepth"
+            },
+            "nullable": true
           }
         },
         "additionalProperties": false
@@ -5016,6 +6757,35 @@
         "type": "integer",
         "format": "int32"
       },
+      "StartGuidedSetupRequest": {
+        "type": "object",
+        "properties": {
+          "targetUrl": {
+            "type": "string",
+            "description": "The website URL the user wants to protect.",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false,
+        "description": "Start a new guided setup session."
+      },
+      "StartGuidedSetupResponse": {
+        "type": "object",
+        "properties": {
+          "sessionId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "question": {
+            "$ref": "#/components/schemas/GuidedSetupQuestion"
+          },
+          "expiresAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "additionalProperties": false
+      },
       "TargetBrowserAuth": {
         "type": "object",
         "properties": {
@@ -5264,6 +7034,30 @@
         "additionalProperties": false,
         "description": "Token usage information from the AI service."
       },
+      "ToolDepth": {
+        "type": "object",
+        "properties": {
+          "tool_id": {
+            "type": "string",
+            "nullable": true
+          },
+          "depth": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "UpdateDeveloperRoleRequest": {
+        "type": "object",
+        "properties": {
+          "customRole": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
       "UpdateJiraProjectRequest": {
         "type": "object",
         "properties": {
@@ -5271,19 +7065,23 @@
             "type": "string",
             "nullable": true
           },
-          "url": {
+          "jiraBaseUrl": {
             "type": "string",
             "nullable": true
           },
-          "user": {
+          "jiraUser": {
             "type": "string",
             "nullable": true
           },
-          "token": {
+          "jiraAuthToken": {
             "type": "string",
             "nullable": true
           },
-          "projectKey": {
+          "jiraProjectKey": {
+            "type": "string",
+            "nullable": true
+          },
+          "jiraAuthTokenType": {
             "type": "string",
             "nullable": true
           },
@@ -5847,6 +7645,24 @@
           },
           "role": {
             "$ref": "#/components/schemas/Role"
+          }
+        },
+        "additionalProperties": false
+      },
+      "VerifyDeveloperRequest": {
+        "type": "object",
+        "properties": {
+          "cloudId": {
+            "type": "string",
+            "nullable": true
+          },
+          "jiraAccountId": {
+            "type": "string",
+            "nullable": true
+          },
+          "customRole": {
+            "type": "string",
+            "nullable": true
           }
         },
         "additionalProperties": false

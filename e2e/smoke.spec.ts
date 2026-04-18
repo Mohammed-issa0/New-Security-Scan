@@ -28,6 +28,185 @@ async function createTargetViaUI(page: Page, targetUrl: string) {
 }
 
 test.describe('End-to-end smoke scenarios', () => {
+  test('Jira developer mapping test (mocked APIs)', async ({ page }) => {
+    test.skip(!USER_EMAIL || !USER_PASSWORD, 'Set E2E_USER_EMAIL and E2E_USER_PASSWORD');
+    await loginByUI(page, USER_EMAIL!, USER_PASSWORD!);
+
+    let mappedDevelopers = [
+      {
+        jiraAccountId: 'acc-1',
+        jiraDisplayName: 'Ali Existing',
+        jiraEmail: 'ali.existing@example.com',
+        customRole: 'Analyst',
+        accountType: 'atlassian',
+        lastVerifiedAt: '2026-04-18T10:00:00.000Z',
+        isDeleted: false,
+      },
+    ];
+
+    await page.route('**/api/v1/jira/oauth/status', async (route) => {
+      await route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify({
+          connected: true,
+          atlassianEmail: 'owner@example.com',
+          atlassianDisplayName: 'Owner',
+          atlassianAccountId: 'owner-1',
+          sites: [{ cloudId: 'cloud-1', name: 'Site One', url: 'https://site-one.atlassian.net' }],
+          connectedAt: '2026-04-18T09:30:00.000Z',
+        }),
+      });
+    });
+
+    await page.route('**/api/v1/jira/oauth/sites', async (route) => {
+      await route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify([{ cloudId: 'cloud-1', name: 'Site One', url: 'https://site-one.atlassian.net' }]),
+      });
+    });
+
+    await page.route('**/api/v1/jira/oauth/projects?*', async (route) => {
+      await route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify([{ key: 'SEC', name: 'Security', projectTypeKey: 'software' }]),
+      });
+    });
+
+    await page.route('**/api/v1/jira/oauth/developers', async (route) => {
+      if (route.request().method() !== 'GET') {
+        await route.fallback();
+        return;
+      }
+
+      await route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify(mappedDevelopers.filter((item) => !item.isDeleted)),
+      });
+    });
+
+    await page.route('**/api/v1/jira/oauth/developers/search?*', async (route) => {
+      await route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify([
+          {
+            jiraAccountId: 'acc-2',
+            jiraDisplayName: 'Ali New',
+            jiraEmail: 'ali.new@example.com',
+            accountType: 'atlassian',
+            isMapped: false,
+            isDeleted: false,
+          },
+        ]),
+      });
+    });
+
+    await page.route('**/api/v1/jira/oauth/developers/verify', async (route) => {
+      const payload = route.request().postDataJSON() as {
+        cloudId: string;
+        jiraAccountId: string;
+        customRole?: string;
+      };
+
+      mappedDevelopers.push({
+        jiraAccountId: payload.jiraAccountId,
+        jiraDisplayName: 'Ali New',
+        jiraEmail: 'ali.new@example.com',
+        customRole: payload.customRole || null,
+        accountType: 'atlassian',
+        lastVerifiedAt: '2026-04-18T11:00:00.000Z',
+        isDeleted: false,
+      });
+
+      await route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify(mappedDevelopers[mappedDevelopers.length - 1]),
+      });
+    });
+
+    await page.route('**/api/v1/jira/oauth/developers/*/role', async (route) => {
+      const payload = route.request().postDataJSON() as { customRole: string };
+      const parts = route.request().url().split('/');
+      const jiraAccountId = parts[parts.length - 2];
+
+      mappedDevelopers = mappedDevelopers.map((item) =>
+        item.jiraAccountId === jiraAccountId ? { ...item, customRole: payload.customRole } : item
+      );
+
+      const developer = mappedDevelopers.find((item) => item.jiraAccountId === jiraAccountId)!;
+      await route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify(developer),
+      });
+    });
+
+    await page.route('**/api/v1/jira/oauth/developers/*?softDelete=true', async (route) => {
+      const parts = route.request().url().split('/');
+      const accountWithQuery = parts[parts.length - 1];
+      const jiraAccountId = accountWithQuery.split('?')[0];
+
+      mappedDevelopers = mappedDevelopers.map((item) =>
+        item.jiraAccountId === jiraAccountId ? { ...item, isDeleted: true } : item
+      );
+
+      await route.fulfill({
+        status: 204,
+        body: '',
+      });
+    });
+
+    await page.route('**/api/v1/jira-projects?*', async (route) => {
+      await route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify({
+          items: [],
+          pageNumber: 1,
+          pageSize: 10,
+          totalCount: 0,
+          totalPages: 1,
+        }),
+      });
+    });
+
+    await page.route('**/api/v1/targets?pageNumber=1&pageSize=200', async (route) => {
+      await route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify({
+          items: [],
+          pageNumber: 1,
+          pageSize: 200,
+          totalCount: 0,
+          totalPages: 1,
+        }),
+      });
+    });
+
+    await page.goto('/en/jira/projects');
+    await expect(page.getByTestId('jira-dev-search-input')).toBeVisible();
+
+    await page.getByTestId('jira-dev-search-input').fill('ali');
+    await expect(page.getByText('Ali New')).toBeVisible();
+
+    await page.getByTestId('jira-dev-verify-role-input').fill('Backend Engineer');
+    await page.getByTestId('jira-dev-verify-acc-2').click();
+    await expect(page.getByTestId('jira-dev-role-acc-2')).toHaveValue('Backend Engineer');
+
+    await page.getByTestId('jira-dev-role-acc-2').fill('Tech Lead');
+    await page.getByTestId('jira-dev-save-role-acc-2').click();
+    await expect(page.getByTestId('jira-dev-role-acc-2')).toHaveValue('Tech Lead');
+
+    await page.getByTestId('jira-dev-remove-acc-2').click();
+    await expect(page.getByTestId('jira-dev-role-acc-2')).toHaveCount(0);
+  });
+
   test('login flow test', async ({ page }) => {
     test.skip(!USER_EMAIL || !USER_PASSWORD, 'Set E2E_USER_EMAIL and E2E_USER_PASSWORD');
     await loginByUI(page, USER_EMAIL!, USER_PASSWORD!);

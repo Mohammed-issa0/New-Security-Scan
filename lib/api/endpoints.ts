@@ -9,16 +9,38 @@ import {
   ToolStatus,
   Vulnerability,
   Report,
+  GenerateScanReportRequest,
+  GenerateReportResponse,
+  ReportStatusResponse,
   CreateJiraTicketsResponse,
   JiraProject,
-  JiraProjectUpsertRequest,
+  JiraOAuthInitiateResponse,
+  JiraOAuthStatusResponse,
+  JiraOAuthDisconnectResponse,
+  JiraAccessibleSite,
+  JiraProjectSummary,
+  JiraConnectionTestResult,
+  JiraDeveloperSearchResult,
+  VerifyDeveloperRequest,
+  JiraDeveloperProfileResponse,
+  UpdateDeveloperRoleRequest,
+  CreateJiraProjectRequest,
+  UpdateJiraProjectRequest,
   LinkJiraProjectRequest,
   EstimatedFinishTime,
   PaginatedResponse,
   AiScanConfigurationRequest,
   AiScanConfigurationResponse,
   AiPostScanReportRequest,
-  AiPostScanReportResponse
+  AiPostScanReportResponse,
+  RegisterRequest,
+  StartGuidedSetupRequest,
+  StartGuidedSetupResponse,
+  AnswerGuidedSetupRequest,
+  GuidedSetupStepResponse,
+  GuidedSetupSessionResponse,
+  CreateScanFromRecommendationRequest,
+  CreateScanFromRecommendationResponse
 } from './types';
 import {
   AdminUser,
@@ -44,7 +66,7 @@ import {
 
 export const endpoints = {
   auth: {
-    register: (data: any) => client.post('/auth/register', data),
+    register: (data: RegisterRequest) => client.post('/auth/register', data),
     login: (data: any) => client.post('/auth/login', data),
     refresh: (data: { refreshToken: string }) => client.post('/auth/refresh', data),
   },
@@ -78,6 +100,8 @@ export const endpoints = {
       }
       if (filters?.tool) {
         params.set('tool', filters.tool);
+        // Keep backward compatibility with backends that expect toolName.
+        params.set('toolName', filters.tool);
       }
       return client.get(`/scans?${params.toString()}`);
     },
@@ -94,6 +118,12 @@ export const endpoints = {
   reports: {
     get: (scanId: string): Promise<Report> => client.get(`/reports/${scanId}`),
     export: (scanId: string) => client.get(`/reports/${scanId}/export`),
+    generate: (scanId: string, data: GenerateScanReportRequest): Promise<GenerateReportResponse> =>
+      client.post(`/reports/${scanId}/generate`, data),
+    status: (reportId: string): Promise<ReportStatusResponse> =>
+      client.get(`/reports/generated/${encodeURIComponent(reportId)}/status`),
+    download: (reportId: string, format: string = 'Pdf'): Promise<Blob> =>
+      client.getBlob(`/reports/generated/${encodeURIComponent(reportId)}/download?format=${encodeURIComponent(format)}`),
   },
   ai: {
     suggestScanConfiguration: (data: AiScanConfigurationRequest): Promise<AiScanConfigurationResponse> =>
@@ -101,18 +131,54 @@ export const endpoints = {
     generatePostScanReport: (scanId: string, data: AiPostScanReportRequest): Promise<AiPostScanReportResponse> =>
       client.post(`/ai/scans/${scanId}/report`, data),
   },
+  guidedSetup: {
+    start: (data: StartGuidedSetupRequest): Promise<StartGuidedSetupResponse> =>
+      client.post('/guided-setup', data),
+    get: (sessionId: string): Promise<GuidedSetupSessionResponse> =>
+      client.get(`/guided-setup/${sessionId}`),
+    answer: (sessionId: string, data: AnswerGuidedSetupRequest): Promise<GuidedSetupStepResponse> =>
+      client.post(`/guided-setup/${sessionId}/answer`, data),
+    createScan: (
+      sessionId: string,
+      data: CreateScanFromRecommendationRequest
+    ): Promise<CreateScanFromRecommendationResponse> =>
+      client.post(`/guided-setup/${sessionId}/create-scan`, data),
+  },
   jiraProjects: {
     list: (pageNumber = 1, pageSize = 10): Promise<PaginatedResponse<JiraProject>> =>
       client.get(`/jira-projects?pageNumber=${pageNumber}&pageSize=${pageSize}`),
-    create: (data: JiraProjectUpsertRequest): Promise<JiraProject> => client.post('/jira-projects', data),
+    create: (data: CreateJiraProjectRequest): Promise<JiraProject> =>
+      client.post('/jira-projects', data),
     get: (id: string): Promise<JiraProject> => client.get(`/jira-projects/${id}`),
-    update: (id: string, data: JiraProjectUpsertRequest): Promise<JiraProject> =>
+    update: (id: string, data: UpdateJiraProjectRequest): Promise<JiraProject> =>
       client.put(`/jira-projects/${id}`, data),
     delete: (id: string) => client.delete(`/jira-projects/${id}`),
     testConnection: (id: string) => client.post(`/jira-projects/${id}/test-connection`),
     linkTarget: (id: string, data: LinkJiraProjectRequest) =>
       client.post(`/jira-projects/${id}/link-target`, data),
     unlinkTarget: (targetId: string) => client.delete(`/jira-projects/unlink-target/${targetId}`),
+  },
+  jiraOAuth: {
+    initiate: (): Promise<JiraOAuthInitiateResponse> => client.get('/jira/oauth/initiate'),
+    status: (): Promise<JiraOAuthStatusResponse> => client.get('/jira/oauth/status'),
+    disconnect: (): Promise<JiraOAuthDisconnectResponse> => client.delete('/jira/oauth/disconnect'),
+    sites: (): Promise<JiraAccessibleSite[]> => client.get('/jira/oauth/sites'),
+    projects: (cloudId: string): Promise<JiraProjectSummary[]> =>
+      client.get(`/jira/oauth/projects?cloudId=${encodeURIComponent(cloudId)}`),
+    testConnection: (cloudId: string): Promise<JiraConnectionTestResult> =>
+      client.post(`/jira/oauth/test-connection?cloudId=${encodeURIComponent(cloudId)}`),
+    searchDevelopers: (cloudId: string, q: string): Promise<JiraDeveloperSearchResult[]> =>
+      client.get(`/jira/oauth/developers/search?cloudId=${encodeURIComponent(cloudId)}&q=${encodeURIComponent(q)}`),
+    verifyDeveloper: (data: VerifyDeveloperRequest): Promise<JiraDeveloperProfileResponse> =>
+      client.post('/jira/oauth/developers/verify', data),
+    developers: (): Promise<JiraDeveloperProfileResponse[]> => client.get('/jira/oauth/developers'),
+    updateDeveloperRole: (
+      jiraAccountId: string,
+      data: UpdateDeveloperRoleRequest
+    ): Promise<JiraDeveloperProfileResponse> =>
+      client.put(`/jira/oauth/developers/${encodeURIComponent(jiraAccountId)}/role`, data),
+    removeDeveloper: (jiraAccountId: string, softDelete = true): Promise<void> =>
+      client.delete(`/jira/oauth/developers/${encodeURIComponent(jiraAccountId)}?softDelete=${softDelete ? 'true' : 'false'}`),
   },
   plans: {
     list: (): Promise<PlanPublicResponse[]> => client.get('/plans'),
