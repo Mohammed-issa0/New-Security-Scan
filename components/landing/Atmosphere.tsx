@@ -17,8 +17,11 @@ export function LandingAtmosphere() {
       const lowMemory =
         typeof (navigator as Navigator & { deviceMemory?: number }).deviceMemory === 'number' &&
         ((navigator as Navigator & { deviceMemory?: number }).deviceMemory ?? 0) <= 4;
+      const mobileViewport = window.matchMedia('(max-width: 1024px)').matches;
+      const mobileUa = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+      const isMobile = mobileViewport || mobileUa;
 
-      setLightMode(reducedMotion || lowCpu || lowMemory);
+      setLightMode(reducedMotion || lowCpu || lowMemory || isMobile);
     };
 
     evaluateLightMode();
