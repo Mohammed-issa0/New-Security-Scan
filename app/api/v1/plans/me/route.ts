@@ -1,40 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { forwardJsonToBackend } from '@/app/api/v1/_backend-proxy';
 
-const DEFAULT_BACKEND_BASE = 'https://backend.blackbrains.tech';
 export const runtime = 'nodejs';
 
-process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
-
-function safeJsonParse(text: string, fallback: unknown) {
-  if (!text) {
-    return fallback;
-  }
-
-  try {
-    return JSON.parse(text);
-  } catch {
-    return fallback;
-  }
-}
-
 export async function GET(request: NextRequest) {
-  const backendBase = process.env.API_BASE_URL || DEFAULT_BACKEND_BASE;
-  const backendUrl = new URL('/api/v1/plans/me', backendBase);
-
-  try {
-    const backendResponse = await fetch(backendUrl.toString(), {
-      method: 'GET',
-      headers: {
-        Authorization: request.headers.get('authorization') || '',
-        Accept: 'application/json',
-      },
-      cache: 'no-store',
-    });
-
-    const text = await backendResponse.text();
-    const body = safeJsonParse(text, {});
-    return NextResponse.json(body, { status: backendResponse.status });
-  } catch {
-    return NextResponse.json({ error: 'Active plan unavailable' }, { status: 502 });
-  }
+  return forwardJsonToBackend({
+    request,
+    backendPath: '/api/v1/plans/me',
+    method: 'GET',
+    fallback: {},
+    unavailableMessage: 'Active plan unavailable',
+  });
 }

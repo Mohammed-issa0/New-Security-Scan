@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from 'next/server';
 
 import { enforceConcurrentScanLimit, proxyBackendRequest } from '../_scan-concurrency';
 
+export const runtime = 'nodejs';
+
 export async function GET(request: NextRequest) {
   return proxyBackendRequest(request, '/api/v1/scans');
 }

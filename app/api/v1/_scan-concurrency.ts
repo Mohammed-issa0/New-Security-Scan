@@ -1,32 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { createBackendHeaders, getBackendBase, proxyToBackend } from './_backend-proxy';
 
 import type { ActivePlanResponse, PlanPublicResponse } from '@/lib/plans/types';
 
-const DEFAULT_BACKEND_BASE = 'https://backend.blackbrains.tech';
 const ACTIVE_SCAN_STATUSES = new Set(['pending', 'running']);
-
-function getBackendBase() {
-  return process.env.API_BASE_URL || DEFAULT_BACKEND_BASE;
-}
-
-function getAuthorizationHeader(request: NextRequest) {
-  return request.headers.get('authorization') || '';
-}
-
-function createBackendHeaders(request: NextRequest, extraHeaders?: Record<string, string>) {
-  const headers: Record<string, string> = {
-    Authorization: getAuthorizationHeader(request),
-    Accept: request.headers.get('accept') || 'application/json',
-  };
-
-  if (extraHeaders) {
-    for (const [key, value] of Object.entries(extraHeaders)) {
-      headers[key] = value;
-    }
-  }
-
-  return headers;
-}
 
 async function readJsonResponse<T>(response: Response): Promise<T | null> {
   const text = await response.text();
@@ -44,32 +21,40 @@ async function readJsonResponse<T>(response: Response): Promise<T | null> {
 
 async function fetchActivePlan(request: NextRequest): Promise<ActivePlanResponse | null> {
   const backendUrl = new URL('/api/v1/plans/me', getBackendBase());
-  const response = await fetch(backendUrl.toString(), {
-    method: 'GET',
-    headers: createBackendHeaders(request),
-    cache: 'no-store',
-  });
+  try {
+    const response = await fetch(backendUrl.toString(), {
+      method: 'GET',
+      headers: createBackendHeaders(request),
+      cache: 'no-store',
+    });
 
-  if (!response.ok) {
+    if (!response.ok) {
+      return null;
+    }
+
+    return readJsonResponse<ActivePlanResponse>(response);
+  } catch {
     return null;
   }
-
-  return readJsonResponse<ActivePlanResponse>(response);
 }
 
 async function fetchPublicPlans(request: NextRequest): Promise<PlanPublicResponse[] | null> {
   const backendUrl = new URL('/api/v1/plans', getBackendBase());
-  const response = await fetch(backendUrl.toString(), {
-    method: 'GET',
-    headers: createBackendHeaders(request),
-    cache: 'no-store',
-  });
+  try {
+    const response = await fetch(backendUrl.toString(), {
+      method: 'GET',
+      headers: createBackendHeaders(request),
+      cache: 'no-store',
+    });
 
-  if (!response.ok) {
+    if (!response.ok) {
+      return null;
+    }
+
+    return readJsonResponse<PlanPublicResponse[]>(response);
+  } catch {
     return null;
   }
-
-  return readJsonResponse<PlanPublicResponse[]>(response);
 }
 
 function getPlanMaxConcurrentScans(plan?: PlanPublicResponse | null) {
@@ -89,11 +74,16 @@ async function countActiveScans(request: NextRequest) {
     backendUrl.searchParams.set('pageNumber', String(pageNumber));
     backendUrl.searchParams.set('pageSize', String(pageSize));
 
-    const response = await fetch(backendUrl.toString(), {
-      method: 'GET',
-      headers: createBackendHeaders(request),
-      cache: 'no-store',
-    });
+    let response: Response;
+    try {
+      response = await fetch(backendUrl.toString(), {
+        method: 'GET',
+        headers: createBackendHeaders(request),
+        cache: 'no-store',
+      });
+    } catch {
+      throw new Error('Unable to read active scans');
+    }
 
     if (!response.ok) {
       throw new Error('Unable to read active scans');
@@ -184,24 +174,11 @@ export async function enforceConcurrentScanLimit(request: NextRequest) {
 }
 
 export async function proxyBackendRequest(request: NextRequest, backendPath: string, body?: string) {
-  const backendUrl = new URL(backendPath, getBackendBase());
-  backendUrl.search = new URL(request.url).search;
-
-  const headers = createBackendHeaders(request);
-
-  if (body !== undefined) {
-    headers['Content-Type'] = request.headers.get('content-type') || 'application/json';
-  }
-
-  const response = await fetch(backendUrl.toString(), {
+  return proxyToBackend({
+    request,
+    backendPath,
     method: request.method,
-    headers,
     body,
-    cache: 'no-store',
-  });
-
-  return new NextResponse(response.body, {
-    status: response.status,
-    headers: response.headers,
+    unavailableMessage: 'Scans backend unavailable',
   });
 }

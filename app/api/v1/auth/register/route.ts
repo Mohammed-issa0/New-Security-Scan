@@ -1,18 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { forwardJsonToBackend } from '../../_backend-proxy';
 
-const DEFAULT_BACKEND_BASE = 'https://backend.blackbrains.tech';
-
-function safeJsonParse(text: string, fallback: unknown) {
-  if (!text) {
-    return fallback;
-  }
-
-  try {
-    return JSON.parse(text);
-  } catch {
-    return fallback;
-  }
-}
+export const runtime = 'nodejs';
 
 type RegisterPayload = {
   fullName?: string | null;
@@ -62,9 +51,6 @@ export async function POST(request: NextRequest) {
     return buildError('fullName or firstName and lastName are required');
   }
 
-  const backendBase = process.env.API_BASE_URL || DEFAULT_BACKEND_BASE;
-  const backendUrl = new URL('/api/v1/auth/register', backendBase);
-
   const backendBody = {
     fullName,
     firstName: payload.fullName?.trim() ? undefined : payload.firstName?.trim() || undefined,
@@ -73,22 +59,12 @@ export async function POST(request: NextRequest) {
     password,
   };
 
-  try {
-    const backendResponse = await fetch(backendUrl.toString(), {
-      method: 'POST',
-      headers: {
-        Authorization: request.headers.get('authorization') || '',
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(backendBody),
-      cache: 'no-store',
-    });
-
-    const text = await backendResponse.text();
-    const body = safeJsonParse(text, text ? { error: text } : {});
-    return NextResponse.json(body, { status: backendResponse.status });
-  } catch {
-    return buildError('Registration unavailable', 502);
-  }
+  return forwardJsonToBackend({
+    request,
+    backendPath: '/api/v1/auth/register',
+    method: 'POST',
+    body: JSON.stringify(backendBody),
+    fallback: {},
+    unavailableMessage: 'Registration unavailable',
+  });
 }
