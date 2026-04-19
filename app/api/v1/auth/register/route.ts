@@ -2,6 +2,18 @@ import { NextRequest, NextResponse } from 'next/server';
 
 const DEFAULT_BACKEND_BASE = 'https://backend.blackbrains.tech';
 
+function safeJsonParse(text: string, fallback: unknown) {
+  if (!text) {
+    return fallback;
+  }
+
+  try {
+    return JSON.parse(text);
+  } catch {
+    return fallback;
+  }
+}
+
 type RegisterPayload = {
   fullName?: string | null;
   firstName?: string | null;
@@ -74,7 +86,7 @@ export async function POST(request: NextRequest) {
     });
 
     const text = await backendResponse.text();
-    const body = text ? JSON.parse(text) : {};
+    const body = safeJsonParse(text, text ? { error: text } : {});
     return NextResponse.json(body, { status: backendResponse.status });
   } catch {
     return buildError('Registration unavailable', 502);
