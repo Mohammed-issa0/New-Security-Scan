@@ -1,6 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
 
 const DEFAULT_BACKEND_BASE = 'https://backend.blackbrains.tech';
+export const runtime = 'nodejs';
+
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
 
 function safeJsonParse(text: string, fallback: unknown) {
   if (!text) {
