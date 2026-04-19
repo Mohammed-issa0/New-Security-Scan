@@ -199,11 +199,18 @@
       linear-gradient(
         180deg,
         rgba(0, 0, 0, 0),
-        rgba(0, 209, 255, 0.18),
+        rgba(0, 209, 255, 0.14),
         rgba(0, 0, 0, 0)
       );
-    animation: cyberScan 7.6s linear infinite;
+    animation: cyberScan 9.2s linear infinite;
     will-change: transform, opacity;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .cyber-scanline::before {
+      animation: none;
+      opacity: 0;
+    }
   }
 
   .app-shell {
