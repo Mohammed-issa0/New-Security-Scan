@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Inter, Cairo, Oxanium, IBM_Plex_Mono } from "next/font/google";
 import "../globals.css";
 import { NextIntlClientProvider } from 'next-intl';
@@ -18,6 +18,17 @@ export function generateStaticParams() {
 export const metadata: Metadata = {
   title: "Black Brains | Automated Security Testing",
   description: "Premium AI-driven cybersecurity platform for automated website security testing and reporting.",
+  manifest: '/manifest.webmanifest',
+  icons: {
+    icon: '/imgs/logo1234.png',
+    shortcut: '/imgs/logo1234.png',
+    apple: '/imgs/logo1234.png',
+  },
+};
+
+export const viewport: Viewport = {
+  themeColor: '#060b14',
+  colorScheme: 'dark',
 };
 
 export default async function RootLayout({

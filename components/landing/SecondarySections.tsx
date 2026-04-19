@@ -1,6 +1,7 @@
 'use client';
 
 import * as React from "react"
+import Image from "next/image"
 import { ShieldCheck, Activity, BarChart3, Fingerprint, Lock, ShieldAlert, Coins } from "lucide-react"
 import { Container, Section } from "./ui"
 import { useTranslations } from "next-intl"
@@ -68,22 +69,17 @@ export function AuthHighlight() {
             whileInView={{ rotateY: 0, opacity: 1 }}
             className="relative"
           >
-            <div className="cyber-panel rounded-2xl p-6 font-mono text-xs text-cyan-200 leading-relaxed">
-              <div className="flex gap-2 mb-4">
-                <div className="w-3 h-3 rounded-full bg-red-500/50" />
-                <div className="w-3 h-3 rounded-full bg-yellow-500/50" />
-                <div className="w-3 h-3 rounded-full bg-green-500/50" />
+            <div className="cyber-panel overflow-hidden rounded-2xl border border-cyan-400/20">
+              <div className="relative aspect-[16/9] w-full">
+                <Image
+                  src="/imgs/Cyber-Security-scaled-1.webp"
+                  alt="Cyber security interface"
+                  fill
+                  className="object-cover"
+                  sizes="(max-width: 768px) 100vw, 50vw"
+                  priority={false}
+                />
               </div>
-              <p className="text-text-muted"># Payload Configuration</p>
-              <p>&#123;</p>
-              <p className="pl-4">"target_config": &#123;</p>
-              <p className="pl-8">"authentication": &#123;</p>
-              <p className="pl-12 text-blue-300">"token": "eyJhGciOiJIUzI1NiI...",</p>
-              <p className="pl-12 text-blue-300">"cookies": [ &#123 "name": "session", "value": "abc" &#125; ]</p>
-              <p className="pl-8">&#125;,</p>
-              <p className="pl-8">"headers": &#123; "X-Scan-Origin": "Platform" &#125;</p>
-              <p className="pl-4">&#125;</p>
-              <p>&#125;</p>
             </div>
           </motion.div>
         </div>
