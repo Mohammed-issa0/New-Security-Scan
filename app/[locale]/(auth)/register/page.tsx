@@ -10,12 +10,15 @@ import { toast } from 'sonner';
 import { useState } from 'react';
 import { ApiRequestError } from '@/lib/api/client';
 import { AuthPageShell } from '@/components/auth/AuthPageShell';
+import { Eye, EyeOff } from 'lucide-react';
 
 export default function RegisterPage() {
   const t = useTranslations('landing.register');
   const locale = useLocale();
   const router = useRouter();
   const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const registerSchema = z.object({
     fullName: z.string().trim().optional().or(z.literal('')),
@@ -171,11 +174,21 @@ export default function RegisterPage() {
                 <label className="mb-1 block text-sm font-medium text-text-secondary">
                   {t('password')}
                 </label>
-                <input
-                  {...register('password')}
-                  type="password"
-                  className="appearance-none relative block w-full rounded-lg border border-cyan-400/18 bg-white/5 px-3 py-2 text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:ring-2 focus:ring-cyan-300/45 focus:border-cyan-300/70"
-                />
+                <div className="relative">
+                  <input
+                    {...register('password')}
+                    type={showPassword ? 'text' : 'password'}
+                    className="appearance-none relative block w-full rounded-lg border border-cyan-400/18 bg-white/5 px-3 py-2 pe-10 text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:ring-2 focus:ring-cyan-300/45 focus:border-cyan-300/70"
+                  />
+                  <button
+                    type="button"
+                    aria-label={showPassword ? 'Hide password' : 'Show password'}
+                    onClick={() => setShowPassword((prev) => !prev)}
+                    className="absolute inset-y-0 end-2 inline-flex items-center text-text-secondary transition-colors hover:text-cyan-200 focus:outline-none"
+                  >
+                    {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                  </button>
+                </div>
                 {errors.password && (
                   <p className="mt-1 text-xs text-status-danger">{errors.password.message}</p>
                 )}
@@ -185,11 +198,21 @@ export default function RegisterPage() {
                 <label className="mb-1 block text-sm font-medium text-text-secondary">
                   {t('confirmPassword')}
                 </label>
-                <input
-                  {...register('confirmPassword')}
-                  type="password"
-                  className="appearance-none relative block w-full rounded-lg border border-cyan-400/18 bg-white/5 px-3 py-2 text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:ring-2 focus:ring-cyan-300/45 focus:border-cyan-300/70"
-                />
+                <div className="relative">
+                  <input
+                    {...register('confirmPassword')}
+                    type={showConfirmPassword ? 'text' : 'password'}
+                    className="appearance-none relative block w-full rounded-lg border border-cyan-400/18 bg-white/5 px-3 py-2 pe-10 text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:ring-2 focus:ring-cyan-300/45 focus:border-cyan-300/70"
+                  />
+                  <button
+                    type="button"
+                    aria-label={showConfirmPassword ? 'Hide password' : 'Show password'}
+                    onClick={() => setShowConfirmPassword((prev) => !prev)}
+                    className="absolute inset-y-0 end-2 inline-flex items-center text-text-secondary transition-colors hover:text-cyan-200 focus:outline-none"
+                  >
+                    {showConfirmPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                  </button>
+                </div>
                 {errors.confirmPassword && (
                   <p className="mt-1 text-xs text-status-danger">{errors.confirmPassword.message}</p>
                 )}

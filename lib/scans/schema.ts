@@ -2,7 +2,7 @@ import { z } from 'zod';
 
 export const scanFormSchema = z.object({
   name: z.string().min(1, 'Scan name is required'),
-  targetId: z.string().min(1, 'Target is required'),
+  targetId: z.string().optional(),
   targets: z.string().min(1, 'At least one target URL is required'),
   tool: z.enum(['ffuf', 'nmap', 'zap', 'wpscan', 'sqlmap', 'xss', 'ssl']),
   tool_depth: z.enum(['light', 'deep', 'aggressive']).default('light'),

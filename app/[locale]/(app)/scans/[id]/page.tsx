@@ -625,24 +625,7 @@ export default function ScanDetailsPage() {
       </div>
 
       {activeTab === 'overview' && (
-        <div id="overview" className="grid grid-cols-1 gap-4 lg:grid-cols-2">
-          <div className="rounded-xl border border-white/14 bg-white/6 p-4">
-            <h2 className="mb-3 text-lg font-semibold">{td('summary')}</h2>
-            <dl className="space-y-2 text-sm">
-              <div className="flex items-center justify-between gap-4">
-                <dt className="text-text-secondary">{td('scanIdLabel')}</dt>
-                <dd className="font-medium text-text-primary">{scan.id}</dd>
-              </div>
-              <div className="flex items-center justify-between gap-4">
-                <dt className="text-text-secondary">{td('targetIdLabel')}</dt>
-                <dd className="font-medium text-text-primary">{scan.targetId || '-'}</dd>
-              </div>
-              <div className="flex items-center justify-between gap-4">
-                <dt className="text-text-secondary">{td('toolsCountLabel')}</dt>
-                <dd className="font-medium text-text-primary">{toolRows.length}</dd>
-              </div>
-            </dl>
-          </div>
+        <div id="overview" className="grid grid-cols-1 gap-4">
           <div className="rounded-xl border border-white/14 bg-white/6 p-4">
             <h2 className="mb-3 text-lg font-semibold">{td('timestampsTitle')}</h2>
             <dl className="space-y-2 text-sm">
@@ -895,7 +878,6 @@ export default function ScanDetailsPage() {
                 <p className="mt-2 text-3xl font-bold text-status-danger">{(report.overallRiskScore ?? report.riskScore ?? 0).toFixed(1)}/100</p>
               </div>
               <div className="rounded-xl border border-white/14 bg-white/6 p-4 lg:col-span-2">
-                <p className="mb-2 text-sm font-semibold text-text-primary">{td('summary')}</p>
                 <p className="text-sm text-text-secondary">{td('reportGeneratedAt', { date: report.generatedAt ? new Date(report.generatedAt).toLocaleString(locale) : '-' })}</p>
                 <div className="mt-4 grid grid-cols-2 gap-2 text-sm sm:grid-cols-5">
                   {(['Critical', 'High', 'Medium', 'Low', 'Info'] as const).map((severity) => (

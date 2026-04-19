@@ -13,7 +13,7 @@ export interface CookieRow {
 
 export interface ScanFormValues {
   name: string;
-  targetId: string;
+  targetId?: string;
   targets: string;
   tool: Tool;
   scopeSigned: boolean;
