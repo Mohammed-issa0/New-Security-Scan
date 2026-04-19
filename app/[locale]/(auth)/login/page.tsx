@@ -40,7 +40,7 @@ export default function LoginPage() {
     try {
       await authService.login(data);
       toast.success('Logged in successfully');
-      router.push(`/${locale}/scans`);
+      router.push(`/${locale}`);
     } catch (error: any) {
       if (error instanceof ApiRequestError && error.data.details) {
         Object.entries(error.data.details).forEach(([field, messages]) => {

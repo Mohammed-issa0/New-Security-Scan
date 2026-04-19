@@ -91,7 +91,7 @@ export default function RegisterPage() {
         password: data.password,
       });
       toast.success('Account created successfully');
-      router.push(`/${locale}/scans`);
+      router.push(`/${locale}`);
     } catch (error: any) {
       if (error instanceof ApiRequestError && error.data.details) {
         Object.entries(error.data.details).forEach(([field, messages]) => {
