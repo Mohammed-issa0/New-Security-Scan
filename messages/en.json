@@ -454,6 +454,8 @@
         "loadingProjects": "Loading projects...",
         "selectSiteFirst": "Select a site first.",
         "noProjects": "No projects found for this site.",
+        "noProjectsHintSite": "Selected site: {site} (cloudId: {cloudId})",
+        "noProjectsHintActions": "Try switching the site, refreshing sites/projects, or ensure your Atlassian account has permission to browse projects in this site.",
         "projectsColumns": {
           "key": "Key",
           "name": "Name",

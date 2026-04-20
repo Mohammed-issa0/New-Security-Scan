@@ -64,7 +64,7 @@ export const CardHeader = ({ title, description, icon: Icon, children }: { title
       <div className="flex items-center gap-3">
         {Icon && <div className="p-2 rounded-lg bg-cyan-400/10 text-cyan-300 border border-cyan-400/18"><Icon size={20} /></div>}
         <div>
-          <h3 className="text-lg font-semibold text-text-primary">{title}</h3>
+          <h3 className="text-md font-semibold text-text-primary">{title}</h3>
           {description && <p className="text-sm text-text-secondary mt-0.5">{description}</p>}
         </div>
       </div>

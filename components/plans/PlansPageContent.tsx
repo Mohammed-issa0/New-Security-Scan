@@ -225,6 +225,7 @@ export function PlansPageContent({
   const usedPercent = getCreditsUsagePercent(activePlan);
 
   const showFull = mode === 'full';
+  const isLandingSection = mode === 'section';
   const compareRows = [
     {
       key: 'price',
@@ -479,7 +480,7 @@ export function PlansPageContent({
                     </p>
                   </div>
                   <div className="rounded-2xl border border-white/10 bg-white/8 p-4">
-                    <div className="text-3xl font-extrabold text-text-primary">
+                    <div className={`text-3xl font-extrabold text-text-primary ${isLandingSection ? 'blur-md select-none' : ''}`}>
                       {formatPrice(plan)}
                     </div>
                     <div className="text-xs font-semibold uppercase tracking-widest text-text-muted">
@@ -536,9 +537,10 @@ export function PlansPageContent({
                     <Button
                       variant={highlight ? 'primary' : 'outline'}
                       size="sm"
-                      className="w-full"
-                      disabled={!plan.planName || checkoutPlanMutation.isPending}
+                      className={`w-full ${isLandingSection ? 'cursor-not-allowed opacity-70' : ''}`}
+                      disabled={isLandingSection || !plan.planName || checkoutPlanMutation.isPending}
                       onClick={() => {
+                        if (isLandingSection) return;
                         if (!plan.planName) return;
                         setActivePurchase(plan.planName);
                         checkoutPlanMutation.mutate(plan.planName);

@@ -2,6 +2,7 @@
 
 import * as React from "react"
 import Link from "next/link"
+import { usePathname } from "next/navigation"
 import { Shield, Menu, X, ArrowRight, LayoutDashboard, Target, History, LogOut, User, CreditCard, FolderKanban } from "lucide-react"
 import { Container } from "./ui"
 import { useTranslations, useLocale } from "next-intl"
@@ -15,12 +16,29 @@ export function Navbar() {
   const [isOpen, setIsOpen] = React.useState(false)
   const [isAuthenticated, setIsAuthenticated] = React.useState(false)
   const [isAdmin, setIsAdmin] = React.useState(false)
+  const [activeSection, setActiveSection] = React.useState('')
   const t = useTranslations('common')
   const tScans = useTranslations('landing.scans')
   const tTargets = useTranslations('landing.targets')
   const tJiraProjects = useTranslations('landing.jiraProjects')
   const locale = useLocale()
+  const pathname = usePathname()
   const isRtl = locale === 'ar'
+  const normalizedPath = React.useMemo(() => {
+    if (!pathname) return ''
+    if (pathname.length > 1 && pathname.endsWith('/')) {
+      return pathname.slice(0, -1)
+    }
+    return pathname
+  }, [pathname])
+  const landingSections = React.useMemo(() => ['features', 'tools', 'plans', 'how-it-works'], [])
+  const landingNavItems = React.useMemo(() => ([
+    { id: 'features', label: t('nav.features') },
+    { id: 'tools', label: t('nav.tools') },
+    { id: 'plans', label: t('nav.plans') },
+    { id: 'how-it-works', label: t('nav.howItWorks') },
+  ]), [t])
+  const isLandingPage = pathname === `/${locale}` || pathname === `/${locale}/`
 
   React.useEffect(() => {
     setIsAuthenticated(!!tokenStore.getTokens()?.accessToken)
@@ -53,8 +71,71 @@ export function Navbar() {
     }
   }, [isAuthenticated])
 
+  React.useEffect(() => {
+    if (isAuthenticated || !isLandingPage) {
+      setActiveSection('')
+      return
+    }
+
+    const updateActiveSection = () => {
+      const hashSection = window.location.hash.replace('#', '')
+      if (hashSection && landingSections.includes(hashSection)) {
+        setActiveSection(hashSection)
+      }
+
+      const scrollOffset = 120
+      let currentSection = ''
+
+      for (const sectionId of landingSections) {
+        const section = document.getElementById(sectionId)
+        if (!section) continue
+
+        if (window.scrollY >= section.offsetTop - scrollOffset) {
+          currentSection = sectionId
+        }
+      }
+
+      if (currentSection) {
+        setActiveSection(currentSection)
+      }
+    }
+
+    updateActiveSection()
+    window.addEventListener('scroll', updateActiveSection, { passive: true })
+    window.addEventListener('hashchange', updateActiveSection)
+
+    return () => {
+      window.removeEventListener('scroll', updateActiveSection)
+      window.removeEventListener('hashchange', updateActiveSection)
+    }
+  }, [isAuthenticated, isLandingPage, landingSections])
+
   const handleLogout = () => {
     authService.logout()
+  }
+
+  const getLandingLinkClass = (sectionId: string, mobile = false) => {
+    const baseClass = mobile
+      ? 'block rounded-lg px-2 py-2 text-base font-medium transition-colors'
+      : 'text-sm font-medium transition-colors'
+    const activeClass = activeSection === sectionId
+      ? 'text-cyan-300'
+      : 'text-text-secondary hover:text-cyan-300'
+
+    return `${baseClass} ${activeClass}`
+  }
+
+  const getAuthenticatedLinkClass = (href: string, mobile = false) => {
+    const normalizedHref = href.length > 1 && href.endsWith('/') ? href.slice(0, -1) : href
+    const isActive = normalizedPath === normalizedHref || normalizedPath.startsWith(`${normalizedHref}/`)
+    const baseClass = mobile
+      ? 'block rounded-lg px-2 py-2 text-base font-medium transition-colors'
+      : 'text-sm font-medium transition-colors flex items-center gap-1'
+    const activeClass = isActive
+      ? 'text-cyan-300'
+      : 'text-text-secondary hover:text-cyan-300'
+
+    return `${baseClass} ${activeClass}`
   }
 
   return (
@@ -82,34 +163,39 @@ export function Navbar() {
           <div className="hidden md:flex items-center gap-8">
             {!isAuthenticated ? (
               <>
-                <Link href="#features" className="text-sm font-medium text-text-secondary hover:text-cyan-300 transition-colors">{t('nav.features')}</Link>
-                <Link href="#tools" className="text-sm font-medium text-text-secondary hover:text-cyan-300 transition-colors">{t('nav.tools')}</Link>
-                <Link href="#plans" className="text-sm font-medium text-text-secondary hover:text-cyan-300 transition-colors">{t('nav.plans')}</Link>
-                <Link href="#how-it-works" className="text-sm font-medium text-text-secondary hover:text-cyan-300 transition-colors">{t('nav.howItWorks')}</Link>
+                {landingNavItems.map((item) => (
+                  <Link
+                    key={item.id}
+                    href={`/${locale}/#${item.id}`}
+                    className={getLandingLinkClass(item.id)}
+                  >
+                    {item.label}
+                  </Link>
+                ))}
               </>
             ) : (
               <>
-                <Link href={`/${locale}/scans`} className="text-sm font-medium text-text-secondary hover:text-cyan-300 transition-colors flex items-center gap-1">
+                <Link href={`/${locale}/scans`} className={getAuthenticatedLinkClass(`/${locale}/scans`)}>
                   <History size={16} />
                   {tScans('title')}
                 </Link>
-                <Link href={`/${locale}/targets`} className="text-sm font-medium text-text-secondary hover:text-cyan-300 transition-colors flex items-center gap-1">
+                <Link href={`/${locale}/targets`} className={getAuthenticatedLinkClass(`/${locale}/targets`)}>
                   <Target size={16} />
                   {tTargets('title')}
                 </Link>
-                <Link href={`/${locale}/jira/projects`} className="text-sm font-medium text-text-secondary hover:text-cyan-300 transition-colors flex items-center gap-1">
+                <Link href={`/${locale}/jira/projects`} className={getAuthenticatedLinkClass(`/${locale}/jira/projects`)}>
                   <FolderKanban size={16} />
                   {tJiraProjects('title')}
                 </Link>
-                <Link href={`/${locale}/profile`} className="text-sm font-medium text-text-secondary hover:text-cyan-300 transition-colors flex items-center gap-1">
+                <Link href={`/${locale}/profile`} className={getAuthenticatedLinkClass(`/${locale}/profile`)}>
                   <User size={16} />
                   {t('nav.profile')}
                 </Link>
-                <Link href={`/${locale}/billing`} className="text-sm font-medium text-text-secondary hover:text-cyan-300 transition-colors flex items-center gap-1">
+                <Link href={`/${locale}/billing`} className={getAuthenticatedLinkClass(`/${locale}/billing`)}>
                   <CreditCard size={16} />
                   {t('nav.billing')}
                 </Link>
-                <Link href={`/${locale}/plans`} className="text-sm font-medium text-text-secondary hover:text-cyan-300 transition-colors">
+                <Link href={`/${locale}/plans`} className={getAuthenticatedLinkClass(`/${locale}/plans`)}>
                   {t('nav.plans')}
                 </Link>
               </>
@@ -183,10 +269,16 @@ export function Navbar() {
             >
               {!isAuthenticated ? (
                 <>
-                    <Link href="#features" className="block text-base font-medium text-text-secondary px-2 py-2">{t('nav.features')}</Link>
-                    <Link href="#tools" className="block text-base font-medium text-text-secondary px-2 py-2">{t('nav.tools')}</Link>
-                    <Link href={`/${locale}/plans`} className="block text-base font-medium text-text-secondary px-2 py-2">{t('nav.plans')}</Link>
-                    <Link href="#how-it-works" className="block text-base font-medium text-text-secondary px-2 py-2">{t('nav.howItWorks')}</Link>
+                  {landingNavItems.map((item) => (
+                    <Link
+                      key={item.id}
+                      href={`/${locale}/#${item.id}`}
+                      className={getLandingLinkClass(item.id, true)}
+                      onClick={() => setIsOpen(false)}
+                    >
+                      {item.label}
+                    </Link>
+                  ))}
                     <Link href={`/${locale}/login`} className="block bg-gradient-to-r from-cyan-400 via-cyan-300 to-blue-400 text-slate-950 px-4 py-3 rounded-xl text-center font-bold shadow-glow">
                     {t('buttons.getStarted')}
                   </Link>
@@ -198,12 +290,12 @@ export function Navbar() {
                       Admin
                     </Link>
                   )}
-                    <Link href={`/${locale}/scans`} className="block text-base font-medium text-text-secondary px-2 py-2">{tScans('title')}</Link>
-                    <Link href={`/${locale}/targets`} className="block text-base font-medium text-text-secondary px-2 py-2">{tTargets('title')}</Link>
-                    <Link href={`/${locale}/jira/projects`} className="block text-base font-medium text-text-secondary px-2 py-2">{tJiraProjects('title')}</Link>
-                    <Link href={`/${locale}/profile`} className="block text-base font-medium text-text-secondary px-2 py-2">{t('nav.profile')}</Link>
-                    <Link href={`/${locale}/billing`} className="block text-base font-medium text-text-secondary px-2 py-2">{t('nav.billing')}</Link>
-                    <Link href={`/${locale}/plans`} className="block text-base font-medium text-text-secondary px-2 py-2">{t('nav.plans')}</Link>
+                    <Link href={`/${locale}/scans`} className={getAuthenticatedLinkClass(`/${locale}/scans`, true)} onClick={() => setIsOpen(false)}>{tScans('title')}</Link>
+                    <Link href={`/${locale}/targets`} className={getAuthenticatedLinkClass(`/${locale}/targets`, true)} onClick={() => setIsOpen(false)}>{tTargets('title')}</Link>
+                    <Link href={`/${locale}/jira/projects`} className={getAuthenticatedLinkClass(`/${locale}/jira/projects`, true)} onClick={() => setIsOpen(false)}>{tJiraProjects('title')}</Link>
+                    <Link href={`/${locale}/profile`} className={getAuthenticatedLinkClass(`/${locale}/profile`, true)} onClick={() => setIsOpen(false)}>{t('nav.profile')}</Link>
+                    <Link href={`/${locale}/billing`} className={getAuthenticatedLinkClass(`/${locale}/billing`, true)} onClick={() => setIsOpen(false)}>{t('nav.billing')}</Link>
+                    <Link href={`/${locale}/plans`} className={getAuthenticatedLinkClass(`/${locale}/plans`, true)} onClick={() => setIsOpen(false)}>{t('nav.plans')}</Link>
                  
                     <Link href={`/${locale}/scans/new`} className="block bg-gradient-to-r from-cyan-400 via-cyan-300 to-blue-400 text-slate-950 px-4 py-3 rounded-xl text-center font-bold shadow-glow">
                     {t('nav.startScanning')}

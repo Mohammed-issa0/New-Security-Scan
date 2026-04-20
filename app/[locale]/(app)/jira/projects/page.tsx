@@ -179,6 +179,7 @@ export default function JiraProjectsPage() {
   });
 
   const totalPages = data?.totalPages ?? (data ? Math.max(1, Math.ceil(data.totalCount / data.pageSize)) : 1);
+  const selectedSite = (jiraOAuthSites || []).find((site) => site.cloudId === selectedCloudId);
 
   useEffect(() => {
     if (data && totalPages > 0 && page > totalPages) {
@@ -523,11 +524,11 @@ export default function JiraProjectsPage() {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
         <div>
           <h1 className="text-2xl font-bold text-text-primary">{t('title')}</h1>
-          <p className="text-text-secondary">{t('subtitle')}</p>
+          <p className="mt-1 text-base text-text-secondary/95">{t('subtitle')}</p>
         </div>
         <div className="flex flex-wrap items-center gap-2 self-start">
           <button
@@ -552,16 +553,17 @@ export default function JiraProjectsPage() {
         </div>
       </div>
 
-      <div className="rounded-2xl border border-cyan-400/18 bg-cyber-panel/75 p-4 shadow-sm">
-        <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+      <div className="overflow-hidden rounded-2xl border border-cyan-400/16 bg-cyber-panel/70">
+        <section className="px-5 py-4">
+          <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div>
-            <p className="text-sm font-semibold text-text-primary">{t('oauth.statusTitle')}</p>
+            <p className="text-base font-semibold text-text-primary">{t('oauth.statusTitle')}</p>
             {isJiraOAuthStatusLoading ? (
-              <p className="text-sm text-text-muted">{t('oauth.loading')}</p>
+              <p className="text-sm text-text-secondary">{t('oauth.loading')}</p>
             ) : isJiraOAuthStatusError ? (
               <p className="text-sm text-status-danger">{t('messages.oauthStatusError')}</p>
             ) : jiraOAuthStatus?.connected ? (
-              <div className="space-y-1 text-sm text-text-secondary">
+              <div className="space-y-1.5 text-sm text-text-secondary/95">
                 <p>
                   {t('oauth.connectedAs', {
                     email: jiraOAuthStatus.atlassianEmail || '-',
@@ -572,7 +574,7 @@ export default function JiraProjectsPage() {
                 <p>{t('oauth.connectedAt', { date: jiraOAuthStatus.connectedAt || '-' })}</p>
               </div>
             ) : (
-              <p className="text-sm text-text-secondary">{t('oauth.notConnected')}</p>
+              <p className="text-sm text-text-secondary/95">{t('oauth.notConnected')}</p>
             )}
           </div>
 
@@ -594,13 +596,13 @@ export default function JiraProjectsPage() {
             </button>
           </div>
         </div>
-      </div>
+        </section>
 
-      <div className="rounded-2xl border border-cyan-400/18 bg-cyber-panel/75 p-4 shadow-sm">
-        <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+        <section className="border-t border-white/10 px-5 py-5">
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
           <div className="w-full space-y-2 sm:max-w-xl">
-            <p className="text-sm font-semibold text-text-primary">{t('developers.title')}</p>
-            <p className="text-xs text-text-muted">{t('developers.subtitle')}</p>
+            <p className="text-base font-semibold text-text-primary">{t('developers.title')}</p>
+            <p className="max-w-2xl text-sm leading-6 text-text-secondary/95">{t('developers.subtitle')}</p>
             <input
               data-testid="jira-dev-search-input"
               value={developerSearchQuery}
@@ -612,7 +614,7 @@ export default function JiraProjectsPage() {
           </div>
 
           <div className="w-full space-y-2 sm:w-72">
-            <p className="text-xs font-medium text-text-muted">{t('developers.verifyRoleLabel')}</p>
+            <p className="text-sm font-medium text-text-secondary">{t('developers.verifyRoleLabel')}</p>
             <input
               data-testid="jira-dev-verify-role-input"
               value={verifyCustomRole}
@@ -621,29 +623,29 @@ export default function JiraProjectsPage() {
               className="h-10 w-full rounded-lg border border-cyan-400/18 bg-white/5 px-3 text-sm text-text-primary placeholder:text-text-muted focus:border-cyan-300/70 focus:outline-none focus:ring-2 focus:ring-cyan-300/45"
             />
           </div>
-        </div>
+          </div>
 
         {developerSearchQuery.trim().length > 0 && developerSearchQuery.trim().length < 2 && (
-          <p className="mt-3 text-xs text-text-muted">{t('developers.searchHint')}</p>
+          <p className="mt-3 text-sm text-text-secondary">{t('developers.searchHint')}</p>
         )}
 
         <div className="mt-4">
-          <p className="mb-2 text-sm font-semibold text-text-primary">{t('developers.searchResultsTitle')}</p>
+          <p className="mb-2 text-base font-semibold text-text-primary">{t('developers.searchResultsTitle')}</p>
           {isSearchDevelopersLoading ? (
-            <p className="text-sm text-text-muted">{t('developers.loadingSearch')}</p>
+            <p className="text-sm text-text-secondary">{t('developers.loadingSearch')}</p>
           ) : isSearchDevelopersError ? (
             <p className="text-sm text-status-danger">{t('messages.developerSearchError')}</p>
           ) : (searchDevelopers?.length ?? 0) === 0 ? (
-            <p className="text-sm text-text-muted">{t('developers.noSearchResults')}</p>
+            <p className="text-sm text-text-secondary">{t('developers.noSearchResults')}</p>
           ) : (
             <div className="overflow-x-auto rounded-xl border border-cyan-400/18">
               <table className="min-w-full divide-y divide-white/10">
                 <thead className="bg-cyber-hover/40">
                   <tr>
-                    <th className="px-4 py-2 text-left text-xs font-medium uppercase tracking-wider text-text-muted">{t('developers.columns.name')}</th>
-                    <th className="px-4 py-2 text-left text-xs font-medium uppercase tracking-wider text-text-muted">{t('developers.columns.email')}</th>
-                    <th className="px-4 py-2 text-left text-xs font-medium uppercase tracking-wider text-text-muted">{t('developers.columns.accountType')}</th>
-                    <th className="px-4 py-2 text-right text-xs font-medium uppercase tracking-wider text-text-muted">{t('developers.columns.actions')}</th>
+                    <th className="px-4 py-2 text-left text-sm font-semibold uppercase tracking-wide text-text-secondary">{t('developers.columns.name')}</th>
+                    <th className="px-4 py-2 text-left text-sm font-semibold uppercase tracking-wide text-text-secondary">{t('developers.columns.email')}</th>
+                    <th className="px-4 py-2 text-left text-sm font-semibold uppercase tracking-wide text-text-secondary">{t('developers.columns.accountType')}</th>
+                    <th className="px-4 py-2 text-right text-sm font-semibold uppercase tracking-wide text-text-secondary">{t('developers.columns.actions')}</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-white/10 bg-cyber-panel/75">
@@ -678,23 +680,23 @@ export default function JiraProjectsPage() {
         </div>
 
         <div className="mt-5">
-          <p className="mb-2 text-sm font-semibold text-text-primary">{t('developers.mappedTitle')}</p>
+          <p className="mb-2 text-base font-semibold text-text-primary">{t('developers.mappedTitle')}</p>
           {isMappedDevelopersLoading ? (
-            <p className="text-sm text-text-muted">{t('developers.loadingMapped')}</p>
+            <p className="text-sm text-text-secondary">{t('developers.loadingMapped')}</p>
           ) : isMappedDevelopersError ? (
             <p className="text-sm text-status-danger">{t('messages.developerMappedLoadError')}</p>
           ) : (mappedDevelopers?.length ?? 0) === 0 ? (
-            <p className="text-sm text-text-muted">{t('developers.noMapped')}</p>
+            <p className="text-sm text-text-secondary">{t('developers.noMapped')}</p>
           ) : (
             <div className="overflow-x-auto rounded-xl border border-cyan-400/18">
               <table className="min-w-full divide-y divide-white/10">
                 <thead className="bg-cyber-hover/40">
                   <tr>
-                    <th className="px-4 py-2 text-left text-xs font-medium uppercase tracking-wider text-text-muted">{t('developers.columns.name')}</th>
-                    <th className="px-4 py-2 text-left text-xs font-medium uppercase tracking-wider text-text-muted">{t('developers.columns.email')}</th>
-                    <th className="px-4 py-2 text-left text-xs font-medium uppercase tracking-wider text-text-muted">{t('developers.columns.role')}</th>
-                    <th className="px-4 py-2 text-left text-xs font-medium uppercase tracking-wider text-text-muted">{t('developers.columns.lastVerified')}</th>
-                    <th className="px-4 py-2 text-right text-xs font-medium uppercase tracking-wider text-text-muted">{t('developers.columns.actions')}</th>
+                    <th className="px-4 py-2 text-left text-sm font-semibold uppercase tracking-wide text-text-secondary">{t('developers.columns.name')}</th>
+                    <th className="px-4 py-2 text-left text-sm font-semibold uppercase tracking-wide text-text-secondary">{t('developers.columns.email')}</th>
+                    <th className="px-4 py-2 text-left text-sm font-semibold uppercase tracking-wide text-text-secondary">{t('developers.columns.role')}</th>
+                    <th className="px-4 py-2 text-left text-sm font-semibold uppercase tracking-wide text-text-secondary">{t('developers.columns.lastVerified')}</th>
+                    <th className="px-4 py-2 text-right text-sm font-semibold uppercase tracking-wide text-text-secondary">{t('developers.columns.actions')}</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-white/10 bg-cyber-panel/75">
@@ -753,14 +755,14 @@ export default function JiraProjectsPage() {
             </div>
           )}
         </div>
-      </div>
+        </section>
 
-      <div className="rounded-2xl border border-cyan-400/18 bg-cyber-panel/75 p-4 shadow-sm">
-        <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+        <section className="border-t border-white/10 px-5 py-5">
+          <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
           <div className="w-full sm:max-w-xl space-y-2">
-            <p className="text-sm font-semibold text-text-primary">{t('oauth.sitesTitle')}</p>
+            <p className="text-base font-semibold text-text-primary">{t('oauth.sitesTitle')}</p>
             {isJiraOAuthSitesLoading ? (
-              <p className="text-sm text-text-muted">{t('oauth.loadingSites')}</p>
+              <p className="text-sm text-text-secondary">{t('oauth.loadingSites')}</p>
             ) : isJiraOAuthSitesError ? (
               <p className="text-sm text-status-danger">{t('messages.oauthSitesError')}</p>
             ) : (
@@ -819,23 +821,32 @@ export default function JiraProjectsPage() {
         )}
 
         <div className="mt-4">
-          <p className="mb-2 text-sm font-semibold text-text-primary">{t('oauth.projectsTitle')}</p>
+          <p className="mb-2 text-base font-semibold text-text-primary">{t('oauth.projectsTitle')}</p>
           {isJiraOAuthProjectsLoading ? (
-            <p className="text-sm text-text-muted">{t('oauth.loadingProjects')}</p>
+            <p className="text-sm text-text-secondary">{t('oauth.loadingProjects')}</p>
           ) : isJiraOAuthProjectsError ? (
             <p className="text-sm text-status-danger">{t('messages.oauthProjectsError')}</p>
           ) : !selectedCloudId ? (
-            <p className="text-sm text-text-muted">{t('oauth.selectSiteFirst')}</p>
+            <p className="text-sm text-text-secondary">{t('oauth.selectSiteFirst')}</p>
           ) : (jiraOAuthProjects?.length ?? 0) === 0 ? (
-            <p className="text-sm text-text-muted">{t('oauth.noProjects')}</p>
+            <div className="space-y-1.5">
+              <p className="text-sm text-text-secondary">{t('oauth.noProjects')}</p>
+              <p className="text-sm text-text-secondary/90">
+                {t('oauth.noProjectsHintSite', {
+                  site: selectedSite?.name || '-',
+                  cloudId: selectedCloudId,
+                })}
+              </p>
+              <p className="text-sm text-text-secondary/90">{t('oauth.noProjectsHintActions')}</p>
+            </div>
           ) : (
             <div className="overflow-x-auto rounded-xl border border-cyan-400/18">
               <table className="min-w-full divide-y divide-white/10">
                 <thead className="bg-cyber-hover/40">
                   <tr>
-                    <th className="px-4 py-2 text-left text-xs font-medium uppercase tracking-wider text-text-muted">{t('oauth.projectsColumns.key')}</th>
-                    <th className="px-4 py-2 text-left text-xs font-medium uppercase tracking-wider text-text-muted">{t('oauth.projectsColumns.name')}</th>
-                    <th className="px-4 py-2 text-left text-xs font-medium uppercase tracking-wider text-text-muted">{t('oauth.projectsColumns.type')}</th>
+                    <th className="px-4 py-2 text-left text-sm font-semibold uppercase tracking-wide text-text-secondary">{t('oauth.projectsColumns.key')}</th>
+                    <th className="px-4 py-2 text-left text-sm font-semibold uppercase tracking-wide text-text-secondary">{t('oauth.projectsColumns.name')}</th>
+                    <th className="px-4 py-2 text-left text-sm font-semibold uppercase tracking-wide text-text-secondary">{t('oauth.projectsColumns.type')}</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-white/10 bg-cyber-panel/75">
@@ -851,19 +862,20 @@ export default function JiraProjectsPage() {
             </div>
           )}
         </div>
+        </section>
       </div>
 
-      <div className="overflow-hidden rounded-2xl border border-cyan-400/18 bg-cyber-panel/75 shadow-sm">
+      <div className="overflow-hidden rounded-2xl border border-cyan-400/16 bg-cyber-panel/70">
           <div className="overflow-x-auto">
             <table className="min-w-full divide-y divide-white/10">
               <thead className="bg-cyber-hover/40">
                 <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-text-muted">{t('table.name')}</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-text-muted">{t('table.url')}</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-text-muted">{t('table.projectKey')}</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-text-muted">{t('table.linkedTargets')}</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-text-muted">{t('table.updatedAt')}</th>
-                  <th className="px-6 py-3 text-right text-xs font-medium uppercase tracking-wider text-text-muted">{t('table.actions')}</th>
+                  <th className="px-6 py-3 text-left text-sm font-semibold uppercase tracking-wide text-text-secondary">{t('table.name')}</th>
+                  <th className="px-6 py-3 text-left text-sm font-semibold uppercase tracking-wide text-text-secondary">{t('table.url')}</th>
+                  <th className="px-6 py-3 text-left text-sm font-semibold uppercase tracking-wide text-text-secondary">{t('table.projectKey')}</th>
+                  <th className="px-6 py-3 text-left text-sm font-semibold uppercase tracking-wide text-text-secondary">{t('table.linkedTargets')}</th>
+                  <th className="px-6 py-3 text-left text-sm font-semibold uppercase tracking-wide text-text-secondary">{t('table.updatedAt')}</th>
+                  <th className="px-6 py-3 text-right text-sm font-semibold uppercase tracking-wide text-text-secondary">{t('table.actions')}</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-white/10 bg-cyber-panel/75">

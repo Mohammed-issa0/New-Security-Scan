@@ -7,7 +7,7 @@ import { scansService } from '@/lib/scans/scansService';
 import { toast } from 'sonner';
 import { Eye, Plus, Trash2 } from 'lucide-react';
 import { Button } from '@/components/scans/ui';
-import { BrowserAuthDialog, CreateTargetDialog, DeleteTargetDialog, ViewTargetDialog } from '@/components/targets/TargetDialogs';
+import { CreateTargetDialog, DeleteTargetDialog, ViewTargetDialog } from '@/components/targets/TargetDialogs';
 import type { PaginatedResponse, Target, TargetBrowserAuthRequest } from '@/lib/api/types';
 import { TableEmptyRow, TableErrorRow, TableSkeletonRows } from '@/components/common/AsyncStates';
 
@@ -19,7 +19,6 @@ export default function TargetsPage() {
   const [isCreateOpen, setIsCreateOpen] = useState(false);
   const [createError, setCreateError] = useState<string | null>(null);
   const [targetToView, setTargetToView] = useState<Target | null>(null);
-  const [targetToConfigureAuth, setTargetToConfigureAuth] = useState<Target | null>(null);
   const [targetToDelete, setTargetToDelete] = useState<Target | null>(null);
 
   const { data: targetsData, isLoading, isError, error, refetch } = useQuery({
@@ -128,10 +127,6 @@ export default function TargetsPage() {
       setTargetToView((currentTarget) =>
         currentTarget?.id === variables.id ? { ...currentTarget, browserAuthConfigured: true } : currentTarget,
       );
-      setTargetToConfigureAuth((currentTarget) =>
-        currentTarget?.id === variables.id ? { ...currentTarget, browserAuthConfigured: true } : currentTarget,
-      );
-      setTargetToConfigureAuth(null);
       await queryClient.invalidateQueries({ queryKey: ['targets'] });
       toast.success(t('browserAuth.feedback.saveSuccess'));
     },
@@ -147,10 +142,6 @@ export default function TargetsPage() {
       setTargetToView((currentTarget) =>
         currentTarget?.id === targetId ? { ...currentTarget, browserAuthConfigured: false } : currentTarget,
       );
-      setTargetToConfigureAuth((currentTarget) =>
-        currentTarget?.id === targetId ? { ...currentTarget, browserAuthConfigured: false } : currentTarget,
-      );
-      setTargetToConfigureAuth(null);
       await queryClient.invalidateQueries({ queryKey: ['targets'] });
       toast.success(t('browserAuth.feedback.deleteSuccess'));
     },
@@ -182,12 +173,6 @@ export default function TargetsPage() {
 
   const closeViewDialog = () => {
     setTargetToView(null);
-  };
-
-  const closeBrowserAuthDialog = () => {
-    if (!saveBrowserAuthMutation.isPending && !deleteBrowserAuthMutation.isPending) {
-      setTargetToConfigureAuth(null);
-    }
   };
 
   return (
@@ -338,14 +323,7 @@ export default function TargetsPage() {
       <ViewTargetDialog
         isOpen={Boolean(targetToView)}
         onClose={closeViewDialog}
-        onConfigureAuth={(target) => setTargetToConfigureAuth(target)}
         target={targetToView}
-      />
-
-      <BrowserAuthDialog
-        isOpen={Boolean(targetToConfigureAuth)}
-        onClose={closeBrowserAuthDialog}
-        target={targetToConfigureAuth}
         isSaving={saveBrowserAuthMutation.isPending}
         isDeleting={deleteBrowserAuthMutation.isPending}
         onSave={(target, payload) => saveBrowserAuthMutation.mutate({ id: target.id, payload })}

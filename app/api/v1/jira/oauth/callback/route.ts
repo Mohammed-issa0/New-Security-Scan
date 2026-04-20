@@ -2,6 +2,36 @@ import { NextRequest, NextResponse } from 'next/server';
 
 const DEFAULT_BACKEND_BASE = 'https://backend.blackbrains.tech';
 
+function buildFrontendSettingsRedirect(options: {
+  incomingUrl: URL;
+  location?: string | null;
+  fallbackQuery: string;
+}) {
+  const { incomingUrl, location, fallbackQuery } = options;
+
+  const fallback = new URL(`/settings/jira?${fallbackQuery}`, incomingUrl.origin);
+  if (!location) {
+    return fallback;
+  }
+
+  try {
+    const parsedLocation = new URL(location, incomingUrl.origin);
+    const path = parsedLocation.pathname;
+    const isSettingsRoute =
+      path === '/settings/jira' ||
+      path === '/en/settings/jira' ||
+      path === '/ar/settings/jira';
+
+    if (!isSettingsRoute) {
+      return fallback;
+    }
+
+    return new URL(`${path}${parsedLocation.search}`, incomingUrl.origin);
+  } catch {
+    return fallback;
+  }
+}
+
 export async function GET(request: NextRequest) {
   const incomingUrl = new URL(request.url);
   const query = incomingUrl.searchParams;
@@ -12,7 +42,12 @@ export async function GET(request: NextRequest) {
 
   // OAuth callback requires at least one expected query parameter.
   if (!code && !state && !error) {
-    return NextResponse.redirect(new URL('/settings/jira?error=missing_callback_params', incomingUrl));
+    return NextResponse.redirect(
+      buildFrontendSettingsRedirect({
+        incomingUrl,
+        fallbackQuery: 'error=missing_callback_params',
+      })
+    );
   }
 
   const backendBase = process.env.API_BASE_URL || DEFAULT_BACKEND_BASE;
@@ -31,15 +66,36 @@ export async function GET(request: NextRequest) {
 
     const location = backendResponse.headers.get('location');
     if (location) {
-      return NextResponse.redirect(new URL(location, incomingUrl.origin));
+      return NextResponse.redirect(
+        buildFrontendSettingsRedirect({
+          incomingUrl,
+          location,
+          fallbackQuery: 'connected=true',
+        })
+      );
     }
 
     if (backendResponse.ok) {
-      return NextResponse.redirect(new URL('/settings/jira?connected=true', incomingUrl));
+      return NextResponse.redirect(
+        buildFrontendSettingsRedirect({
+          incomingUrl,
+          fallbackQuery: 'connected=true',
+        })
+      );
     }
 
-    return NextResponse.redirect(new URL('/settings/jira?error=callback_failed', incomingUrl));
+    return NextResponse.redirect(
+      buildFrontendSettingsRedirect({
+        incomingUrl,
+        fallbackQuery: 'error=callback_failed',
+      })
+    );
   } catch {
-    return NextResponse.redirect(new URL('/settings/jira?error=callback_unreachable', incomingUrl));
+    return NextResponse.redirect(
+      buildFrontendSettingsRedirect({
+        incomingUrl,
+        fallbackQuery: 'error=callback_unreachable',
+      })
+    );
   }
 }

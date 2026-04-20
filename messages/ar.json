@@ -454,6 +454,8 @@
         "loadingProjects": "جارٍ تحميل المشاريع...",
         "selectSiteFirst": "اختر موقعًا أولاً.",
         "noProjects": "لا توجد مشاريع في هذا الموقع.",
+        "noProjectsHintSite": "الموقع المحدد: {site} (cloudId: {cloudId})",
+        "noProjectsHintActions": "جرّب تغيير الموقع، أو تحديث المواقع/المشاريع، أو تأكد أن حساب Atlassian لديه صلاحية عرض المشاريع في هذا الموقع.",
         "projectsColumns": {
           "key": "المفتاح",
           "name": "الاسم",

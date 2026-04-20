@@ -25,10 +25,21 @@ export function createBackendHeaders(
   includeBodyHeaders = false,
   extraHeaders?: Record<string, string>
 ) {
+  const forwardedHost = request.headers.get('x-forwarded-host') || request.headers.get('host') || '';
+  const forwardedProto = request.headers.get('x-forwarded-proto') || new URL(request.url).protocol.replace(':', '');
+
   const headers: Record<string, string> = {
     Authorization: request.headers.get('authorization') || '',
     Accept: request.headers.get('accept') || 'application/json',
   };
+
+  if (forwardedHost) {
+    headers['X-Forwarded-Host'] = forwardedHost;
+  }
+
+  if (forwardedProto) {
+    headers['X-Forwarded-Proto'] = forwardedProto;
+  }
 
   if (includeBodyHeaders) {
     headers['Content-Type'] = request.headers.get('content-type') || 'application/json';

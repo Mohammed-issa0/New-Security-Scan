@@ -27,7 +27,10 @@ interface DeleteTargetDialogProps extends BaseDialogProps {
 
 interface ViewTargetDialogProps extends BaseDialogProps {
   target: Target | null;
-  onConfigureAuth: (target: Target) => void;
+  isSaving?: boolean;
+  isDeleting?: boolean;
+  onSave: (target: Target, payload: TargetBrowserAuthRequest) => void;
+  onDelete: (target: Target) => void;
 }
 
 interface BrowserAuthDialogProps extends BaseDialogProps {
@@ -267,24 +270,101 @@ export function DeleteTargetDialog({
   );
 }
 
-export function ViewTargetDialog({ isOpen, onClose, onConfigureAuth, target }: ViewTargetDialogProps) {
+export function ViewTargetDialog({
+  isOpen,
+  onClose,
+  target,
+  isSaving = false,
+  isDeleting = false,
+  onSave,
+  onDelete,
+}: ViewTargetDialogProps) {
   const t = useTranslations('landing.targets');
-  const [copied, setCopied] = useState(false);
+  const loginUrlId = useId();
+  const targetUrlId = useId();
+  const usernameId = useId();
+  const passwordId = useId();
+  const mfaId = useId();
+  const [showPassword, setShowPassword] = useState(false);
+  const [formData, setFormData] = useState<TargetBrowserAuthRequest>({
+    loginUrl: '',
+    targetUrl: '',
+    username: '',
+    password: '',
+    mfa: false,
+  });
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   useEffect(() => {
     if (!isOpen) {
-      setCopied(false);
+      return;
     }
-  }, [isOpen]);
 
-  const copyUrl = async () => {
+    setShowPassword(false);
+    setErrorMessage(null);
+    setFormData({
+      loginUrl: target?.url ?? '',
+      targetUrl: target?.url ?? '',
+      username: '',
+      password: '',
+      mfa: false,
+    });
+  }, [isOpen, target]);
+
+  const validateOptionalUrl = (value?: string | null) => {
+    const trimmedValue = value?.trim();
+    if (!trimmedValue) {
+      return null;
+    }
+
+    try {
+      const parsedUrl = new URL(trimmedValue);
+      if (!['http:', 'https:'].includes(parsedUrl.protocol)) {
+        return t('validation.httpOnly');
+      }
+    } catch {
+      return t('validation.invalid');
+    }
+
+    return null;
+  };
+
+  const handleSave = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
     if (!target) {
       return;
     }
 
-    await navigator.clipboard.writeText(target.url);
-    setCopied(true);
-    window.setTimeout(() => setCopied(false), 2000);
+    const loginUrlError = validateOptionalUrl(formData.loginUrl);
+    if (loginUrlError) {
+      setErrorMessage(`${t('browserAuth.loginUrl')}: ${loginUrlError}`);
+      return;
+    }
+
+    const targetUrlError = validateOptionalUrl(formData.targetUrl);
+    if (targetUrlError) {
+      setErrorMessage(`${t('browserAuth.targetUrl')}: ${targetUrlError}`);
+      return;
+    }
+
+    if (!formData.username?.trim()) {
+      setErrorMessage(t('browserAuth.validation.usernameRequired'));
+      return;
+    }
+
+    if (!formData.password?.trim()) {
+      setErrorMessage(t('browserAuth.validation.passwordRequired'));
+      return;
+    }
+
+    setErrorMessage(null);
+    onSave(target, {
+      loginUrl: formData.loginUrl?.trim() || null,
+      targetUrl: formData.targetUrl?.trim() || null,
+      username: formData.username.trim(),
+      password: formData.password.trim(),
+      mfa: formData.mfa,
+    });
   };
 
   const formatDate = (value?: string) => {
@@ -317,25 +397,11 @@ export function ViewTargetDialog({ isOpen, onClose, onConfigureAuth, target }: V
         </div>
       </div>
 
-      <div className="max-h-[70vh] space-y-5 overflow-y-auto px-6 py-6">
-        <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
-          <p className="text-xs font-semibold uppercase tracking-[0.16em] text-text-muted">
-            {t('url')}
-          </p>
-          <p className="mt-2 break-all text-sm font-medium text-text-primary">{target?.url ?? t('details.notAvailable')}</p>
-          <div className="mt-4">
-            <Button type="button" variant="outline" size="sm" onClick={copyUrl} disabled={!target} className="gap-2">
-              {copied ? <Check className="h-4 w-4 text-green-600" /> : <Copy className="h-4 w-4" />}
-              {copied ? t('details.copied') : t('details.copyUrl')}
-            </Button>
-          </div>
-        </div>
+      <form onSubmit={handleSave} className="max-h-[70vh] space-y-5 overflow-y-auto px-6 py-6">
+        
 
         <div className="grid gap-4 sm:grid-cols-2">
-          <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
-            <p className="text-xs font-semibold uppercase tracking-[0.16em] text-text-muted">{t('details.id')}</p>
-            <p className="mt-2 break-all text-sm text-text-primary">{target?.id ?? t('details.notAvailable')}</p>
-          </div>
+          
           <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
             <p className="text-xs font-semibold uppercase tracking-[0.16em] text-text-muted">{t('browserAuth.statusLabel')}</p>
             <p className="mt-2 text-sm text-text-primary">
@@ -346,10 +412,7 @@ export function ViewTargetDialog({ isOpen, onClose, onConfigureAuth, target }: V
             <p className="text-xs font-semibold uppercase tracking-[0.16em] text-text-muted">{t('createdAt')}</p>
             <p className="mt-2 text-sm text-text-primary">{formatDate(target?.createdAt)}</p>
           </div>
-          <div className="rounded-2xl border border-white/10 bg-white/5 p-4 sm:col-span-2">
-            <p className="text-xs font-semibold uppercase tracking-[0.16em] text-text-muted">{t('details.updatedAt')}</p>
-            <p className="mt-2 text-sm text-text-primary">{formatDate(target?.updatedAt)}</p>
-          </div>
+          
         </div>
 
         <div className="rounded-2xl border border-cyan-400/15 bg-cyan-500/10 p-4">
@@ -362,17 +425,89 @@ export function ViewTargetDialog({ isOpen, onClose, onConfigureAuth, target }: V
                 <p className="text-sm font-semibold text-text-primary">{t('browserAuth.cardTitle')}</p>
                 <p className="mt-1 text-sm text-text-muted">{t('browserAuth.cardDescription')}</p>
               </div>
-              <Button
-                type="button"
-                variant="outline"
-                size="sm"
-                onClick={() => target && onConfigureAuth(target)}
-                disabled={!target}
-                className="gap-2"
-              >
-                <ShieldCheck className="h-4 w-4" />
-                {t('browserAuth.configure')}
-              </Button>
+              <div className="grid gap-4 sm:grid-cols-2">
+                <div>
+                  <Label htmlFor={loginUrlId}>{t('browserAuth.loginUrl')}</Label>
+                  <Input
+                    id={loginUrlId}
+                    type="url"
+                    value={formData.loginUrl ?? ''}
+                    onChange={(event) => setFormData((current) => ({ ...current, loginUrl: event.target.value }))}
+                    placeholder={target?.url ?? t('placeholder')}
+                  />
+                </div>
+                <div>
+                  <Label htmlFor={targetUrlId}>{t('browserAuth.targetUrl')}</Label>
+                  <Input
+                    id={targetUrlId}
+                    type="url"
+                    value={formData.targetUrl ?? ''}
+                    onChange={(event) => setFormData((current) => ({ ...current, targetUrl: event.target.value }))}
+                    placeholder={target?.url ?? t('placeholder')}
+                  />
+                </div>
+                <div>
+                  <Label htmlFor={usernameId} required>{t('browserAuth.username')}</Label>
+                  <Input
+                    id={usernameId}
+                    value={formData.username ?? ''}
+                    onChange={(event) => setFormData((current) => ({ ...current, username: event.target.value }))}
+                    autoComplete="username"
+                    placeholder={t('browserAuth.usernamePlaceholder')}
+                  />
+                </div>
+                <div>
+                  <Label htmlFor={passwordId} required>{t('browserAuth.password')}</Label>
+                  <div className="relative">
+                    <Input
+                      id={passwordId}
+                      type={showPassword ? 'text' : 'password'}
+                      value={formData.password ?? ''}
+                      onChange={(event) => setFormData((current) => ({ ...current, password: event.target.value }))}
+                      autoComplete="current-password"
+                      placeholder={t('browserAuth.passwordPlaceholder')}
+                      className="pr-11"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowPassword((current) => !current)}
+                      className="absolute inset-y-0 right-0 flex w-11 items-center justify-center text-text-muted transition hover:text-text-secondary"
+                      aria-label={showPassword ? t('browserAuth.hidePassword') : t('browserAuth.showPassword')}
+                    >
+                      {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <label htmlFor={mfaId} className="flex items-start gap-3 rounded-2xl border border-white/10 bg-white/5 px-4 py-3">
+                <Checkbox
+                  id={mfaId}
+                  checked={formData.mfa}
+                  onChange={(event) => setFormData((current) => ({ ...current, mfa: event.target.checked }))}
+                  className="mt-0.5"
+                />
+                <div>
+                  <p className="text-sm font-medium text-text-primary">{t('browserAuth.mfa')}</p>
+                  <p className="mt-1 text-sm text-text-muted">{t('browserAuth.mfaDescription')}</p>
+                </div>
+              </label>
+
+              {errorMessage ? <p className="text-sm text-status-danger">{errorMessage}</p> : null}
+
+              <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between text-md">
+                <Button
+                  type="button"
+                  variant="danger"
+                  onClick={() => target && onDelete(target)}
+                  disabled={!target || !target.browserAuthConfigured || isSaving || isDeleting}
+                >
+                  {isDeleting ? t('browserAuth.deleting') : t('browserAuth.delete')}
+                </Button>
+                <Button type="submit" disabled={isSaving || isDeleting || !target}>
+                  {isSaving ? t('browserAuth.saving') : t('browserAuth.save')}
+                </Button>
+              </div>
             </div>
           </div>
         </div>
@@ -380,7 +515,7 @@ export function ViewTargetDialog({ isOpen, onClose, onConfigureAuth, target }: V
         <div className="flex justify-end border-t border-white/10 pt-5">
           <Button type="button" onClick={onClose}>{t('close')}</Button>
         </div>
-      </div>
+      </form>
     </DialogShell>
   );
 }
