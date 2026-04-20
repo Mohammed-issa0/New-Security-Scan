@@ -5,7 +5,7 @@ import { useState } from 'react';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { useLocale, useTranslations } from 'next-intl';
 import { useParams } from 'next/navigation';
-import { AlertTriangle, ArrowLeft, BarChart, CalendarClock, Download, RefreshCw, Search, ShieldAlert, Sparkles, X } from 'lucide-react';
+import { AlertTriangle, ArrowLeft, BarChart, CalendarClock, RefreshCw, Search, ShieldAlert, Sparkles, X, Download  } from 'lucide-react';
 import { scansService } from '@/lib/scans/scansService';
 import type { GenerateReportResponse, ReportStatusResponse, Vulnerability } from '@/lib/api/types';
 import { toast } from 'sonner';
@@ -119,24 +119,6 @@ export default function ScanReportPage() {
     queryKey: ['scan-vulnerabilities', id],
     queryFn: () => scansService.getScanVulnerabilities(id),
     enabled: !!id,
-  });
-
-  const exportPdfMutation = useMutation({
-    mutationFn: () => scansService.exportScanPdf(id),
-    onSuccess: (blob) => {
-      const objectUrl = window.URL.createObjectURL(blob);
-      const link = document.createElement('a');
-      link.href = objectUrl;
-      link.download = `scan-report-${id}.pdf`;
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      window.URL.revokeObjectURL(objectUrl);
-      toast.success(t('export.success'));
-    },
-    onError: (error: any) => {
-      toast.error(error?.message || t('export.error'));
-    },
   });
 
   const generateAsyncReportMutation = useMutation({
@@ -281,22 +263,13 @@ export default function ScanReportPage() {
             <p className="mt-2 text-sm text-text-secondary">{t('subtitle')}</p>
           </div>
           <div className="flex flex-wrap items-center gap-3">
-          <button
-            type="button"
-            onClick={() => exportPdfMutation.mutate()}
-            disabled={exportPdfMutation.isPending}
-            className="inline-flex items-center gap-2 rounded-lg border border-cyan-300/28 bg-cyan-400/10 px-4 py-2 text-sm font-medium text-cyan-200 hover:bg-cyan-400/14 disabled:cursor-not-allowed disabled:opacity-50"
-          >
-            <Download className="h-4 w-4" />
-            {exportPdfMutation.isPending ? t('export.exporting') : t('export.button')}
-          </button>
-          <Link
-            href={`/${locale}/scans/${id}`}
-            className="inline-flex items-center gap-2 rounded-lg border border-white/14 bg-white/6 px-4 py-2 text-sm font-medium text-text-secondary hover:bg-white/10"
-          >
-            <ArrowLeft className="h-4 w-4" />
-            {t('backToScan')}
-          </Link>
+            <Link
+              href={`/${locale}/scans/${id}`}
+              className="inline-flex items-center gap-2 rounded-lg border border-white/14 bg-white/6 px-4 py-2 text-sm font-medium text-text-secondary hover:bg-white/10"
+            >
+              <ArrowLeft className="h-4 w-4" />
+              {t('backToScan')}
+            </Link>
           </div>
         </div>
 

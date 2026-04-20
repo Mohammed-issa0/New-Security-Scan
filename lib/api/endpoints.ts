@@ -34,6 +34,7 @@ import {
   AiPostScanReportRequest,
   AiPostScanReportResponse,
   RegisterRequest,
+  LoginRequest,
   StartGuidedSetupRequest,
   StartGuidedSetupResponse,
   AnswerGuidedSetupRequest,
@@ -67,7 +68,8 @@ import {
 export const endpoints = {
   auth: {
     register: (data: RegisterRequest) => client.post('/auth/register', data),
-    login: (data: any) => client.post('/auth/login', data),
+    login: (data: LoginRequest) => client.post('/auth/login', data),
+    verifyOtp: (data: { otpToken: string; code: string }) => client.post('/auth/verify-otp', data),
     refresh: (data: { refreshToken: string }) => client.post('/auth/refresh', data),
   },
   users: {
@@ -117,7 +119,7 @@ export const endpoints = {
   },
   reports: {
     get: (scanId: string): Promise<Report> => client.get(`/reports/${scanId}`),
-    export: (scanId: string) => client.get(`/reports/${scanId}/export`),
+    export: (scanId: string): Promise<Blob> => client.getBlob(`/reports/${scanId}/export`),
     generate: (scanId: string, data: GenerateScanReportRequest): Promise<GenerateReportResponse> =>
       client.post(`/reports/${scanId}/generate`, data),
     status: (reportId: string): Promise<ReportStatusResponse> =>

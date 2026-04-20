@@ -17,7 +17,7 @@ import type {
 import { ApiRequestError } from '@/lib/api/client';
 import { 
   Shield, Clock, AlertTriangle, CheckCircle,
-  Terminal, BarChart, AlertCircle, PlayCircle, X, Download, Sparkles
+  Terminal, BarChart, AlertCircle, PlayCircle, X, Sparkles
 } from 'lucide-react';
 import { toast } from 'sonner';
 import { PanelEmptyState, PanelErrorState, PanelLoadingState } from '@/components/common/AsyncStates';
@@ -172,24 +172,6 @@ export default function ScanDetailsPage() {
     },
     onError: (error: any) => {
       toast.error(error.message || td('cancelError'));
-    },
-  });
-
-  const exportPdfMutation = useMutation({
-    mutationFn: () => scansService.exportScanPdf(id),
-    onSuccess: (blob) => {
-      const objectUrl = window.URL.createObjectURL(blob);
-      const link = document.createElement('a');
-      link.href = objectUrl;
-      link.download = `scan-report-${id}.pdf`;
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      window.URL.revokeObjectURL(objectUrl);
-      toast.success(td('pdf.exportSuccess'));
-    },
-    onError: (error: any) => {
-      toast.error(error?.message || td('pdf.exportError'));
     },
   });
 
@@ -409,16 +391,6 @@ export default function ScanDetailsPage() {
               <BarChart className="h-4 w-4" />
               {td('openReportPage')}
             </Link>
-            <button
-              type="button"
-              onClick={() => exportPdfMutation.mutate()}
-              data-testid="scan-export-pdf"
-              disabled={exportPdfMutation.isPending}
-              className="inline-flex items-center gap-2 rounded-lg border border-cyan-300/28 bg-cyan-400/10 px-4 py-2 text-sm font-medium text-cyan-200 hover:bg-cyan-400/14 disabled:cursor-not-allowed disabled:opacity-50"
-            >
-              <Download className="h-4 w-4" />
-              {exportPdfMutation.isPending ? td('pdf.exporting') : td('pdf.exportButton')}
-            </button>
             <button
               type="button"
               onClick={() => createJiraTicketsMutation.mutate()}

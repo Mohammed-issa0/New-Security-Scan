@@ -6,6 +6,7 @@ import * as z from 'zod';
 import { useTranslations, useLocale } from 'next-intl';
 import { useRouter } from 'next/navigation';
 import { authService } from '@/lib/auth/authService';
+import { setOtpFlowState } from '@/lib/auth/otpFlow';
 import { toast } from 'sonner';
 import { useState } from 'react';
 import { ApiRequestError } from '@/lib/api/client';
@@ -83,15 +84,27 @@ export default function RegisterPage() {
       const firstName = data.firstName?.trim();
       const lastName = data.lastName?.trim();
 
-      await authService.register({
+      const challenge = await authService.register({
         fullName: fullName || undefined,
         firstName: fullName ? undefined : firstName || undefined,
         lastName: fullName ? undefined : lastName || undefined,
         email: data.email,
         password: data.password,
       });
-      toast.success('Account created successfully');
-      router.push(`/${locale}`);
+      setOtpFlowState({
+        mode: 'register',
+        challenge,
+        createdAt: Date.now(),
+        registerData: {
+          fullName: fullName || undefined,
+          firstName: fullName ? undefined : firstName || undefined,
+          lastName: fullName ? undefined : lastName || undefined,
+          email: data.email,
+          password: data.password,
+        },
+      });
+      toast.success(`تم إرسال رمز التحقق إلى ${challenge.maskedEmail ?? 'بريدك الإلكتروني'}`);
+      router.push(`/${locale}/verify-otp`);
     } catch (error: any) {
       if (error instanceof ApiRequestError && error.data.details) {
         Object.entries(error.data.details).forEach(([field, messages]) => {

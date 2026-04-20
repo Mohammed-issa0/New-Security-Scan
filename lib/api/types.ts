@@ -41,6 +41,11 @@ export interface RegisterRequest {
   password: string;
 }
 
+export interface LoginRequest {
+  email: string;
+  password: string;
+}
+
 export interface Scan {
   id: string;
   targetId: string;

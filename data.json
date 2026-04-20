@@ -1121,6 +1121,7 @@
         "tags": [
           "Auth"
         ],
+        "summary": "Step 1 of 2 for registration.\r\nCreates a pending account and sends a 6-digit verification code to the supplied email.\r\nComplete registration by calling POST /api/v1/auth/verify-otp.",
         "requestBody": {
           "content": {
             "application/json": {
@@ -1146,17 +1147,17 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/AuthResponse"
+                  "$ref": "#/components/schemas/OtpChallengeResponse"
                 }
               },
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/AuthResponse"
+                  "$ref": "#/components/schemas/OtpChallengeResponse"
                 }
               },
               "text/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/AuthResponse"
+                  "$ref": "#/components/schemas/OtpChallengeResponse"
                 }
               }
             }
@@ -1169,6 +1170,7 @@
         "tags": [
           "Auth"
         ],
+        "summary": "Step 1 of 2 for login.\r\nValidates credentials and sends a 6-digit verification code to the account email.\r\nComplete login by calling POST /api/v1/auth/verify-otp.",
         "requestBody": {
           "content": {
             "application/json": {
@@ -1184,6 +1186,55 @@
             "application/*+json": {
               "schema": {
                 "$ref": "#/components/schemas/LoginRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/OtpChallengeResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OtpChallengeResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OtpChallengeResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/auth/verify-otp": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "summary": "Step 2 of 2 for both registration and login.\r\nSubmits the 6-digit code received by email together with the otpToken\r\nreturned by /register or /login. Returns JWT tokens on success.",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/VerifyOtpRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/VerifyOtpRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/VerifyOtpRequest"
               }
             }
           }
@@ -1217,6 +1268,7 @@
         "tags": [
           "Auth"
         ],
+        "summary": "Issues a new access token using a valid refresh token.",
         "requestBody": {
           "content": {
             "application/json": {
@@ -5566,6 +5618,32 @@
         },
         "additionalProperties": false
       },
+      "OtpChallengeResponse": {
+        "type": "object",
+        "properties": {
+          "requiresOtp": {
+            "type": "boolean",
+            "description": "Always true — signals the client to show the OTP input screen."
+          },
+          "otpToken": {
+            "type": "string",
+            "description": "Opaque token that must be sent back with the OTP code to\r\nPOST /api/v1/auth/verify-otp. Treat like a short-lived session token.",
+            "nullable": true
+          },
+          "maskedEmail": {
+            "type": "string",
+            "description": "Masked email shown to the user (e.g. j***n@gmail.com).",
+            "nullable": true
+          },
+          "expiresAt": {
+            "type": "string",
+            "description": "UTC expiry of the OTP (15 minutes from issuance).",
+            "format": "date-time"
+          }
+        },
+        "additionalProperties": false,
+        "description": "Returned by /register and /login when an email OTP must be verified\r\nbefore a full JWT is issued."
+      },
       "Permission": {
         "type": "object",
         "properties": {
@@ -6389,6 +6467,18 @@
             "type": "string",
             "nullable": true
           },
+          "estimatedTotalDurationSeconds": {
+            "type": "integer",
+            "description": "Total estimated duration in seconds across all tools (sum of per-tool estimates).\r\nOnly meaningful while status is Pending or Running.",
+            "format": "int32",
+            "nullable": true
+          },
+          "estimatedFinishAt": {
+            "type": "string",
+            "description": "Estimated completion timestamp based on StartedAt + total estimated duration.\r\nNull when the scan hasn't started or is already finished.",
+            "format": "date-time",
+            "nullable": true
+          },
           "tools": {
             "type": "array",
             "items": {
@@ -6568,6 +6658,18 @@
             "type": "string",
             "format": "date-time",
             "nullable": true
+          },
+          "estimatedTotalDurationSeconds": {
+            "type": "integer",
+            "description": "Total estimated duration in seconds across all tools.",
+            "format": "int32",
+            "nullable": true
+          },
+          "estimatedFinishAt": {
+            "type": "string",
+            "description": "Estimated completion timestamp.",
+            "format": "date-time",
+            "nullable": true
           }
         },
         "additionalProperties": false
@@ -6677,6 +6779,11 @@
             "type": "string",
             "nullable": true
           },
+          "estimatedDurationSeconds": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
           "scan": {
             "$ref": "#/components/schemas/Scan"
           }
@@ -6705,6 +6812,12 @@
           "finishedAt": {
             "type": "string",
             "format": "date-time",
+            "nullable": true
+          },
+          "estimatedDurationSeconds": {
+            "type": "integer",
+            "description": "Estimated duration in seconds for this tool run.",
+            "format": "int32",
             "nullable": true
           }
         },
@@ -7666,6 +7779,23 @@
           }
         },
         "additionalProperties": false
+      },
+      "VerifyOtpRequest": {
+        "type": "object",
+        "properties": {
+          "otpToken": {
+            "type": "string",
+            "description": "The opaque token received from /register or /login.",
+            "nullable": true
+          },
+          "code": {
+            "type": "string",
+            "description": "The 6-digit code the user received by email.",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false,
+        "description": "Request body for POST /api/v1/auth/verify-otp."
       },
       "VpsWebhookPayload": {
         "type": "object",

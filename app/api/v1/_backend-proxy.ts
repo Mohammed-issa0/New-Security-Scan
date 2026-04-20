@@ -70,7 +70,25 @@ export async function forwardJsonToBackend(options: {
     const text = await backendResponse.text();
     const responseBody = safeJsonParse(text, fallback);
     return NextResponse.json(responseBody, { status: backendResponse.status });
-  } catch {
+  } catch (error) {
+    const reason = error instanceof Error ? error.message : 'Unknown fetch error';
+    console.error('[proxy] forwardJsonToBackend failed', {
+      backendUrl: backendUrl.toString(),
+      method,
+      reason,
+    });
+
+    if (process.env.NODE_ENV !== 'production') {
+      return NextResponse.json(
+        {
+          error: unavailableMessage,
+          reason,
+          backendUrl: backendUrl.toString(),
+        },
+        { status: 502 }
+      );
+    }
+
     return NextResponse.json({ error: unavailableMessage }, { status: 502 });
   }
 }
@@ -98,7 +116,25 @@ export async function proxyToBackend(options: {
       status: backendResponse.status,
       headers: backendResponse.headers,
     });
-  } catch {
+  } catch (error) {
+    const reason = error instanceof Error ? error.message : 'Unknown fetch error';
+    console.error('[proxy] proxyToBackend failed', {
+      backendUrl: backendUrl.toString(),
+      method,
+      reason,
+    });
+
+    if (process.env.NODE_ENV !== 'production') {
+      return NextResponse.json(
+        {
+          error: unavailableMessage,
+          reason,
+          backendUrl: backendUrl.toString(),
+        },
+        { status: 502 }
+      );
+    }
+
     return NextResponse.json({ error: unavailableMessage }, { status: 502 });
   }
 }

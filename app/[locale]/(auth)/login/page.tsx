@@ -6,6 +6,7 @@ import * as z from 'zod';
 import { useTranslations, useLocale } from 'next-intl';
 import { useRouter } from 'next/navigation';
 import { authService } from '@/lib/auth/authService';
+import { setOtpFlowState } from '@/lib/auth/otpFlow';
 import { toast } from 'sonner';
 import { useState } from 'react';
 import { ApiRequestError } from '@/lib/api/client';
@@ -38,9 +39,15 @@ export default function LoginPage() {
   const onSubmit = async (data: LoginFormValues) => {
     setLoading(true);
     try {
-      await authService.login(data);
-      toast.success('Logged in successfully');
-      router.push(`/${locale}`);
+      const challenge = await authService.login(data);
+      setOtpFlowState({
+        mode: 'login',
+        challenge,
+        createdAt: Date.now(),
+        loginData: data,
+      });
+      toast.success(`تم إرسال رمز التحقق إلى ${challenge.maskedEmail ?? 'بريدك الإلكتروني'}`);
+      router.push(`/${locale}/verify-otp`);
     } catch (error: any) {
       if (error instanceof ApiRequestError && error.data.details) {
         Object.entries(error.data.details).forEach(([field, messages]) => {

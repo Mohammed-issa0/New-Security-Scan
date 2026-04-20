@@ -58,7 +58,7 @@ export const scansService = {
     return endpoints.scans.getToolEstimatedFinishTime(id, toolId);
   },
   async exportScanPdf(id: string) {
-    return endpoints.scans.exportPdf(id);
+    return endpoints.reports.export(id);
   },
   async createJiraTickets(scanId: string) {
     return endpoints.scans.createJiraTickets(scanId);

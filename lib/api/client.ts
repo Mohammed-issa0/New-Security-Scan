@@ -12,7 +12,7 @@ export interface ApiError {
 
 export class ApiRequestError extends Error {
   constructor(public status: number, public data: ApiError) {
-    super(data.error || data.message || data.detail || 'API Request Failed');
+    super(data.message || data.detail || data.error || 'API Request Failed');
   }
 }
 
