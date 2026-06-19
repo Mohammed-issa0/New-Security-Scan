@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { useState } from 'react';
-import { useQuery, useQueries, useMutation, useQueryClient } from '@tanstack/react-query';
+import { useQuery, useQueries, useMutation, useQueryClient, type Query } from '@tanstack/react-query';
 import { useTranslations, useLocale } from 'next-intl';
 import { scansService } from '@/lib/scans/scansService';
 import { plansService } from '@/lib/plans/plansService';
@@ -266,7 +266,8 @@ export default function ScanDetailsPage() {
           enabled: !!scan && isActiveScanStatus(normalizeScanStatus(scan.status)),
           retry: false,
           refetchOnWindowFocus: false,
-          refetchInterval: (query) => (query.state.data === null ? false : 30_000),
+          refetchInterval: (query: Query<EstimatedFinishTime | null, Error>) =>
+            query.state.data === null ? false : 30_000,
           staleTime: 10_000,
         };
       })
