@@ -17,6 +17,10 @@ import {
 import { ApiRequestError } from '@/lib/api/client';
 import { tokenStore } from '@/lib/auth/tokenStore';
 import { guidedSetupService } from '@/lib/scans/guidedSetupService';
+import {
+  inferCreditBudgetFromRecommendation,
+  inferProfileFromRecommendation,
+} from '@/lib/scans/guidedSetupProfile';
 import { Badge, Button, Input } from '@/components/scans/ui';
 
 type ChatRole = 'assistant' | 'user' | 'system';
@@ -299,15 +303,20 @@ export function FloatingAssistant() {
   }, [appendMessage, currentQuestion, sessionId, t]);
 
   const createScan = React.useCallback(async () => {
-    if (!sessionId) {
+    if (!sessionId || !recommendation) {
       return;
     }
 
     setIsBusy(true);
     setUpgradeMessage(null);
     try {
+      const profile = inferProfileFromRecommendation(recommendation);
+      const creditBudget = inferCreditBudgetFromRecommendation(recommendation);
+
       const response = await guidedSetupService.createScanFromRecommendation(sessionId, {
         targetUrl: targetUrl.trim() || undefined,
+        profile,
+        creditBudget,
       });
 
       resetSession();
@@ -338,7 +347,7 @@ export function FloatingAssistant() {
     } finally {
       setIsBusy(false);
     }
-  }, [appendMessage, locale, router, resetSession, sessionId, targetUrl, t]);
+  }, [appendMessage, locale, recommendation, router, resetSession, sessionId, targetUrl, t]);
 
   const restoreSession = React.useCallback(async () => {
     if (!sessionId) {

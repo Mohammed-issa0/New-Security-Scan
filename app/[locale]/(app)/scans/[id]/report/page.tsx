@@ -7,10 +7,15 @@ import { useLocale, useTranslations } from 'next-intl';
 import { useParams } from 'next/navigation';
 import { AlertTriangle, ArrowLeft, BarChart, CalendarClock, RefreshCw, Search, ShieldAlert, Sparkles, X, Download  } from 'lucide-react';
 import { scansService } from '@/lib/scans/scansService';
+import { normalizeScanStatus, isActiveScanStatus, isTerminalScanStatus, getScanDisplayName, getScanStatusTranslationKey, scanStatusClassMap } from '@/lib/scans/scanStatus';
+import { buildSeverityCounts, getOverallRiskScore, getTotalVulnerabilities } from '@/lib/scans/reportUtils';
 import type { GenerateReportResponse, ReportStatusResponse, Vulnerability } from '@/lib/api/types';
 import { toast } from 'sonner';
 import { PanelEmptyState, PanelErrorState, PanelLoadingState } from '@/components/common/AsyncStates';
-import { ApiRequestError } from '@/lib/api/client';
+import { ExecutiveSummarySection } from '@/components/reports/ExecutiveSummarySection';
+import { PriorityFixTable } from '@/components/reports/PriorityFixTable';
+import { JsonVulnerabilityCard } from '@/components/reports/JsonVulnerabilityCard';
+import { ZeroFindingsState } from '@/components/reports/ZeroFindingsState';
 
 const severityStyles: Record<string, string> = {
   Critical: 'border-status-danger/30 bg-status-danger/14 text-status-danger',
@@ -49,6 +54,8 @@ function buildDonutSegments(entries: Array<{ label: string; value: number; color
   });
 }
 
+const DEFAULT_REPORT_MODE = 'comprehensive';
+
 export default function ScanReportPage() {
   const { id } = useParams<{ id: string }>();
   const t = useTranslations('landing.scans.reportPage');
@@ -59,7 +66,6 @@ export default function ScanReportPage() {
   const [searchTerm, setSearchTerm] = useState('');
   const [sortBy, setSortBy] = useState<'severity-desc' | 'severity-asc' | 'name-asc' | 'name-desc' | 'tool-asc'>('severity-desc');
   const [selectedVulnerability, setSelectedVulnerability] = useState<Vulnerability | null>(null);
-  const [reportMode, setReportMode] = useState('comprehensive');
   const [outputFormats, setOutputFormats] = useState<string[]>(['Pdf']);
   const [generatedReportId, setGeneratedReportId] = useState<string | null>(null);
   const [idempotencyKey] = useState(() => {
@@ -88,17 +94,10 @@ export default function ScanReportPage() {
     refetch: refetchReport,
   } = useQuery({
     queryKey: ['scan-report', id],
-    queryFn: async () => {
-      try {
-        return await scansService.getReport(id);
-      } catch (error) {
-        if (error instanceof ApiRequestError && error.status === 404) {
-          return null;
-        }
-        throw error;
-      }
-    },
-    enabled: !!id,
+    queryFn: () => scansService.getReportOptional(id),
+    enabled: !!scan && isTerminalScanStatus(normalizeScanStatus(scan.status)),
+    retry: false,
+    refetchOnWindowFocus: false,
   });
 
   const {
@@ -111,7 +110,7 @@ export default function ScanReportPage() {
     enabled: !!generatedReportId,
     refetchInterval: (query) => {
       const status = String(query.state.data?.status || '').toLowerCase();
-      return status === 'pending' || status === 'processing' ? 3000 : false;
+      return status === 'pending' || status === 'processing' || status === 'rendering' ? 3000 : false;
     },
   });
 
@@ -123,7 +122,7 @@ export default function ScanReportPage() {
 
   const generateAsyncReportMutation = useMutation({
     mutationFn: () => scansService.generateReport(id, {
-      reportMode,
+      reportMode: DEFAULT_REPORT_MODE,
       outputFormats,
       idempotencyKey,
     }),
@@ -154,6 +153,33 @@ export default function ScanReportPage() {
     },
   });
 
+  const downloadJsonReportMutation = useMutation({
+    mutationFn: () => scansService.downloadGeneratedReport(generatedReportId!, 'Json'),
+    onSuccess: (blob) => {
+      const objectUrl = window.URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = objectUrl;
+      link.download = `generated-report-${generatedReportId}.json`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(objectUrl);
+      toast.success(t('asyncReport.downloadJsonSuccess'));
+    },
+    onError: (error: any) => {
+      toast.error(error?.message || t('asyncReport.downloadJsonError'));
+    },
+  });
+
+  const generatedReportState = String(generatedReportStatus?.status || '').toLowerCase();
+  const generatedReportReady = generatedReportState === 'completed' && !!generatedReportId;
+
+  const { data: jsonReport } = useQuery({
+    queryKey: ['generated-json-report', generatedReportId],
+    queryFn: () => scansService.fetchJsonReport(generatedReportId!),
+    enabled: generatedReportReady,
+  });
+
   const formatDate = (value?: string) => (value ? new Date(value).toLocaleString(locale) : '-');
 
   if (scanLoading || reportLoading) {
@@ -177,16 +203,10 @@ export default function ScanReportPage() {
     return <PanelEmptyState title={td('reportUnavailable')} />;
   }
 
-  const severityCounts = {
-    Critical: report?.criticalCount ?? report?.vulnerabilityCounts?.Critical ?? 0,
-    High: report?.highCount ?? report?.vulnerabilityCounts?.High ?? 0,
-    Medium: report?.mediumCount ?? report?.vulnerabilityCounts?.Medium ?? 0,
-    Low: report?.lowCount ?? report?.vulnerabilityCounts?.Low ?? 0,
-    Info: report?.infoCount ?? report?.vulnerabilityCounts?.Info ?? 0,
-  };
+  const severityCounts = buildSeverityCounts(report, vulnerabilities);
 
-  const totalVulnerabilities = report?.totalVulnerabilities ?? Object.values(severityCounts).reduce((sum, value) => sum + value, 0);
-  const overallRiskScore = report?.overallRiskScore ?? report?.riskScore ?? 0;
+  const totalVulnerabilities = getTotalVulnerabilities(report, severityCounts, vulnerabilities);
+  const overallRiskScore = getOverallRiskScore(report);
   const severityRank: Record<string, number> = { Critical: 5, High: 4, Medium: 3, Low: 2, Info: 1 };
   const chartEntries = (Object.entries(severityCounts) as Array<[keyof typeof severityCounts, number]>).map(([label, value]) => ({
     label,
@@ -196,9 +216,18 @@ export default function ScanReportPage() {
   const donutSegments = buildDonutSegments(chartEntries);
   const highestSeverityCount = Math.max(...chartEntries.map((entry) => entry.value), 1);
   const riskPercentage = Math.max(0, Math.min(overallRiskScore, 100));
-  const generatedReportState = String(generatedReportStatus?.status || '').toLowerCase();
-  const generatedReportReady = generatedReportState === 'completed' && !!generatedReportId;
   const canDownloadGeneratedReport = generatedReportReady && !downloadGeneratedReportMutation.isPending;
+
+  const normalizedScanStatus = normalizeScanStatus(scan.status);
+  const statusKey = getScanStatusTranslationKey(scan.status);
+  const scanDisplayName = getScanDisplayName(scan) || t('title', { id: scan.id.slice(0, 8) });
+  const scanCompleted =
+    normalizedScanStatus === 'Completed' || normalizedScanStatus === 'CompletedWithLimits';
+  const showZeroFindings =
+    scanCompleted &&
+    totalVulnerabilities === 0 &&
+    (vulnerabilities?.length ?? 0) === 0 &&
+    (jsonReport?.vulnerabilities?.length ?? 0) === 0;
 
   const filteredVulnerabilities = (() => {
     const normalizedSearch = searchTerm.trim().toLowerCase();
@@ -242,6 +271,8 @@ export default function ScanReportPage() {
   const sectionLinks = [
     { href: '#summary', label: t('nav.summary') },
     { href: '#charts', label: t('nav.charts') },
+    ...(jsonReport?.executiveSummary ? [{ href: '#executive-summary', label: t('nav.executiveSummary') }] : []),
+    ...(jsonReport?.priorityFixTable?.length ? [{ href: '#priority-fix', label: t('nav.priorityFix') }] : []),
     { href: '#vulnerabilities', label: t('nav.vulnerabilities') },
   ];
 
@@ -251,11 +282,11 @@ export default function ScanReportPage() {
         <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div>
             <p className="text-xs font-semibold uppercase tracking-[0.18em] text-cyan-300">{t('eyebrow')}</p>
-            <h1 className="mt-2 text-3xl font-bold text-text-primary">{t('title', { id: scan.id.slice(0, 8) })}</h1>
+            <h1 className="mt-2 text-3xl font-bold text-text-primary">{scanDisplayName}</h1>
             <div className="mt-3 flex flex-wrap items-center gap-2 text-sm text-text-secondary">
               <span className="text-xs font-semibold uppercase tracking-wider text-text-muted">{td('statusLabel')}</span>
-              <span className="inline-flex items-center rounded-full border border-white/14 bg-white/8 px-2.5 py-1 text-xs font-semibold text-text-primary">
-                {scan.status}
+              <span className={`inline-flex items-center rounded-full px-2.5 py-1 text-xs font-semibold ${scanStatusClassMap[normalizedScanStatus] || scanStatusClassMap.Unknown}`}>
+                {td(`status.${statusKey}`)}
               </span>
               <span className="text-xs text-text-muted">•</span>
               <span>{t('reportMeta', { date: formatDate(report?.generatedAt) })}</span>
@@ -286,6 +317,15 @@ export default function ScanReportPage() {
         </div>
       </div>
 
+      {!report && isTerminalScanStatus(normalizedScanStatus) && (
+        <div className="rounded-2xl border border-status-warning/30 bg-status-warning/12 p-4 text-sm text-status-warning">
+          <div className="flex items-start gap-2">
+            <AlertTriangle className="h-5 w-5 shrink-0" />
+            <p>{td('reportUnavailable')}</p>
+          </div>
+        </div>
+      )}
+
       <div className="app-panel rounded-2xl p-6 shadow-sm">
         <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
           <div>
@@ -315,48 +355,33 @@ export default function ScanReportPage() {
         </div>
 
         <div className="mt-4 grid grid-cols-1 gap-3 lg:grid-cols-[1fr_auto]">
-          <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
-            <label className="space-y-1">
-              <span className="text-xs font-semibold uppercase tracking-wide text-text-muted">{t('asyncReport.reportMode')}</span>
-              <select
-                value={reportMode}
-                onChange={(event) => setReportMode(event.target.value)}
-                className="h-11 w-full rounded-lg border border-cyan-400/18 bg-white/5 px-3 text-sm text-text-primary outline-none focus:border-cyan-300/70 focus:ring-2 focus:ring-cyan-300/45"
-              >
-                <option value="standard">{t('asyncReport.modes.standard')}</option>
-                <option value="detailed">{t('asyncReport.modes.detailed')}</option>
-                <option value="comprehensive">{t('asyncReport.modes.comprehensive')}</option>
-              </select>
-            </label>
-
-            <div className="space-y-1">
-              <span className="text-xs font-semibold uppercase tracking-wide text-text-muted">{t('asyncReport.outputFormats')}</span>
-              <div className="flex flex-wrap gap-2">
-                {['Pdf', 'Json'].map((format) => {
-                  const checked = format === 'Pdf' ? true : outputFormats.includes(format);
-                  return (
-                    <label key={format} className={`inline-flex cursor-pointer items-center gap-2 rounded-lg border px-3 py-2 text-sm transition ${checked ? 'border-cyan-300/35 bg-cyan-400/12 text-text-primary' : 'border-white/14 bg-white/6 text-text-secondary hover:bg-white/10'}`}>
-                      <input
-                        type="checkbox"
-                        checked={checked}
-                        disabled={format === 'Pdf'}
-                        onChange={(event) => {
-                          if (format === 'Pdf') {
-                            return;
-                          }
-                          setOutputFormats((current) =>
-                            event.target.checked
-                              ? Array.from(new Set([...current, format]))
-                              : current.filter((item) => item !== format)
-                          );
-                        }}
-                        className="h-4 w-4 rounded border-cyan-300/35 bg-transparent text-cyan-300 focus:ring-cyan-300/45"
-                      />
-                      {format}
-                    </label>
-                  );
-                })}
-              </div>
+          <div className="space-y-1">
+            <span className="text-xs font-semibold uppercase tracking-wide text-text-muted">{t('asyncReport.outputFormats')}</span>
+            <div className="flex flex-wrap gap-2">
+              {['Pdf', 'Json'].map((format) => {
+                const checked = format === 'Pdf' ? true : outputFormats.includes(format);
+                return (
+                  <label key={format} className={`inline-flex cursor-pointer items-center gap-2 rounded-lg border px-3 py-2 text-sm transition ${checked ? 'border-cyan-300/35 bg-cyan-400/12 text-text-primary' : 'border-white/14 bg-white/6 text-text-secondary hover:bg-white/10'}`}>
+                    <input
+                      type="checkbox"
+                      checked={checked}
+                      disabled={format === 'Pdf'}
+                      onChange={(event) => {
+                        if (format === 'Pdf') {
+                          return;
+                        }
+                        setOutputFormats((current) =>
+                          event.target.checked
+                            ? Array.from(new Set([...current, format]))
+                            : current.filter((item) => item !== format)
+                        );
+                      }}
+                      className="h-4 w-4 rounded border-cyan-300/35 bg-transparent text-cyan-300 focus:ring-cyan-300/45"
+                    />
+                    {format}
+                  </label>
+                );
+              })}
             </div>
           </div>
 
@@ -388,11 +413,31 @@ export default function ScanReportPage() {
               <Download className="h-4 w-4" />
               {downloadGeneratedReportMutation.isPending ? t('asyncReport.downloading') : t('asyncReport.downloadButton')}
             </button>
+            <button
+              type="button"
+              onClick={() => downloadJsonReportMutation.mutate()}
+              disabled={!canDownloadGeneratedReport || downloadJsonReportMutation.isPending}
+              className="inline-flex items-center justify-center gap-2 rounded-lg border border-white/14 bg-white/6 px-4 py-2 text-sm font-medium text-text-secondary hover:bg-white/10 disabled:cursor-not-allowed disabled:opacity-50"
+            >
+              <Download className="h-4 w-4" />
+              {downloadJsonReportMutation.isPending ? t('asyncReport.downloadingJson') : t('asyncReport.downloadJsonButton')}
+            </button>
           </div>
         </div>
 
         {generatedReportStatus?.errorMessage && generatedReportState === 'failed' && (
-          <p className="mt-4 text-sm text-status-danger">{generatedReportStatus.errorMessage}</p>
+          <div className="mt-4 rounded-xl border border-status-danger/30 bg-status-danger/12 p-4">
+            <p className="text-sm text-status-danger">{generatedReportStatus.errorMessage}</p>
+            <button
+              type="button"
+              onClick={() => generateAsyncReportMutation.mutate()}
+              disabled={generateAsyncReportMutation.isPending}
+              className="mt-3 inline-flex items-center gap-2 rounded-lg border border-status-danger/35 bg-status-danger/16 px-3 py-2 text-xs font-semibold text-status-danger hover:bg-status-danger/22 disabled:opacity-50"
+            >
+              <RefreshCw className="h-3.5 w-3.5" />
+              {t('asyncReport.retryButton')}
+            </button>
+          </div>
         )}
 
         {generatedReportId && !generatedReportReady && generatedReportState !== 'failed' && (
@@ -431,7 +476,7 @@ export default function ScanReportPage() {
             <AlertTriangle className="h-4 w-4" />
             {t('cards.scanStatus')}
           </div>
-          <p className="mt-3 text-base font-semibold text-text-primary">{scan.status}</p>
+          <p className="mt-3 text-base font-semibold text-text-primary">{td(`status.${statusKey}`)}</p>
         </div>
       </div>
 
@@ -613,6 +658,33 @@ export default function ScanReportPage() {
           </div>
         </div>
       </div>
+
+      {jsonReport?.executiveSummary && (
+        <div id="executive-summary" className="scroll-mt-24">
+          <ExecutiveSummarySection summary={jsonReport.executiveSummary} />
+        </div>
+      )}
+
+      {jsonReport?.priorityFixTable && jsonReport.priorityFixTable.length > 0 && (
+        <div id="priority-fix" className="scroll-mt-24">
+          <PriorityFixTable rows={jsonReport.priorityFixTable} />
+        </div>
+      )}
+
+      {showZeroFindings ? (
+        <ZeroFindingsState />
+      ) : null}
+
+      {(jsonReport?.vulnerabilities?.length ?? 0) > 0 && (
+        <div id="json-findings" className="space-y-4 scroll-mt-24">
+          <h2 className="text-xl font-semibold text-text-primary">{t('jsonFindings.title')}</h2>
+          <div className="space-y-4">
+            {jsonReport?.vulnerabilities?.map((vuln, index) => (
+              <JsonVulnerabilityCard key={vuln.vulnId ?? `${vuln.title}-${index}`} vulnerability={vuln} />
+            ))}
+          </div>
+        </div>
+      )}
 
       <div id="vulnerabilities" className="rounded-2xl border border-white/14 bg-white/6 p-6 shadow-sm scroll-mt-24">
         <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">

@@ -2,6 +2,7 @@ import { endpoints } from '../api/endpoints';
 import { ApiRequestError, client } from '../api/client';
 import type {
   CreateScanRequest,
+  AddCreditsToScanRequest,
   TargetBrowserAuthRequest,
   AiScanConfigurationRequest,
   AiScanConfigurationResponse,
@@ -16,6 +17,9 @@ const isTransientGatewayError = (error: unknown) =>
   error instanceof ApiRequestError && (error.status === 502 || error.status === 503 || error.status === 504);
 
 const wait = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+
+const isOptionalResourceMissing = (error: unknown) =>
+  error instanceof ApiRequestError && (error.status === 404 || error.status === 400);
 
 export const scansService = {
   // Targets
@@ -39,6 +43,9 @@ export const scansService = {
   async createScan(data: CreateScanRequest) {
     return endpoints.scans.create(data);
   },
+  async getToolConfigSchema() {
+    return endpoints.scans.getToolConfigSchema();
+  },
   async createScanLegacy(targetId: string, toolNames?: string[]) {
     return endpoints.scans.createLegacy(targetId, toolNames);
   },
@@ -48,14 +55,37 @@ export const scansService = {
   async getScanDetails(id: string) {
     return endpoints.scans.get(id);
   },
+  async getQueueEstimate(id: string) {
+    try {
+      return await endpoints.scans.getQueueEstimate(id);
+    } catch (error) {
+      if (error instanceof ApiRequestError && error.status === 404) {
+        return null;
+      }
+      throw error;
+    }
+  },
   async cancelScan(id: string) {
     return endpoints.scans.cancel(id);
+  },
+  async addCreditsToScan(id: string, data: AddCreditsToScanRequest) {
+    return endpoints.scans.addCredits(id, data);
   },
   async getScanTools(id: string) {
     return endpoints.scans.getTools(id);
   },
   async getToolEstimatedFinishTime(id: string, toolId: string) {
     return endpoints.scans.getToolEstimatedFinishTime(id, toolId);
+  },
+  async getToolEstimatedFinishTimeOptional(id: string, toolId: string) {
+    try {
+      return await endpoints.scans.getToolEstimatedFinishTime(id, toolId);
+    } catch (error) {
+      if (isOptionalResourceMissing(error)) {
+        return null;
+      }
+      throw error;
+    }
   },
   async exportScanPdf(id: string) {
     return endpoints.reports.export(id);
@@ -71,6 +101,16 @@ export const scansService = {
   async getReport(scanId: string) {
     return endpoints.reports.get(scanId);
   },
+  async getReportOptional(scanId: string) {
+    try {
+      return await endpoints.reports.get(scanId);
+    } catch (error) {
+      if (isOptionalResourceMissing(error)) {
+        return null;
+      }
+      throw error;
+    }
+  },
   async generateReport(scanId: string, data: GenerateScanReportRequest) {
     return endpoints.reports.generate(scanId, data);
   },
@@ -79,6 +119,11 @@ export const scansService = {
   },
   async downloadGeneratedReport(reportId: string, format: string = 'Pdf') {
     return endpoints.reports.download(reportId, format);
+  },
+  async fetchJsonReport(reportId: string) {
+    const blob = await endpoints.reports.download(reportId, 'Json');
+    const { parseJsonReportBlob } = await import('../reports/parseJsonReport');
+    return parseJsonReportBlob(blob);
   },
 
   // AI

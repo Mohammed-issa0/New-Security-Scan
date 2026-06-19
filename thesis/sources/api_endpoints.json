@@ -1,0 +1,536 @@
+[
+  {
+    "path": "/api/v1/admin/audit-logs",
+    "method": "GET",
+    "tag": "Admin",
+    "summary": "—"
+  },
+  {
+    "path": "/api/v1/admin/scans",
+    "method": "GET",
+    "tag": "Admin",
+    "summary": "—"
+  },
+  {
+    "path": "/api/v1/admin/scans",
+    "method": "POST",
+    "tag": "Admin",
+    "summary": "—"
+  },
+  {
+    "path": "/api/v1/admin/scans/cancel-all",
+    "method": "POST",
+    "tag": "Admin",
+    "summary": "Admin-only: cancel all scans that are Pending or Running. Marks each scan as Canceled, marks Pending/Running tools as Fa"
+  },
+  {
+    "path": "/api/v1/admin/scans/{id}",
+    "method": "DELETE",
+    "tag": "Admin",
+    "summary": "—"
+  },
+  {
+    "path": "/api/v1/admin/scans/{id}",
+    "method": "GET",
+    "tag": "Admin",
+    "summary": "—"
+  },
+  {
+    "path": "/api/v1/admin/scans/{id}",
+    "method": "PUT",
+    "tag": "Admin",
+    "summary": "—"
+  },
+  {
+    "path": "/api/v1/admin/scans/{id}/export/pdf",
+    "method": "GET",
+    "tag": "Admin",
+    "summary": "Exports scan report as PDF (admin version - any scan)."
+  },
+  {
+    "path": "/api/v1/admin/scans/{id}/force-fail",
+    "method": "POST",
+    "tag": "Admin",
+    "summary": "Admin-only operational endpoint to force-fail a stuck scan (e.g., a scan left Running due to a crash). This will set Sca"
+  },
+  {
+    "path": "/api/v1/admin/users",
+    "method": "GET",
+    "tag": "Admin",
+    "summary": "—"
+  },
+  {
+    "path": "/api/v1/admin/users",
+    "method": "POST",
+    "tag": "Admin",
+    "summary": "—"
+  },
+  {
+    "path": "/api/v1/admin/users/{id}",
+    "method": "DELETE",
+    "tag": "Admin",
+    "summary": "—"
+  },
+  {
+    "path": "/api/v1/admin/users/{id}",
+    "method": "GET",
+    "tag": "Admin",
+    "summary": "—"
+  },
+  {
+    "path": "/api/v1/admin/users/{id}",
+    "method": "PUT",
+    "tag": "Admin",
+    "summary": "—"
+  },
+  {
+    "path": "/api/v1/admin/billing/grant-plan",
+    "method": "POST",
+    "tag": "AdminBilling",
+    "summary": "Admin-only helper to grant a plan to a user (no Stripe). Useful for support and local testing."
+  },
+  {
+    "path": "/api/v1/admin/plans",
+    "method": "GET",
+    "tag": "AdminPlans",
+    "summary": "List all plan definitions."
+  },
+  {
+    "path": "/api/v1/admin/plans/user-plans",
+    "method": "GET",
+    "tag": "AdminPlans",
+    "summary": "List all user plan instances."
+  },
+  {
+    "path": "/api/v1/admin/plans/user-plans/{id}",
+    "method": "DELETE",
+    "tag": "AdminPlans",
+    "summary": "Delete user plan."
+  },
+  {
+    "path": "/api/v1/admin/plans/user-plans/{id}",
+    "method": "GET",
+    "tag": "AdminPlans",
+    "summary": "Get user plan details by ID."
+  },
+  {
+    "path": "/api/v1/admin/plans/user-plans/{id}",
+    "method": "PUT",
+    "tag": "AdminPlans",
+    "summary": "Update user plan."
+  },
+  {
+    "path": "/api/v1/admin/plans/{planName}",
+    "method": "DELETE",
+    "tag": "AdminPlans",
+    "summary": "Delete plan definition."
+  },
+  {
+    "path": "/api/v1/admin/plans/{planName}",
+    "method": "GET",
+    "tag": "AdminPlans",
+    "summary": "Get plan definition by name."
+  },
+  {
+    "path": "/api/v1/admin/plans/{planName}",
+    "method": "PUT",
+    "tag": "AdminPlans",
+    "summary": "Replace entire plan definition by plan name."
+  },
+  {
+    "path": "/api/v1/admin/queue",
+    "method": "GET",
+    "tag": "AdminQueue",
+    "summary": "Get current VPS queue with estimated finish times."
+  },
+  {
+    "path": "/api/v1/admin/queue/reorder",
+    "method": "PUT",
+    "tag": "AdminQueue",
+    "summary": "Reorder a job in the VPS queue."
+  },
+  {
+    "path": "/api/v1/admin/queue/{vpsJobId}",
+    "method": "DELETE",
+    "tag": "AdminQueue",
+    "summary": "Delete a job from the VPS queue."
+  },
+  {
+    "path": "/api/v1/ai/scan-config",
+    "method": "POST",
+    "tag": "Ai",
+    "summary": "Pre-scan: converts a user's intent into a strict scan configuration (AI-powered)."
+  },
+  {
+    "path": "/api/v1/ai/scans/{scanId}/report",
+    "method": "POST",
+    "tag": "Ai",
+    "summary": "Post-scan: generates a summarized vulnerability report (AI-powered) for an existing scan."
+  },
+  {
+    "path": "/api/v1/auth/login",
+    "method": "POST",
+    "tag": "Auth",
+    "summary": "Step 1 of 2 for login. Validates credentials and sends a 6-digit verification code to the account email. Complete login "
+  },
+  {
+    "path": "/api/v1/auth/refresh",
+    "method": "POST",
+    "tag": "Auth",
+    "summary": "Issues a new access token using a valid refresh token."
+  },
+  {
+    "path": "/api/v1/auth/register",
+    "method": "POST",
+    "tag": "Auth",
+    "summary": "Step 1 of 2 for registration. Creates a pending account and sends a 6-digit verification code to the supplied email. Com"
+  },
+  {
+    "path": "/api/v1/auth/verify-otp",
+    "method": "POST",
+    "tag": "Auth",
+    "summary": "Step 2 of 2 for both registration and login. Submits the 6-digit code received by email together with the otpToken retur"
+  },
+  {
+    "path": "/api/v1/billing/checkout/extra-credit",
+    "method": "POST",
+    "tag": "Billing",
+    "summary": "—"
+  },
+  {
+    "path": "/api/v1/billing/checkout/plan",
+    "method": "POST",
+    "tag": "Billing",
+    "summary": "—"
+  },
+  {
+    "path": "/api/v1/billing/purchase-extra-scan",
+    "method": "POST",
+    "tag": "Billing",
+    "summary": "Purchase an extra scan credit without Stripe payment (direct purchase for testing/admin)."
+  },
+  {
+    "path": "/api/v1/billing/purchase-plan",
+    "method": "POST",
+    "tag": "Billing",
+    "summary": "Purchase or renew a plan without Stripe payment (direct purchase for testing/admin)."
+  },
+  {
+    "path": "/api/extension/scan",
+    "method": "POST",
+    "tag": "ExtensionScan",
+    "summary": "—"
+  },
+  {
+    "path": "/api/extension/scan/{scanId}",
+    "method": "GET",
+    "tag": "ExtensionScan",
+    "summary": "—"
+  },
+  {
+    "path": "/api/v1/guided-setup",
+    "method": "POST",
+    "tag": "GuidedSetup",
+    "summary": "Start a new guided setup session and receive the first question."
+  },
+  {
+    "path": "/api/v1/guided-setup/{sessionId}",
+    "method": "GET",
+    "tag": "GuidedSetup",
+    "summary": "Get the current state of a guided setup session (for resume / display)."
+  },
+  {
+    "path": "/api/v1/guided-setup/{sessionId}/answer",
+    "method": "POST",
+    "tag": "GuidedSetup",
+    "summary": "Submit an answer to the current question and advance the wizard. Returns either the next question or the final scan reco"
+  },
+  {
+    "path": "/api/v1/guided-setup/{sessionId}/create-scan",
+    "method": "POST",
+    "tag": "GuidedSetup",
+    "summary": "Create a real scan from a completed session's recommendation. The session must be in Complete status."
+  },
+  {
+    "path": "/api/v1/jira/oauth/callback",
+    "method": "GET",
+    "tag": "JiraOAuth",
+    "summary": "Handles the OAuth callback from Atlassian. This endpoint is hit by the user's browser as a redirect from Atlassian — no "
+  },
+  {
+    "path": "/api/v1/jira/oauth/developers",
+    "method": "GET",
+    "tag": "JiraOAuth",
+    "summary": "Returns all locally mapped developer profiles for the authenticated user."
+  },
+  {
+    "path": "/api/v1/jira/oauth/developers/search",
+    "method": "GET",
+    "tag": "JiraOAuth",
+    "summary": "Searches for Jira users by display name or email fragment on a specific site."
+  },
+  {
+    "path": "/api/v1/jira/oauth/developers/verify",
+    "method": "POST",
+    "tag": "JiraOAuth",
+    "summary": "Verifies a Jira account exists on the site and creates/updates a local developer mapping."
+  },
+  {
+    "path": "/api/v1/jira/oauth/developers/{jiraAccountId}",
+    "method": "DELETE",
+    "tag": "JiraOAuth",
+    "summary": "Soft-deletes a developer mapping."
+  },
+  {
+    "path": "/api/v1/jira/oauth/developers/{jiraAccountId}/role",
+    "method": "PUT",
+    "tag": "JiraOAuth",
+    "summary": "Updates the custom role label for an existing developer mapping."
+  },
+  {
+    "path": "/api/v1/jira/oauth/disconnect",
+    "method": "DELETE",
+    "tag": "JiraOAuth",
+    "summary": "Disconnects the Atlassian OAuth integration (removes stored tokens)."
+  },
+  {
+    "path": "/api/v1/jira/oauth/initiate",
+    "method": "GET",
+    "tag": "JiraOAuth",
+    "summary": "Returns the Atlassian OAuth authorization URL. The frontend should redirect the user's browser to this URL."
+  },
+  {
+    "path": "/api/v1/jira/oauth/projects",
+    "method": "GET",
+    "tag": "JiraOAuth",
+    "summary": "Returns all Jira projects for a specific site (cloudId)."
+  },
+  {
+    "path": "/api/v1/jira/oauth/sites",
+    "method": "GET",
+    "tag": "JiraOAuth",
+    "summary": "Returns all Jira sites accessible by the connected Atlassian account."
+  },
+  {
+    "path": "/api/v1/jira/oauth/status",
+    "method": "GET",
+    "tag": "JiraOAuth",
+    "summary": "Returns the current Atlassian OAuth connection status for the authenticated user."
+  },
+  {
+    "path": "/api/v1/jira/oauth/test-connection",
+    "method": "POST",
+    "tag": "JiraOAuth",
+    "summary": "Performs a live connectivity test against the specified Jira site."
+  },
+  {
+    "path": "/api/v1/jira-projects",
+    "method": "GET",
+    "tag": "JiraProjects",
+    "summary": "Get all Jira projects for the current user."
+  },
+  {
+    "path": "/api/v1/jira-projects",
+    "method": "POST",
+    "tag": "JiraProjects",
+    "summary": "Create a new Jira project configuration."
+  },
+  {
+    "path": "/api/v1/jira-projects/unlink-target/{targetId}",
+    "method": "DELETE",
+    "tag": "JiraProjects",
+    "summary": "Unlink a Jira project from a target."
+  },
+  {
+    "path": "/api/v1/jira-projects/{id}",
+    "method": "DELETE",
+    "tag": "JiraProjects",
+    "summary": "Delete (soft delete) a Jira project."
+  },
+  {
+    "path": "/api/v1/jira-projects/{id}",
+    "method": "GET",
+    "tag": "JiraProjects",
+    "summary": "Get a specific Jira project by ID."
+  },
+  {
+    "path": "/api/v1/jira-projects/{id}",
+    "method": "PUT",
+    "tag": "JiraProjects",
+    "summary": "Update a Jira project configuration."
+  },
+  {
+    "path": "/api/v1/jira-projects/{id}/link-target",
+    "method": "POST",
+    "tag": "JiraProjects",
+    "summary": "Link a Jira project to a target."
+  },
+  {
+    "path": "/api/v1/jira-projects/{id}/test-connection",
+    "method": "POST",
+    "tag": "JiraProjects",
+    "summary": "Test Jira connection for a project."
+  },
+  {
+    "path": "/api/v1/plans",
+    "method": "GET",
+    "tag": "Plans",
+    "summary": "Public list of available plans (prices, credits, max runtime, enabled tools)."
+  },
+  {
+    "path": "/api/v1/plans/me",
+    "method": "GET",
+    "tag": "Plans",
+    "summary": "Returns the current user's active plan + remaining credits."
+  },
+  {
+    "path": "/api/v1/reports/generated/{reportId}/download",
+    "method": "GET",
+    "tag": "Reports",
+    "summary": "—"
+  },
+  {
+    "path": "/api/v1/reports/generated/{reportId}/status",
+    "method": "GET",
+    "tag": "Reports",
+    "summary": "—"
+  },
+  {
+    "path": "/api/v1/reports/{scanId}",
+    "method": "GET",
+    "tag": "Reports",
+    "summary": "—"
+  },
+  {
+    "path": "/api/v1/reports/{scanId}/export",
+    "method": "GET",
+    "tag": "Reports",
+    "summary": "—"
+  },
+  {
+    "path": "/api/v1/reports/{scanId}/generate",
+    "method": "POST",
+    "tag": "Reports",
+    "summary": "—"
+  },
+  {
+    "path": "/api/v1/scans",
+    "method": "GET",
+    "tag": "Scans",
+    "summary": "—"
+  },
+  {
+    "path": "/api/v1/scans",
+    "method": "POST",
+    "tag": "Scans",
+    "summary": "Creates a new security scan."
+  },
+  {
+    "path": "/api/v1/scans/{id}",
+    "method": "GET",
+    "tag": "Scans",
+    "summary": "—"
+  },
+  {
+    "path": "/api/v1/scans/{id}/cancel",
+    "method": "POST",
+    "tag": "Scans",
+    "summary": "—"
+  },
+  {
+    "path": "/api/v1/scans/{id}/export/pdf",
+    "method": "GET",
+    "tag": "Scans",
+    "summary": "Exports scan report as PDF with Arabic support."
+  },
+  {
+    "path": "/api/v1/scans/{id}/tools",
+    "method": "GET",
+    "tag": "Scans",
+    "summary": "—"
+  },
+  {
+    "path": "/api/v1/scans/{id}/tools/{toolId}/estimated-finish-time",
+    "method": "GET",
+    "tag": "Scans",
+    "summary": "Gets estimated finish time for a scan tool job."
+  },
+  {
+    "path": "/api/v1/scans/{id}/vulnerabilities",
+    "method": "GET",
+    "tag": "Scans",
+    "summary": "—"
+  },
+  {
+    "path": "/api/v1/scans/{scanId}/jira-tickets",
+    "method": "POST",
+    "tag": "Scans",
+    "summary": "Create Jira tickets for an existing scan (manual/retroactive ticket creation)."
+  },
+  {
+    "path": "/internal/scans/{scanId}/findings",
+    "method": "GET",
+    "tag": "Scans",
+    "summary": "INTERNAL ONLY: Get raw findings for a scan (for report generation microservice). Requires X-Internal-Service-Token heade"
+  },
+  {
+    "path": "/internal/scans/{scanId}/trend",
+    "method": "GET",
+    "tag": "Scans",
+    "summary": "INTERNAL ONLY: Get trend data for a scan (for report generation microservice). Requires X-Internal-Service-Token header."
+  },
+  {
+    "path": "/api/v1/stripe/webhook",
+    "method": "POST",
+    "tag": "StripeWebhook",
+    "summary": "—"
+  },
+  {
+    "path": "/api/v1/targets",
+    "method": "GET",
+    "tag": "Targets",
+    "summary": "—"
+  },
+  {
+    "path": "/api/v1/targets",
+    "method": "POST",
+    "tag": "Targets",
+    "summary": "—"
+  },
+  {
+    "path": "/api/v1/targets/{id}",
+    "method": "DELETE",
+    "tag": "Targets",
+    "summary": "—"
+  },
+  {
+    "path": "/api/v1/targets/{id}/browser-auth",
+    "method": "DELETE",
+    "tag": "Targets",
+    "summary": "Remove browser-based auth configuration from a target."
+  },
+  {
+    "path": "/api/v1/targets/{id}/browser-auth",
+    "method": "PUT",
+    "tag": "Targets",
+    "summary": "Set browser-based login credentials for a target (for authenticated scanning). Credentials are encrypted and used by the"
+  },
+  {
+    "path": "/api/v1/users/me",
+    "method": "GET",
+    "tag": "Users",
+    "summary": "—"
+  },
+  {
+    "path": "/api/v1/users/me",
+    "method": "PUT",
+    "tag": "Users",
+    "summary": "—"
+  },
+  {
+    "path": "/api/v1/vps/webhook",
+    "method": "POST",
+    "tag": "VpsWebhook",
+    "summary": "Receives webhook callbacks from VPS when a job completes. Authenticates using Bearer token (same token used for VPS API "
+  }
+]

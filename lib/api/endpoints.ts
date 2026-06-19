@@ -6,6 +6,8 @@ import {
   TargetBrowserAuthRequest,
   Scan,
   CreateScanRequest,
+  AddCreditsToScanRequest,
+  AddCreditsToScanResponse,
   ToolStatus,
   Vulnerability,
   Report,
@@ -28,6 +30,8 @@ import {
   UpdateJiraProjectRequest,
   LinkJiraProjectRequest,
   EstimatedFinishTime,
+  ScanQueueEstimate,
+  ToolConfigSchemaResponse,
   PaginatedResponse,
   AiScanConfigurationRequest,
   AiScanConfigurationResponse,
@@ -108,6 +112,8 @@ export const endpoints = {
       return client.get(`/scans?${params.toString()}`);
     },
     get: (id: string): Promise<Scan> => client.get(`/scans/${id}`),
+    getQueueEstimate: (id: string): Promise<ScanQueueEstimate> =>
+      client.get(`/scans/${id}/queue-estimate`),
     cancel: (id: string) => client.post(`/scans/${id}/cancel`),
     getTools: (id: string): Promise<ToolStatus[]> => client.get(`/scans/${id}/tools`),
     getToolEstimatedFinishTime: (id: string, toolId: string): Promise<EstimatedFinishTime> =>
@@ -116,6 +122,10 @@ export const endpoints = {
     createJiraTickets: (scanId: string): Promise<CreateJiraTicketsResponse> =>
       client.post(`/scans/${scanId}/jira-tickets`),
     getVulnerabilities: (id: string): Promise<Vulnerability[]> => client.get(`/scans/${id}/vulnerabilities`),
+    addCredits: (id: string, data: AddCreditsToScanRequest): Promise<AddCreditsToScanResponse> =>
+      client.post(`/scans/${id}/credits`, data),
+    getToolConfigSchema: (): Promise<ToolConfigSchemaResponse> =>
+      client.get('/scans/tool-config-schema'),
   },
   reports: {
     get: (scanId: string): Promise<Report> => client.get(`/reports/${scanId}`),

@@ -19,13 +19,7 @@ export default async function NewScanPage({ params: { locale } }: { params: { lo
         <p className="text-sm font-medium text-text-secondary">{t('subtitle')}</p>
       </div>
 
-      <ScanForm
-        showAiAssistant={false}
-        hideTimeoutField
-        hideToolConfig
-        hideAdvancedSettings
-      />
+      <ScanForm />
     </div>
   );
 }
-

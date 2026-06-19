@@ -272,6 +272,7 @@
         "statusConfigured": "Configured",
         "statusNotConfigured": "Not configured",
         "loginUrl": "Login URL",
+        "loginUrlAutoDetectHint": "Leave empty to auto-detect. If auto-detection fails you will be asked to provide it.",
         "targetUrl": "Target URL",
         "username": "Username",
         "password": "Password",
@@ -512,6 +513,40 @@
         "toolLabel": "Filter by tool",
         "allTools": "All tools"
       },
+      "credits": {
+        "column": "Credits",
+        "allocated": "Credits: {count} allocated",
+        "used": "Credits: {count} used",
+        "usedWithRefund": "{used} used · {refunded} refunded",
+        "refundBadge": "{count} credit(s) refunded"
+      },
+      "profile": {
+        "column": "Profile"
+      },
+      "concurrent": {
+        "usage": "Active scans: {active} of {max} concurrent slots",
+        "slot": "Counts toward concurrent limit ({max} max)"
+      },
+      "queueEstimate": {
+        "estimatedStart": "Estimated start: in {duration}",
+        "position": "Position #{position} in queue",
+        "currentlyRunning": "Currently running",
+        "runningRemaining": "Running — {duration} remaining",
+        "creditsAddedFinish": "Credits added — new estimated finish: {time}"
+      },
+      "addCredits": {
+        "button": "Add Scan Credit",
+        "title": "Add scan credits",
+        "description": "Extend this scan's maximum runtime by allocating additional credits.",
+        "available": "You have {count} credit(s) available.",
+        "preview": "New total budget: {budget} credits · Max runtime: {minutes} min",
+        "zapWarning": "For best results with ZAP scans on large websites, pre-allocate the credits you need before starting the scan. Mid-scan extension may not restart ZAP if it already hit its runtime limit.",
+        "cancel": "Cancel",
+        "confirm": "Add credits",
+        "confirming": "Adding...",
+        "success": "Scan extended by {count} credit(s). New budget: {budget}.",
+        "refundToast": "Scan already finished. Your credits were automatically refunded."
+      },
       "details": {
         "eyebrow": "Scan workspace",
         "title": "Scan #{id}",
@@ -602,9 +637,22 @@
           "pending": "Pending",
           "running": "Running",
           "completed": "Completed",
+          "completedwithlimits": "Completed with limits",
           "failed": "Failed",
           "canceled": "Canceled",
           "unknown": "Unknown"
+        },
+        "creditsLabel": "Credits",
+        "banners": {
+          "loginUrlCta": "Update browser auth settings",
+          "technicalDetails": "Technical failure details"
+        },
+        "completedWithLimits": {
+          "default": "The scan stopped at the credit time limit.",
+          "upgraded": "The scan exhausted all {credits} credits ({minutes} min). The website's attack surface is larger than expected. Consider upgrading your plan or contacting support."
+        },
+        "addCredits": {
+          "button": "Add Scan Credit"
         },
         "requestedAt": "Requested {date}",
         "requestedAtLabel": "Requested",
@@ -649,6 +697,11 @@
           "generating": "Generating...",
           "refreshStatus": "Refresh status",
           "downloadButton": "Download generated PDF",
+          "downloadJsonButton": "Download JSON",
+          "downloadingJson": "Downloading JSON...",
+          "downloadJsonSuccess": "JSON report downloaded successfully.",
+          "downloadJsonError": "Failed to download the JSON report.",
+          "retryButton": "Retry report generation",
           "downloading": "Downloading...",
           "generateSuccess": "Report generation started successfully.",
           "generateError": "Failed to start report generation.",
@@ -668,6 +721,7 @@
           "status": {
             "pending": "Pending",
             "processing": "Processing",
+            "rendering": "Rendering",
             "completed": "Completed",
             "failed": "Failed"
           }
@@ -675,7 +729,46 @@
         "nav": {
           "summary": "Summary",
           "charts": "Charts",
+          "executiveSummary": "Executive summary",
+          "priorityFix": "Priority fixes",
           "vulnerabilities": "Vulnerabilities"
+        },
+        "executiveSummary": {
+          "title": "Executive summary",
+          "keyRisks": "Key risks",
+          "recommendedNextSteps": "Recommended next steps"
+        },
+        "priorityFix": {
+          "title": "Priority fix table",
+          "subtitle": "Top findings ranked by urgency.",
+          "columns": {
+            "priority": "Priority",
+            "finding": "Finding",
+            "severity": "Severity",
+            "cvss": "CVSS",
+            "endpoint": "Endpoint"
+          }
+        },
+        "jsonVuln": {
+          "untitled": "Unnamed vulnerability",
+          "nonTechnical": "Non-technical overview",
+          "technical": "Technical details",
+          "whereFound": "Where found",
+          "howToFix": "How to fix",
+          "references": "References"
+        },
+        "jsonFindings": {
+          "title": "Detailed findings (JSON report)"
+        },
+        "zeroFindings": {
+          "title": "No vulnerabilities detected.",
+          "body": "The automated scan did not identify any security vulnerabilities on this target. This does not guarantee the absence of all security issues — manual testing and code review are recommended as complementary measures.",
+          "nextStepsTitle": "Recommended next steps:",
+          "steps": {
+            "rescan": "Re-scan after significant application changes or dependency updates.",
+            "manual": "Consider a manual penetration test for deeper coverage.",
+            "auth": "Ensure authentication-protected routes were included in the scan scope."
+          }
         },
         "export": {
           "button": "Export report",
@@ -851,7 +944,34 @@
         "label": "Target",
         "placeholder": "Select target",
         "loading": "Loading targets...",
-        "hint": "Choose one existing target for this scan."
+        "hint": "Choose one existing target for this scan.",
+        "orEnterUrl": "Or enter target URL",
+        "autoCreateHint": "A new target will be created automatically when you start the scan.",
+        "required": "Target is required."
+      },
+      "profile": {
+        "label": "Scan profile",
+        "hint": "Choose how deep the automated scan should go. The backend selects tools automatically.",
+        "summaryLabel": "Profile",
+        "defaultCredits": "{count} credit(s) default",
+        "options": {
+          "recon": {
+            "title": "Recon",
+            "description": "Light footprint discovery and surface mapping."
+          },
+          "quick": {
+            "title": "Quick",
+            "description": "Fast baseline security check for rapid feedback."
+          },
+          "standard": {
+            "title": "Standard",
+            "description": "Balanced coverage suitable for most web applications."
+          },
+          "deep": {
+            "title": "Deep",
+            "description": "Maximum automated coverage with extended runtime."
+          }
+        }
       },
       "scopeSigned": {
         "label": "Scope Approval",
@@ -888,6 +1008,20 @@
       },
       "extraArgs": { "label": "Extra Arguments", "placeholder": "e.g. -v --debug-log" }
     },
+    "creditBudget": {
+      "label": "Credit budget",
+      "helper": "Each credit adds {minutes} min to the scan's maximum runtime.",
+      "refundNote": "Unused credits are automatically refunded when the scan finishes early.",
+      "maxRuntime": "Max runtime: {minutes} min",
+      "maxRuntimeLabel": "Max runtime",
+      "summaryLabel": "Credit budget",
+      "summaryValue": "{budget} credit(s) · {remaining} remaining"
+    },
+    "concurrent": {
+      "title": "Concurrent scans",
+      "available": "You have {active}/{max} active scans. You can start another scan.",
+      "blocked": "You have {active}/{max} active scans. Wait for one to complete before starting a new scan."
+    },
     "actions": {
       "ai": {
         "generate": "Get AI recommendation",
@@ -899,6 +1033,8 @@
       "title": "Scan Preview",
       "scanName": "Scan Name",
       "untitled": "Untitled Scan",
+      "targetReady": "Target selected",
+      "targetMissing": "No target",
       "targetsCount": "{count} Target{count, plural, one {} other {s}} detected",
       "auth": "Authentication",
       "noAuth": "No auth configured",
@@ -920,6 +1056,10 @@
       "toolNotAllowed": "The selected tool is not allowed by your current plan.",
       "authNotAllowed": "Authentication settings are blocked by your current plan.",
       "timeoutExceedsPlan": "Timeout cannot exceed {max} minutes for your current plan.",
+      "noCreditsRemaining": "No scan credits remaining. Purchase more credits or upgrade your plan.",
+      "insufficientCredits": "Not enough credits for a {requested}-credit scan. You have {available} remaining.",
+      "creditBudgetExceedsPlan": "Your plan allows a maximum of {max} credits per scan.",
+      "concurrentLimit": "You have reached your plan's limit of {max} concurrent active scan(s).",
       "ai": {
         "missingFields": "Plan ID, prompt, target URL, and time budget are required.",
         "success": "AI recommendation generated successfully.",
@@ -1087,7 +1227,9 @@
       "expiresAt": "Expires at",
       "purchasedAt": "Purchased {date}",
       "extraCredits": "Extra credits",
-      "expiredUnused": "Expired unused: {count}"
+      "expiredUnused": "Expired unused: {count}",
+      "concurrentScans": "Concurrent scans allowed",
+      "unlimitedConcurrent": "Unlimited"
     },
     "usage": {
       "title": "Usage progress",

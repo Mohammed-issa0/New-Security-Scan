@@ -1312,6 +1312,19 @@
         }
       }
     },
+    "/api/v1/auth/logout": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "summary": "Revokes the caller's refresh token. The current access token remains valid\r\nuntil its short expiry, but cannot be renewed.",
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
     "/api/v1/billing/checkout/plan": {
       "post": {
         "tags": [
@@ -1614,6 +1627,26 @@
               }
             }
           },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
           "401": {
             "description": "Unauthorized",
             "content": {
@@ -1634,8 +1667,8 @@
               }
             }
           },
-          "400": {
-            "description": "Bad Request",
+          "429": {
+            "description": "Too Many Requests",
             "content": {
               "text/plain": {
                 "schema": {
@@ -1693,6 +1726,89 @@
                 }
               }
             }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/extension/scan/{scanId}/estimate": {
+      "get": {
+        "tags": [
+          "ExtensionScan"
+        ],
+        "parameters": [
+          {
+            "name": "scanId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExtensionScanEstimateDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExtensionScanEstimateDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExtensionScanEstimateDto"
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "No Content"
           },
           "401": {
             "description": "Unauthorized",
@@ -3177,6 +3293,197 @@
         }
       }
     },
+    "/api/v1/scans/{id}/credits": {
+      "post": {
+        "tags": [
+          "Scans"
+        ],
+        "summary": "Adds extra scan credits to a Pending or Running scan, extending its maximum runtime.\r\nEach credit adds one plan-credit period (e.g. 60 min on Professional plan).\r\nForbidden once the scan reaches a terminal state (Completed, Failed, Canceled, CompletedWithLimits).\r\nTotal credit budget (existing + additional) may not exceed 4.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AddCreditsToScanRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AddCreditsToScanRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/AddCreditsToScanRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Credits added; returns new budget and max runtime.",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/AddCreditsToScanResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AddCreditsToScanResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AddCreditsToScanResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Scan is terminal, budget would exceed 4, or insufficient credits.",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized.",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/scans/{id}/queue-estimate": {
+      "get": {
+        "tags": [
+          "Scans"
+        ],
+        "summary": "Returns a lightweight queue/progress estimate for a scan: position in the queue,\r\nestimated wait time, estimated start/finish wall-clock, and progress percentage.\r\nDesigned for high-frequency polling — preferred over the full scan detail when\r\nonly the progress card needs to update.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Estimate returned.",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ScanQueueEstimate"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ScanQueueEstimate"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ScanQueueEstimate"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Scan not found, terminal, or not owned by caller.",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/scans/tool-config-schema": {
+      "get": {
+        "tags": [
+          "Scans"
+        ],
+        "summary": "Returns the Advanced-Mode tool configuration schema: every tool, every knob,\r\nallowed values, defaults, and UI hints. Frontend renders dropdowns / forms\r\nfrom this response. Also lists available wordlists and the 4 scan profiles\r\nwith their default credit budgets. Safe to cache for 24h.",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ToolConfigSchemaResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ToolConfigSchemaResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ToolConfigSchemaResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/scans/{id}/tools": {
       "get": {
         "tags": [
@@ -4079,6 +4386,39 @@
         },
         "additionalProperties": false
       },
+      "AddCreditsToScanRequest": {
+        "type": "object",
+        "properties": {
+          "additionalCredits": {
+            "type": "integer",
+            "description": "Number of additional credits to allocate (1–3).\r\nTotal budget (existing + additional) may not exceed 4.",
+            "format": "int32",
+            "example": 1
+          }
+        },
+        "additionalProperties": false,
+        "description": "Request to add extra scan credits to an active (Pending or Running) scan.\r\nEach additional credit extends the scan's maximum runtime by one plan-credit period."
+      },
+      "AddCreditsToScanResponse": {
+        "type": "object",
+        "properties": {
+          "scanId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "newCreditBudget": {
+            "type": "integer",
+            "description": "New total credit budget after the addition.",
+            "format": "int32"
+          },
+          "newMaxRuntimeSeconds": {
+            "type": "integer",
+            "description": "New total maximum scan runtime in seconds (CreditBudget × PlanMaxRuntimeSeconds).",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
       "AdminCreateScanRequest": {
         "type": "object",
         "properties": {
@@ -4577,16 +4917,16 @@
             "nullable": true,
             "example": "Baseline scan with AJAX spider and an auth token."
           },
-          "scopeSigned": {
+          "scope_signed": {
             "type": "boolean",
             "description": "Whether the scope is signed/verified.",
             "default": true,
             "example": true
           },
-          "targetConfig": {
+          "target_config": {
             "$ref": "#/components/schemas/TargetConfigDto"
           },
-          "toolConfig": {
+          "tool_config": {
             "type": "object",
             "additionalProperties": { },
             "description": "Tool-specific configuration (varies by tool).\r\nFor ZAP: {\"scan-type\": \"baseline\", \"ajax\": \"true\"}\r\nFor ffuf: {\"wordlist\": \"common.txt\", \"recursion\": \"true\", \"mc\": \"200,301,403\", \"fc\": \"404\"}",
@@ -4596,13 +4936,13 @@
               "ajax": "true"
             }
           },
-          "extraArgs": {
+          "extra_args": {
             "type": "string",
             "description": "Extra command-line arguments to pass to the tool.",
             "nullable": true,
             "example": "-d -v"
           },
-          "toolDepths": {
+          "tool_depths": {
             "type": "object",
             "additionalProperties": {
               "type": "string"
@@ -4614,12 +4954,25 @@
               "zap": "deep"
             }
           },
-          "timeoutMinutes": {
+          "timeout_minutes": {
             "type": "integer",
-            "description": "Optional scan timeout in minutes. When set, overrides the plan's max runtime so the scan can run longer (e.g. 10080 = 7 days).\r\nIf not set, the plan's max runtime is used. Capped at 43200 (30 days) when provided.",
+            "description": "Optional scan timeout in minutes. When set, overrides the plan's max runtime so the scan can run longer (e.g. 10080 = 7 days).\r\nIf not set, the plan's max runtime is used. Capped at 43200 (30 days) when provided.\r\nCannot be combined with CreditBudget — TimeoutMinutes takes precedence.",
             "format": "int32",
             "nullable": true,
             "example": 10080
+          },
+          "credit_budget": {
+            "type": "integer",
+            "description": "Number of scan credits to pre-allocate for this scan (default 1, max 4).\r\nEach additional credit multiplies the maximum scan runtime by the budget count.\r\nExample: plan max_runtime = 60 min + credit_budget = 3 → scan runs up to 180 min.\r\nCredits not consumed by the time the scan finishes are automatically refunded.\r\nCannot be combined with timeout_minutes — timeout_minutes takes precedence when both are set.\r\nIf profile is set and credit_budget is omitted, the profile's default_credits applies.",
+            "format": "int32",
+            "nullable": true,
+            "example": 2
+          },
+          "profile": {
+            "type": "string",
+            "description": "Outcome-named scan profile: \"recon\" | \"quick\" | \"standard\" | \"deep\".\r\nWhen set, the backend resolves the tool list, depths, and tool_config knobs\r\nautomatically (auto-detecting WordPress for Standard / Deep). Takes precedence\r\nover the legacy Tool / ToolDepths / ToolConfig fields. Null = legacy Advanced\r\nMode where the caller picks tools manually.",
+            "nullable": true,
+            "example": "standard"
           }
         },
         "additionalProperties": false,
@@ -4732,6 +5085,33 @@
         },
         "additionalProperties": false,
         "description": "Response containing estimated finish time information for a scan job."
+      },
+      "ExtensionScanEstimateDto": {
+        "type": "object",
+        "properties": {
+          "queue_position": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "estimated_wait_seconds": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "estimated_total_seconds": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "estimated_finish_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "progress_percent": {
+            "type": "number",
+            "format": "double"
+          }
+        },
+        "additionalProperties": false,
+        "description": "Inline time-estimate block embedded in status responses and returned by the\r\ndedicated estimate endpoint."
       },
       "ExtensionScanQueuedResponse": {
         "type": "object",
@@ -4857,6 +5237,9 @@
           },
           "report": {
             "$ref": "#/components/schemas/ExtensionScanReportResponse"
+          },
+          "estimate": {
+            "$ref": "#/components/schemas/ExtensionScanEstimateDto"
           }
         },
         "additionalProperties": false
@@ -5571,6 +5954,63 @@
         "additionalProperties": false,
         "description": "Information about a job ahead in the queue."
       },
+      "KnobSchema": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "description": "boolean | integer | string | enum | multi-enum | enum-or-range",
+            "nullable": true
+          },
+          "allowedValues": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "For enum / multi-enum: full list of accepted values",
+            "nullable": true
+          },
+          "min": {
+            "type": "integer",
+            "description": "For integer types — inclusive minimum",
+            "format": "int32",
+            "nullable": true
+          },
+          "max": {
+            "type": "integer",
+            "description": "For integer types — inclusive maximum",
+            "format": "int32",
+            "nullable": true
+          },
+          "default": {
+            "description": "Default applied when the user doesn't override",
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "description": "Human-readable explanation, shown as helper text in the UI",
+            "nullable": true
+          },
+          "depthAware": {
+            "type": "boolean",
+            "description": "True if heavier scan profiles automatically pick a heavier value for this knob"
+          },
+          "uiHint": {
+            "type": "string",
+            "description": "dropdown | toggle | slider | multi-select | text | dropdown-with-custom",
+            "nullable": true
+          },
+          "examples": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "For string knobs — example values to suggest in the UI",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
       "LinkJiraProjectRequest": {
         "type": "object",
         "properties": {
@@ -5639,6 +6079,9 @@
             "type": "string",
             "description": "UTC expiry of the OTP (15 minutes from issuance).",
             "format": "date-time"
+          },
+          "auth": {
+            "$ref": "#/components/schemas/AuthResponse"
           }
         },
         "additionalProperties": false,
@@ -5772,6 +6215,14 @@
           },
           "depth_limits": {
             "$ref": "#/components/schemas/DepthLimits"
+          },
+          "allowed_profiles": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Profile names available on this plan. Allowed values: \"recon\", \"quick\", \"standard\", \"deep\".\r\nNull means all profiles available (back-compat for plans without this field).",
+            "nullable": true
           }
         },
         "additionalProperties": false
@@ -5945,6 +6396,35 @@
           }
         },
         "additionalProperties": { }
+      },
+      "ProfileInfo": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "display": {
+            "type": "string",
+            "nullable": true
+          },
+          "defaultCredits": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "planTiers": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
       },
       "PurchaseExtraScanResponse": {
         "type": "object",
@@ -6344,6 +6824,19 @@
             "type": "string",
             "nullable": true
           },
+          "creditBudget": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "creditsConsumed": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "profile": {
+            "type": "string",
+            "nullable": true
+          },
           "websiteTarget": {
             "$ref": "#/components/schemas/WebsiteTarget"
           },
@@ -6479,6 +6972,46 @@
             "format": "date-time",
             "nullable": true
           },
+          "creditBudget": {
+            "type": "integer",
+            "description": "Number of scan credits pre-allocated for this scan.",
+            "format": "int32"
+          },
+          "creditsConsumed": {
+            "type": "integer",
+            "description": "Actual credits consumed. Null while running; set on completion.\r\nMay be less than CreditBudget if the scan finished early (unused credits are refunded).",
+            "format": "int32",
+            "nullable": true
+          },
+          "queuePosition": {
+            "type": "integer",
+            "description": "Position in the FIFO queue. 0 = currently running, 1 = next, … . Null for terminal scans.",
+            "format": "int32",
+            "nullable": true
+          },
+          "estimatedWaitSeconds": {
+            "type": "integer",
+            "description": "Estimated time (seconds) until this scan starts running. Null for terminal scans;\r\n0 if this scan is already running.",
+            "format": "int32",
+            "nullable": true
+          },
+          "estimatedStartAt": {
+            "type": "string",
+            "description": "Estimated wall-clock time when this scan will start running. Null for terminal scans.",
+            "format": "date-time",
+            "nullable": true
+          },
+          "progressPercent": {
+            "type": "number",
+            "description": "Progress percentage (0–100). Pending = 0, Running clamps at 99 until terminal.",
+            "format": "double",
+            "nullable": true
+          },
+          "profile": {
+            "type": "string",
+            "description": "Profile used to create this scan (\"recon\" | \"quick\" | \"standard\" | \"deep\").\r\nNull when the scan was created via legacy Advanced Mode (manual tool selection).",
+            "nullable": true
+          },
           "tools": {
             "type": "array",
             "items": {
@@ -6498,6 +7031,50 @@
           }
         },
         "additionalProperties": false
+      },
+      "ScanQueueEstimate": {
+        "type": "object",
+        "properties": {
+          "scanId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "status": {
+            "$ref": "#/components/schemas/ScanStatus"
+          },
+          "queuePosition": {
+            "type": "integer",
+            "description": "Position in the queue. 0 = the currently-running scan, 1 = next, 2 = second-in-line, etc.",
+            "format": "int32"
+          },
+          "estimatedWaitSeconds": {
+            "type": "integer",
+            "description": "Estimated time (seconds) until this scan starts running. 0 for Running scans.\r\nIncludes a safety buffer for mid-scan credit extensions on queued scans ahead.",
+            "format": "int32"
+          },
+          "estimatedTotalSeconds": {
+            "type": "integer",
+            "description": "Estimated total time (seconds) from now until this scan finishes\r\n= EstimatedWaitSeconds + own scan timeout.",
+            "format": "int32"
+          },
+          "estimatedStartAt": {
+            "type": "string",
+            "description": "Estimated wall-clock time when this scan will start running.",
+            "format": "date-time"
+          },
+          "estimatedFinishAt": {
+            "type": "string",
+            "description": "Estimated wall-clock time when this scan will finish (worst case).",
+            "format": "date-time"
+          },
+          "progressPercent": {
+            "type": "number",
+            "description": "Progress percentage 0–100. Pending scans are always 0. Running scans are\r\nclamped at 99% until they reach a terminal state. If the user adds extra\r\ncredits mid-scan, the percentage drops because the budget grew — that is\r\nexpected behavior, not a bug.",
+            "format": "double"
+          }
+        },
+        "additionalProperties": false,
+        "description": "Per-scan wait-time and progress estimate. Computed on demand from the live queue\r\nand the running scan's Redis deadline. Returned for both Pending and Running scans;\r\nterminal scans return null from the estimator."
       },
       "ScanRecommendation": {
         "type": "object",
@@ -6669,6 +7246,46 @@
             "type": "string",
             "description": "Estimated completion timestamp.",
             "format": "date-time",
+            "nullable": true
+          },
+          "creditBudget": {
+            "type": "integer",
+            "description": "Number of scan credits pre-allocated for this scan.",
+            "format": "int32"
+          },
+          "creditsConsumed": {
+            "type": "integer",
+            "description": "Actual credits consumed. Null while running; set on completion.",
+            "format": "int32",
+            "nullable": true
+          },
+          "queuePosition": {
+            "type": "integer",
+            "description": "Position in the FIFO queue. 0 = currently running, 1 = next, … . Null for terminal scans.",
+            "format": "int32",
+            "nullable": true
+          },
+          "estimatedWaitSeconds": {
+            "type": "integer",
+            "description": "Estimated time (seconds) until this scan starts running. Null for terminal scans;\r\n0 if this scan is already running.",
+            "format": "int32",
+            "nullable": true
+          },
+          "estimatedStartAt": {
+            "type": "string",
+            "description": "Estimated wall-clock time when this scan will start running. Null for terminal scans.",
+            "format": "date-time",
+            "nullable": true
+          },
+          "progressPercent": {
+            "type": "number",
+            "description": "Progress percentage (0–100). Pending = 0, Running clamps at 99 until terminal.",
+            "format": "double",
+            "nullable": true
+          },
+          "profile": {
+            "type": "string",
+            "description": "Profile used to create this scan (\"recon\" | \"quick\" | \"standard\" | \"deep\") or null\r\nfor scans created via the legacy Advanced-Mode tool/tool_depths fields.",
             "nullable": true
           }
         },
@@ -6968,7 +7585,7 @@
               "Authorization": "Bearer token123"
             }
           },
-          "userAgent": {
+          "user_agent": {
             "type": "string",
             "description": "Custom User-Agent string.",
             "nullable": true,
@@ -7147,6 +7764,34 @@
         "additionalProperties": false,
         "description": "Token usage information from the AI service."
       },
+      "ToolConfigSchemaResponse": {
+        "type": "object",
+        "properties": {
+          "tools": {
+            "type": "object",
+            "additionalProperties": {
+              "$ref": "#/components/schemas/ToolSchema"
+            },
+            "nullable": true
+          },
+          "wordlistsAvailable": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/WordlistInfo"
+            },
+            "nullable": true
+          },
+          "profiles": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ProfileInfo"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false,
+        "description": "Discovery payload describing every Advanced Mode tool config knob with its\r\ntype, allowed values, default, and UI hint. Frontend renders forms from this\r\nresponse — no hardcoded schemas."
+      },
       "ToolDepth": {
         "type": "object",
         "properties": {
@@ -7156,6 +7801,27 @@
           },
           "depth": {
             "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "ToolSchema": {
+        "type": "object",
+        "properties": {
+          "displayName": {
+            "type": "string",
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "knobs": {
+            "type": "object",
+            "additionalProperties": {
+              "$ref": "#/components/schemas/KnobSchema"
+            },
             "nullable": true
           }
         },
@@ -7300,6 +7966,9 @@
             "nullable": true
           },
           "isActive": {
+            "type": "boolean"
+          },
+          "otpExempt": {
             "type": "boolean"
           },
           "createdAt": {
@@ -8019,6 +8688,24 @@
             "items": {
               "$ref": "#/components/schemas/ScanTarget"
             },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "WordlistInfo": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "entries": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "purpose": {
+            "type": "string",
             "nullable": true
           }
         },

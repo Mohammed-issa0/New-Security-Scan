@@ -12,6 +12,7 @@ import { ApiRequestError } from '@/lib/api/client';
 import { plansService } from '@/lib/plans/plansService';
 import type { CheckoutSessionResponse, PurchaseExtraScanResponse } from '@/lib/plans/types';
 import { findMatchingPlanDefinition, getCreditsUsagePercent, getPlanDisplayName, getPlanTools } from '@/lib/plans/utils';
+import { getPlanMaxConcurrentScans } from '@/lib/scans/concurrency';
 import { Alert, Badge, Button } from '@/components/scans/ui';
 
 function getErrorMessage(error: unknown, fallback: string) {
@@ -70,6 +71,7 @@ export function CurrentPlanPageContent() {
   const tools = getPlanTools(matchingPlan || activePlan);
   const usagePercent = getCreditsUsagePercent(activePlan);
   const extraRules = matchingPlan?.extraCredit;
+  const maxConcurrentScans = getPlanMaxConcurrentScans(matchingPlan);
 
   const extraCreditMutation = useMutation<CheckoutSessionResponse | PurchaseExtraScanResponse, unknown, void>({
     mutationFn: () =>
@@ -272,7 +274,7 @@ export function CurrentPlanPageContent() {
                 <div className="h-3 rounded-full bg-white/10">
                   <div className="h-3 rounded-full bg-cyan-300 transition-all" style={{ width: `${usagePercent}%` }} />
                 </div>
-                <div className="grid gap-3 md:grid-cols-3">
+                <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-4">
                   <div className="rounded-2xl border border-white/10 bg-white/8 p-4">
                     <div className="text-xs font-semibold uppercase tracking-[0.18em] text-text-muted">{t('usage.remaining')}</div>
                     <div className="mt-2 text-xl font-bold text-text-primary">{formatNumber(activePlan.remainingCredits)}</div>
@@ -284,6 +286,12 @@ export function CurrentPlanPageContent() {
                   <div className="rounded-2xl border border-white/10 bg-white/8 p-4">
                     <div className="text-xs font-semibold uppercase tracking-[0.18em] text-text-muted">{t('usage.extraAvailable')}</div>
                     <div className="mt-2 text-xl font-bold text-text-primary">{formatNumber(activePlan.extraCreditsAvailable)}</div>
+                  </div>
+                  <div className="rounded-2xl border border-white/10 bg-white/8 p-4">
+                    <div className="text-xs font-semibold uppercase tracking-[0.18em] text-text-muted">{t('summary.concurrentScans')}</div>
+                    <div className="mt-2 text-xl font-bold text-text-primary">
+                      {maxConcurrentScans > 0 ? formatNumber(maxConcurrentScans) : t('summary.unlimitedConcurrent')}
+                    </div>
                   </div>
                 </div>
               </div>

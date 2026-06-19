@@ -46,23 +46,80 @@ export interface LoginRequest {
   password: string;
 }
 
+export type ScanStatus =
+  | 'Pending'
+  | 'Running'
+  | 'Completed'
+  | 'Failed'
+  | 'Canceled'
+  | 'CompletedWithLimits';
+
 export interface Scan {
   id: string;
   targetId: string;
-  status: 'Pending' | 'Running' | 'Completed' | 'Failed' | 'Canceled';
+  status: ScanStatus;
   toolNames: string[];
   requestedAt: string;
   startedAt?: string;
   finishedAt?: string;
   error?: string;
+  name?: string;
+  creditBudget?: number;
+  creditsConsumed?: number | null;
+  limitMessage?: string | null;
+  profile?: string | null;
+  progressPercent?: number | null;
+  estimatedFinishAt?: string | null;
+  queuePosition?: number | null;
+  estimatedWaitSeconds?: number | null;
+  estimatedStartAt?: string | null;
+  failureReason?: string | null;
+}
+
+export interface ScanQueueEstimate {
+  scanId: string;
+  status: ScanStatus | number;
+  queuePosition: number;
+  estimatedWaitSeconds: number;
+  estimatedTotalSeconds: number;
+  estimatedStartAt: string;
+  estimatedFinishAt: string;
+  progressPercent: number;
+}
+
+export type ScanProfile = 'recon' | 'quick' | 'standard' | 'deep';
+
+export interface ProfileInfo {
+  name?: string | null;
+  display?: string | null;
+  defaultCredits?: number;
+  planTiers?: string[] | null;
+  description?: string | null;
+}
+
+export interface ToolConfigSchemaResponse {
+  tools?: Record<string, unknown> | null;
+  wordlistsAvailable?: unknown[] | null;
+  profiles?: ProfileInfo[] | null;
+}
+
+export interface ProfileCreateScanRequest {
+  targetId: string;
+  profile: ScanProfile;
+  creditBudget: number;
+  name?: string;
+  notes?: string;
+  scopeSigned?: boolean;
 }
 
 export interface CreateScanRequest {
-  name: string;
-  scopeSigned: boolean;
-  targets: string[];
+  name?: string;
+  scopeSigned?: boolean;
+  targets?: string[];
+  targetId?: string;
+  profile?: ScanProfile;
   notes?: string;
-  tool: 'ffuf' | 'nmap' | 'zap' | 'wpscan' | 'sqlmap' | 'xss' | 'ssl';
+  tool?: 'ffuf' | 'nmap' | 'zap' | 'wpscan' | 'sqlmap' | 'xss' | 'ssl';
   targetConfig?: {
     userAgent?: string;
     headers?: Record<string, string>;
@@ -75,6 +132,17 @@ export interface CreateScanRequest {
   toolDepths?: Record<string, string>;
   extraArgs?: string;
   timeoutMinutes?: number;
+  creditBudget?: number;
+}
+
+export interface AddCreditsToScanRequest {
+  additionalCredits: number;
+}
+
+export interface AddCreditsToScanResponse {
+  scanId: string;
+  newCreditBudget: number;
+  newMaxRuntimeSeconds: number;
 }
 
 export interface ToolStatus {
@@ -431,6 +499,8 @@ export interface GuidedSetupSessionResponse {
 
 export interface CreateScanFromRecommendationRequest {
   targetUrl?: string | null;
+  profile?: ScanProfile;
+  creditBudget?: number;
 }
 
 export interface CreateScanFromRecommendationResponse {

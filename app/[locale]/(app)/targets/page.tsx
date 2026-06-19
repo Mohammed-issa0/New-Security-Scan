@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useTranslations } from 'next-intl';
+import { useSearchParams } from 'next/navigation';
 import { scansService } from '@/lib/scans/scansService';
 import { toast } from 'sonner';
 import { Eye, Plus, Trash2 } from 'lucide-react';
@@ -15,6 +16,8 @@ export default function TargetsPage() {
   const t = useTranslations('landing.targets');
   const tCommon = useTranslations('common.states');
   const queryClient = useQueryClient();
+  const searchParams = useSearchParams();
+  const browserAuthTargetId = searchParams.get('browserAuth');
   const [page, setPage] = useState(1);
   const [isCreateOpen, setIsCreateOpen] = useState(false);
   const [createError, setCreateError] = useState<string | null>(null);
@@ -35,6 +38,17 @@ export default function TargetsPage() {
       setPage(targetsTotalPages);
     }
   }, [page, targetsData, targetsTotalPages]);
+
+  useEffect(() => {
+    if (!browserAuthTargetId || !targetsData?.items?.length) {
+      return;
+    }
+
+    const target = targetsData.items.find((item) => item.id === browserAuthTargetId);
+    if (target) {
+      setTargetToView(target);
+    }
+  }, [browserAuthTargetId, targetsData?.items]);
 
   const updateTargetCaches = (targetId: string, updater: (target: Target) => Target) => {
     queryClient.setQueriesData<PaginatedResponse<Target>>({ queryKey: ['targets'] }, (currentData) => {

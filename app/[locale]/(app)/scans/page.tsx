@@ -4,32 +4,47 @@ import { useEffect, useMemo, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { useTranslations, useLocale } from 'next-intl';
 import { scansService } from '@/lib/scans/scansService';
+import { plansService } from '@/lib/plans/plansService';
 import Link from 'next/link';
 import { Eye } from 'lucide-react';
-import { Scan } from '@/lib/api/types';
+import { Scan, ScanStatus } from '@/lib/api/types';
 import { TableEmptyRow, TableErrorRow, TableSkeletonRows } from '@/components/common/AsyncStates';
+import { ScanCreditsDisplay } from '@/components/scans/ScanCreditsDisplay';
+import { ScanQueueProgressCard } from '@/components/scans/ScanQueueProgressCard';
+import { ScanProfileBadge } from '@/components/scans/ScanProfileBadge';
+import { countActiveScans, getPlanMaxConcurrentScans } from '@/lib/scans/concurrency';
+import { isActiveScanStatus, normalizeScanStatus } from '@/lib/scans/scanStatus';
+import { usePageVisibility } from '@/lib/hooks/usePageVisibility';
+import { scanHasQueueFields } from '@/lib/scans/useScanQueueEstimate';
 
-const StatusBadge = ({ status }: { status: Scan['status'] }) => {
-  const styles = {
+const StatusBadge = ({ status }: { status: ScanStatus | 'Unknown' }) => {
+  const t = useTranslations('landing.scans.details.status');
+  const styles: Record<string, string> = {
     Pending: 'border border-status-warning/30 bg-status-warning/14 text-status-warning',
     Running: 'animate-pulse border border-cyan-300/28 bg-cyan-400/14 text-cyan-200',
     Completed: 'border border-status-success/30 bg-status-success/14 text-status-success',
+    CompletedWithLimits: 'border border-status-warning/30 bg-status-warning/14 text-status-warning',
     Failed: 'border border-status-danger/30 bg-status-danger/14 text-status-danger',
     Canceled: 'border border-white/14 bg-white/8 text-text-secondary',
+    Unknown: 'border border-white/14 bg-white/8 text-text-secondary',
   };
 
+  const labelKey = status === 'Unknown' ? 'unknown' : status.toLowerCase();
+
   return (
-    <span className={`inline-flex rounded-full px-2 text-xs font-semibold leading-5 ${styles[status]}`}>
-      {status}
+    <span className={`inline-flex rounded-full px-2 text-xs font-semibold leading-5 ${styles[status] || styles.Unknown}`}>
+      {status === 'Unknown' ? status : t(labelKey as 'pending')}
     </span>
   );
 };
+
+type StatusFilter = 'All' | ScanStatus;
 
 export default function ScansPage() {
   const t = useTranslations('landing.scans');
   const locale = useLocale();
   const [page, setPage] = useState(1);
-  const [statusFilter, setStatusFilter] = useState<'All' | Scan['status']>('All');
+  const [statusFilter, setStatusFilter] = useState<StatusFilter>('All');
   const [toolFilter, setToolFilter] = useState<'All' | 'zap' | 'ffuf' | 'nmap' | 'wpscan' | 'sqlmap'>('All');
 
   useEffect(() => {
@@ -39,6 +54,24 @@ export default function ScansPage() {
   const tCommon = useTranslations('common.states');
   const tButtons = useTranslations('common.buttons');
 
+  const { data: plansData } = useQuery({
+    queryKey: ['plans-public'],
+    queryFn: () => plansService.listPublic(),
+  });
+
+  const { data: activePlan } = useQuery({
+    queryKey: ['plans-active'],
+    queryFn: () => plansService.getActivePlan(),
+  });
+
+  const planName = activePlan?.planName?.trim().toLowerCase();
+  const currentPlan = useMemo(
+    () => plansData?.find((plan) => plan.planName?.trim().toLowerCase() === planName),
+    [planName, plansData]
+  );
+  const maxConcurrentScans = getPlanMaxConcurrentScans(currentPlan);
+  const isPageVisible = usePageVisibility();
+
   const { data: scansData, isLoading, isError, error, refetch } = useQuery({
     queryKey: ['scans', page, statusFilter, toolFilter],
     queryFn: () =>
@@ -47,19 +80,37 @@ export default function ScansPage() {
         tool: toolFilter === 'All' ? undefined : toolFilter,
       }),
     refetchInterval: (query) => {
-      // Poll if any scan is Running or Pending
-      const hasActiveScans = query.state.data?.items.some(
-        (scan) => scan.status === 'Running' || scan.status === 'Pending'
+      if (!isPageVisible) {
+        return false;
+      }
+
+      const activeScans = query.state.data?.items.filter((scan) =>
+        isActiveScanStatus(normalizeScanStatus(scan.status))
       );
-      return hasActiveScans ? 5000 : false;
+
+      if (!activeScans?.length) {
+        return false;
+      }
+
+      const hasDeepQueue = activeScans.some(
+        (scan) => (scan.queuePosition ?? 0) >= 4
+      );
+
+      return hasDeepQueue ? 30_000 : 15_000;
     },
   });
+
+  const activeScanCount = useMemo(
+    () => countActiveScans(scansData?.items ?? []),
+    [scansData?.items]
+  );
 
   const filteredScans = useMemo(() => {
     const items = scansData?.items ?? [];
 
     return items.filter((scan) => {
-      const statusMatches = statusFilter === 'All' || scan.status === statusFilter;
+      const normalizedStatus = normalizeScanStatus(scan.status);
+      const statusMatches = statusFilter === 'All' || normalizedStatus === statusFilter;
       const toolMatches =
         toolFilter === 'All' ||
         (Array.isArray(scan.toolNames) && scan.toolNames.some((tool) => tool.toLowerCase() === toolFilter));
@@ -70,12 +121,27 @@ export default function ScansPage() {
 
   const totalPages = scansData?.totalPages ?? (scansData ? Math.max(1, Math.ceil(scansData.totalCount / scansData.pageSize)) : 1);
 
+  const statusFilters: StatusFilter[] = [
+    'All',
+    'Pending',
+    'Running',
+    'Completed',
+    'CompletedWithLimits',
+    'Failed',
+    'Canceled',
+  ];
+
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
         <div>
           <h1 className="text-2xl font-bold text-text-primary">{t('title')}</h1>
           <p className="text-text-secondary">{t('subtitle')}</p>
+          {maxConcurrentScans > 0 && (
+            <p className="mt-1 text-xs text-text-muted">
+              {t('concurrent.usage', { active: activeScanCount, max: maxConcurrentScans })}
+            </p>
+          )}
         </div>
         <Link
           href={`/${locale}/scans/new`}
@@ -89,7 +155,7 @@ export default function ScansPage() {
         <div className="space-y-2">
           <div className="text-sm text-text-secondary">{t('filters.label')}</div>
           <div className="flex flex-wrap items-center gap-2">
-            {(['All', 'Pending', 'Running', 'Completed', 'Failed', 'Canceled'] as const).map((status) => (
+            {statusFilters.map((status) => (
               <button
                 key={status}
                 type="button"
@@ -100,7 +166,9 @@ export default function ScansPage() {
                     : 'border-white/14 bg-white/5 text-text-secondary hover:border-cyan-300/30 hover:text-text-primary'
                 }`}
               >
-                {status === 'All' ? t('filters.all') : t(`details.status.${status.toLowerCase()}`)}
+                {status === 'All'
+                  ? t('filters.all')
+                  : t(`details.status.${status === 'CompletedWithLimits' ? 'completedwithlimits' : status.toLowerCase()}`)}
               </button>
             ))}
           </div>
@@ -134,6 +202,12 @@ export default function ScansPage() {
                 {t('status')}
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-text-muted">
+                {t('profile.column')}
+              </th>
+              <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-text-muted">
+                {t('credits.column')}
+              </th>
+              <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-text-muted">
                 {t('requested')}
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-text-muted">
@@ -149,43 +223,80 @@ export default function ScansPage() {
           </thead>
           <tbody className="divide-y divide-white/10 bg-transparent">
             {isLoading ? (
-              <TableSkeletonRows columns={5} />
+              <TableSkeletonRows columns={7} />
             ) : isError ? (
               <TableErrorRow
-                columns={5}
+                columns={7}
                 title={tCommon('error')}
                 description={error instanceof Error ? error.message : undefined}
                 retryLabel={tCommon('retry')}
                 onRetry={() => refetch()}
               />
             ) : filteredScans.length === 0 ? (
-              <TableEmptyRow columns={5} title={t('noScans')} />
+              <TableEmptyRow columns={7} title={t('noScans')} />
             ) : (
-              filteredScans.map((scan) => (
-                <tr key={scan.id} className="hover:bg-white/6">
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <StatusBadge status={scan.status} />
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-text-secondary">
-                    {new Date(scan.requestedAt).toLocaleString()}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-text-secondary">
-                    {scan.startedAt ? new Date(scan.startedAt).toLocaleString() : '-'}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-text-secondary">
-                    {scan.finishedAt ? new Date(scan.finishedAt).toLocaleString() : '-'}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                    <Link
-                      href={`/${locale}/scans/${scan.id}`}
-                      className="flex items-center justify-end text-cyan-300 hover:text-cyan-200"
-                    >
-                      <Eye className="h-5 w-5 mr-1" />
-                      {t('view')}
-                    </Link>
-                  </td>
-                </tr>
-              ))
+              filteredScans.map((scan) => {
+                const normalizedStatus = normalizeScanStatus(scan.status);
+                const showConcurrentSlot =
+                  maxConcurrentScans > 0 && isActiveScanStatus(normalizedStatus);
+
+                return (
+                  <tr key={scan.id} className="hover:bg-white/6">
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <div className="space-y-1">
+                        <StatusBadge status={normalizedStatus} />
+                        {showConcurrentSlot && (
+                          <p className="text-[10px] text-text-muted">
+                            {t('concurrent.slot', { max: maxConcurrentScans })}
+                          </p>
+                        )}
+                        {isActiveScanStatus(normalizedStatus) &&
+                        (scanHasQueueFields(scan) || normalizedStatus === 'Pending' || normalizedStatus === 'Running') ? (
+                          <ScanQueueProgressCard
+                            variant="compact"
+                            source={{
+                              status: scan.status,
+                              queuePosition: scan.queuePosition ?? (normalizedStatus === 'Running' ? 0 : null),
+                              estimatedWaitSeconds: scan.estimatedWaitSeconds,
+                              estimatedFinishAt: scan.estimatedFinishAt,
+                              progressPercent: scan.progressPercent ?? (normalizedStatus === 'Pending' ? 0 : null),
+                            }}
+                          />
+                        ) : null}
+                      </div>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <ScanProfileBadge profile={scan.profile} />
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <ScanCreditsDisplay
+                        status={normalizedStatus}
+                        creditBudget={scan.creditBudget}
+                        creditsConsumed={scan.creditsConsumed}
+                        compact
+                      />
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-text-secondary">
+                      {new Date(scan.requestedAt).toLocaleString()}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-text-secondary">
+                      {scan.startedAt ? new Date(scan.startedAt).toLocaleString() : '-'}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-text-secondary">
+                      {scan.finishedAt ? new Date(scan.finishedAt).toLocaleString() : '-'}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                      <Link
+                        href={`/${locale}/scans/${scan.id}`}
+                        className="flex items-center justify-end text-cyan-300 hover:text-cyan-200"
+                      >
+                        <Eye className="h-5 w-5 mr-1" />
+                        {t('view')}
+                      </Link>
+                    </td>
+                  </tr>
+                );
+              })
             )}
           </tbody>
         </table>
@@ -239,4 +350,3 @@ export default function ScansPage() {
     </div>
   );
 }
-

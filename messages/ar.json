@@ -272,6 +272,7 @@
         "statusConfigured": "مُعدّة",
         "statusNotConfigured": "غير مُعدّة",
         "loginUrl": "رابط تسجيل الدخول",
+        "loginUrlAutoDetectHint": "اتركه فارغاً للاكتشاف التلقائي. إذا فشل الاكتشاف سيُطلب منك إدخال الرابط يدوياً.",
         "targetUrl": "رابط الهدف",
         "username": "اسم المستخدم",
         "password": "كلمة المرور",
@@ -512,6 +513,40 @@
         "toolLabel": "تصفية حسب الأداة",
         "allTools": "كل الأدوات"
       },
+      "credits": {
+        "column": "الأرصدة",
+        "allocated": "الأرصدة: {count} مخصصة",
+        "used": "الأرصدة: {count} مستخدمة",
+        "usedWithRefund": "{used} مستخدمة · {refunded} مستردة",
+        "refundBadge": "تم استرداد {count} رصيد"
+      },
+      "profile": {
+        "column": "الملف"
+      },
+      "concurrent": {
+        "usage": "الفحوصات النشطة: {active} من {max} فتحات متزامنة",
+        "slot": "يحتسب ضمن حد التزامن ({max} كحد أقصى)"
+      },
+      "queueEstimate": {
+        "estimatedStart": "البدء المتوقع: خلال {duration}",
+        "position": "الترتيب #{position} في الطابور",
+        "currentlyRunning": "قيد التشغيل حالياً",
+        "runningRemaining": "قيد التشغيل — متبقي {duration}",
+        "creditsAddedFinish": "تمت إضافة الأرصدة — وقت الانتهاء المتوقع الجديد: {time}"
+      },
+      "addCredits": {
+        "button": "إضافة رصيد فحص",
+        "title": "إضافة أرصدة فحص",
+        "description": "مدّ أقصى وقت تشغيل لهذا الفحص بتخصيص أرصدة إضافية.",
+        "available": "لديك {count} رصيد متاح.",
+        "preview": "الميزانية الجديدة: {budget} أرصدة · أقصى وقت: {minutes} دقيقة",
+        "zapWarning": "للحصول على أفضل نتائج مع فحوصات ZAP على المواقع الكبيرة، خصّص الأرصدة التي تحتاجها قبل بدء الفحص. قد لا يعيد التمديد أثناء الفحص تشغيل ZAP إذا وصل بالفعل لحد الوقت.",
+        "cancel": "إلغاء",
+        "confirm": "إضافة الأرصدة",
+        "confirming": "جار الإضافة...",
+        "success": "تم تمديد الفحص بـ {count} رصيد. الميزانية الجديدة: {budget}.",
+        "refundToast": "انتهى الفحص بالفعل. تم استرداد أرصدتك تلقائياً."
+      },
       "details": {
         "eyebrow": "مساحة عمل الفحص",
         "title": "فحص #{id}",
@@ -602,9 +637,22 @@
           "pending": "قيد الانتظار",
           "running": "قيد التنفيذ",
           "completed": "مكتمل",
+          "completedwithlimits": "مكتمل مع حدود",
           "failed": "فشل",
           "canceled": "ملغي",
           "unknown": "غير معروف"
+        },
+        "creditsLabel": "الأرصدة",
+        "banners": {
+          "loginUrlCta": "تحديث إعدادات مصادقة المتصفح",
+          "technicalDetails": "تفاصيل الفشل التقنية"
+        },
+        "completedWithLimits": {
+          "default": "توقف الفحص عند حد وقت الرصيد.",
+          "upgraded": "استنفد الفحص جميع الأرصدة الـ {credits} ({minutes} دقيقة). سطح هجوم الموقع أكبر من المتوقع. فكّر في ترقية خطتك أو التواصل مع الدعم."
+        },
+        "addCredits": {
+          "button": "إضافة رصيد فحص"
         },
         "requestedAt": "تم الطلب {date}",
         "requestedAtLabel": "تم الطلب",
@@ -649,6 +697,11 @@
           "generating": "جارٍ التوليد...",
           "refreshStatus": "تحديث الحالة",
           "downloadButton": "تنزيل PDF الناتج",
+          "downloadJsonButton": "تنزيل JSON",
+          "downloadingJson": "جارٍ تنزيل JSON...",
+          "downloadJsonSuccess": "تم تنزيل تقرير JSON بنجاح.",
+          "downloadJsonError": "فشل تنزيل تقرير JSON.",
+          "retryButton": "إعادة محاولة توليد التقرير",
           "downloading": "جارٍ التنزيل...",
           "generateSuccess": "بدأ توليد التقرير بنجاح.",
           "generateError": "فشل بدء توليد التقرير.",
@@ -668,6 +721,7 @@
           "status": {
             "pending": "قيد الانتظار",
             "processing": "قيد المعالجة",
+            "rendering": "جارٍ التنسيق",
             "completed": "مكتمل",
             "failed": "فشل"
           }
@@ -675,7 +729,46 @@
         "nav": {
           "summary": "الملخص",
           "charts": "الرسوم",
+          "executiveSummary": "الملخص التنفيذي",
+          "priorityFix": "إصلاحات ذات أولوية",
           "vulnerabilities": "الثغرات"
+        },
+        "executiveSummary": {
+          "title": "الملخص التنفيذي",
+          "keyRisks": "المخاطر الرئيسية",
+          "recommendedNextSteps": "الخطوات التالية الموصى بها"
+        },
+        "priorityFix": {
+          "title": "جدول الإصلاحات ذات الأولوية",
+          "subtitle": "أهم النتائج مرتبة حسب الإلحاح.",
+          "columns": {
+            "priority": "الأولوية",
+            "finding": "النتيجة",
+            "severity": "الخطورة",
+            "cvss": "CVSS",
+            "endpoint": "نقطة النهاية"
+          }
+        },
+        "jsonVuln": {
+          "untitled": "ثغرة بدون اسم",
+          "nonTechnical": "نظرة عامة غير تقنية",
+          "technical": "التفاصيل التقنية",
+          "whereFound": "أين وُجدت",
+          "howToFix": "كيفية الإصلاح",
+          "references": "مراجع"
+        },
+        "jsonFindings": {
+          "title": "نتائج مفصّلة (تقرير JSON)"
+        },
+        "zeroFindings": {
+          "title": "لم يتم اكتشاف ثغرات.",
+          "body": "لم يحدد الفحص الآلي أي ثغرات أمنية على هذا الهدف. هذا لا يضمن خلو التطبيق من جميع المشكلات — يُنصح بالاختبار اليدائي ومراجعة الكود كإجراءات تكميلية.",
+          "nextStepsTitle": "الخطوات التالية الموصى بها:",
+          "steps": {
+            "rescan": "أعد الفحص بعد تغييرات كبيرة في التطبيق أو تحديثات التبعيات.",
+            "manual": "فكّر في اختبار اختراق يدوي لتغطية أعمق.",
+            "auth": "تأكد من تضمين المسارات المحمية بالمصادقة في نطاق الفحص."
+          }
         },
         "export": {
           "button": "تصدير التقرير",
@@ -851,7 +944,34 @@
         "label": "الهدف",
         "placeholder": "اختر هدفًا",
         "loading": "جار تحميل الأهداف...",
-        "hint": "اختر هدفًا موجودًا واحدًا لهذا الفحص."
+        "hint": "اختر هدفًا موجودًا واحدًا لهذا الفحص.",
+        "orEnterUrl": "أو أدخل رابط الهدف",
+        "autoCreateHint": "سيُنشأ هدف جديد تلقائياً عند بدء الفحص.",
+        "required": "الهدف مطلوب."
+      },
+      "profile": {
+        "label": "ملف الفحص",
+        "hint": "اختر عمق الفحص الآلي. يختار الخادم الأدوات تلقائياً.",
+        "summaryLabel": "الملف",
+        "defaultCredits": "{count} رصيد افتراضي",
+        "options": {
+          "recon": {
+            "title": "استطلاع",
+            "description": "اكتشاف خفيف ورسم سطح التطبيق."
+          },
+          "quick": {
+            "title": "سريع",
+            "description": "فحص أمني أساسي سريع للحصول على نتائج فورية."
+          },
+          "standard": {
+            "title": "قياسي",
+            "description": "تغطية متوازنة مناسبة لمعظم تطبيقات الويب."
+          },
+          "deep": {
+            "title": "عميق",
+            "description": "أقصى تغطية آلية مع وقت تشغيل ممتد."
+          }
+        }
       },
       "scopeSigned": {
         "label": "اعتماد النطاق",
@@ -888,6 +1008,20 @@
       },
       "extraArgs": { "label": "وسيطات إضافية", "placeholder": "مثال: -v --debug-log" }
     },
+    "creditBudget": {
+      "label": "ميزانية الأرصدة",
+      "helper": "كل رصيد يضيف {minutes} دقيقة لأقصى وقت تشغيل للفحص.",
+      "refundNote": "يتم استرداد الأرصدة غير المستخدمة تلقائياً عند انتهاء الفحص مبكراً.",
+      "maxRuntime": "أقصى وقت: {minutes} دقيقة",
+      "maxRuntimeLabel": "أقصى وقت",
+      "summaryLabel": "ميزانية الأرصدة",
+      "summaryValue": "{budget} رصيد · {remaining} متبقية"
+    },
+    "concurrent": {
+      "title": "الفحوصات المتزامنة",
+      "available": "لديك {active}/{max} فحوصات نشطة. يمكنك بدء فحص جديد.",
+      "blocked": "لديك {active}/{max} فحوصات نشطة. انتظر حتى ينتهي أحدها قبل بدء فحص جديد."
+    },
     "actions": {
       "ai": {
         "generate": "الحصول على توصية AI",
@@ -899,6 +1033,8 @@
       "title": "معاينة الفحص",
       "scanName": "اسم الفحص",
       "untitled": "فحص بدون عنوان",
+      "targetReady": "تم اختيار الهدف",
+      "targetMissing": "لا يوجد هدف",
       "targetsCount": "تم اكتشاف {count} هدف",
       "auth": "المصادقة",
       "noAuth": "لم يتم ضبط مصادقة",
@@ -920,6 +1056,10 @@
       "toolNotAllowed": "الأداة المحددة غير مسموح بها في باقتك الحالية.",
       "authNotAllowed": "إعدادات المصادقة محظورة في باقتك الحالية.",
       "timeoutExceedsPlan": "المهلة لا يمكن أن تتجاوز {max} دقيقة في باقتك الحالية.",
+      "noCreditsRemaining": "لا توجد أرصدة فحص متبقية. اشترِ أرصدة إضافية أو رقِّ خطتك.",
+      "insufficientCredits": "لا توجد أرصدة كافية لفحص بـ {requested} رصيد. لديك {available} متبقية.",
+      "creditBudgetExceedsPlan": "تسمح باقتك بحد أقصى {max} أرصدة لكل فحص.",
+      "concurrentLimit": "وصلت إلى حد خطتك البالغ {max} فحص نشط متزامن.",
       "ai": {
         "missingFields": "معرّف الخطة وتعليماتك ورابط الهدف والوقت المتاح حقول مطلوبة.",
         "success": "تم توليد توصية AI بنجاح.",
@@ -1087,7 +1227,9 @@
       "expiresAt": "تنتهي في",
       "purchasedAt": "تم الشراء {date}",
       "extraCredits": "الأرصدة الإضافية",
-      "expiredUnused": "المنتهي غير المستخدم: {count}"
+      "expiredUnused": "المنتهي غير المستخدم: {count}",
+      "concurrentScans": "الفحوصات المتزامنة المسموحة",
+      "unlimitedConcurrent": "غير محدود"
     },
     "usage": {
       "title": "تقدم الاستخدام",

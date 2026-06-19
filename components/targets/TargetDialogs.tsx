@@ -303,7 +303,7 @@ export function ViewTargetDialog({
     setShowPassword(false);
     setErrorMessage(null);
     setFormData({
-      loginUrl: target?.url ?? '',
+      loginUrl: '',
       targetUrl: target?.url ?? '',
       username: '',
       password: '',
@@ -435,6 +435,7 @@ export function ViewTargetDialog({
                     onChange={(event) => setFormData((current) => ({ ...current, loginUrl: event.target.value }))}
                     placeholder={target?.url ?? t('placeholder')}
                   />
+                  <p className="mt-1 text-[11px] text-text-muted">{t('browserAuth.loginUrlAutoDetectHint')}</p>
                 </div>
                 <div>
                   <Label htmlFor={targetUrlId}>{t('browserAuth.targetUrl')}</Label>
@@ -553,7 +554,7 @@ export function BrowserAuthDialog({
     setShowPassword(false);
     setErrorMessage(null);
     setFormData({
-      loginUrl: target?.url ?? '',
+      loginUrl: '',
       targetUrl: target?.url ?? '',
       username: '',
       password: '',
@@ -659,6 +660,7 @@ export function BrowserAuthDialog({
               onChange={(event) => setFormData((current) => ({ ...current, loginUrl: event.target.value }))}
               placeholder={target?.url ?? t('placeholder')}
             />
+            <p className="mt-1 text-[11px] text-text-muted">{t('browserAuth.loginUrlAutoDetectHint')}</p>
           </div>
           <div>
             <Label htmlFor={targetUrlId}>{t('browserAuth.targetUrl')}</Label>

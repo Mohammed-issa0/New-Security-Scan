@@ -1,0 +1,12 @@
+{
+  "university": "[اسم الجامعة]",
+  "faculty": "[اسم الكلية]",
+  "department": "[اسم القسم]",
+  "student_name": "[اسم الطالب]",
+  "supervisor_name": "[اسم المشرف]",
+  "year": "2026",
+  "project_title_ar": "منصة اختبار الأمن السيبراني — New-Security-Scan",
+  "project_title_en": "Cyber Security Testing Platform — New-Security-Scan",
+  "dedication": "إلى من ألهمني لإكمال هذا المشروع...",
+  "acknowledgment": "أتقدم بالشكر الجزيل إلى مشرفي الأكاديمي [اسم المشرف] على توجيهاته القيّمة، وإلى أعضاء هيئة التدريس في قسم [اسم القسم]، وإلى عائلتي وأصدقائي على دعمهم المستمر."
+}

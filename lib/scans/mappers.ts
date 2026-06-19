@@ -1,4 +1,7 @@
+import type { ScanProfile } from '@/lib/api/types';
+import type { ProfileCreateScanRequest } from '@/lib/api/types';
 import { ScanFormValues, ScanPayload, HeaderRow, CookieRow } from './types';
+import type { ProfileScanFormSchemaType } from './schema';
 
 export const parseTargets = (text: string | undefined | null): string[] => {
   if (!text) return [];
@@ -25,6 +28,21 @@ export const booleanToString = (value: boolean): 'true' | 'false' => {
   return value ? 'true' : 'false';
 };
 
+export function buildProfilePayload(values: ProfileScanFormSchemaType): ProfileCreateScanRequest {
+  if (!values.targetId?.trim()) {
+    throw new Error('Target is required');
+  }
+
+  return {
+    targetId: values.targetId.trim(),
+    profile: values.profile as ScanProfile,
+    creditBudget: values.creditBudget ?? 1,
+    name: values.name,
+    notes: values.notes,
+    scopeSigned: values.scopeSigned,
+  };
+}
+
 export const buildPayload = (values: ScanFormValues): ScanPayload => {
   const payload: ScanPayload = {
     name: values.name,
@@ -47,6 +65,10 @@ export const buildPayload = (values: ScanFormValues): ScanPayload => {
     timeoutMinutes: values.timeoutMinutes,
   };
 
+  if (values.timeoutMinutes == null && values.creditBudget != null) {
+    payload.creditBudget = values.creditBudget;
+  }
+
   if (values.tool === 'zap' && values.zap_config) {
     payload.toolConfig = {
       'scan-type': values.zap_config['scan-type'],
@@ -63,6 +85,3 @@ export const buildPayload = (values: ScanFormValues): ScanPayload => {
 
   return payload;
 };
-
-
-

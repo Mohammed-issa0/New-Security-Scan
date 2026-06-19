@@ -17,6 +17,7 @@ export interface ScanFormValues {
   targets: string;
   tool: Tool;
   scopeSigned: boolean;
+  creditBudget?: number;
   timeoutMinutes?: number;
   notes?: string;
   target_config: {
@@ -60,6 +61,7 @@ export interface ScanPayload {
   toolDepths?: Record<string, ScanDepth>;
   extraArgs?: string;
   timeoutMinutes?: number;
+  creditBudget?: number;
 }
 
 

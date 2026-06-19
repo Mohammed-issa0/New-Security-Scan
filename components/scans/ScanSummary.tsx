@@ -1,34 +1,50 @@
 'use client';
 
-import * as React from "react"
-import { Shield, Target, Key, Settings2, Code, AlertTriangle } from "lucide-react"
-import { ScanFormValues } from "@/lib/scans/types"
-import { Button, Badge, Alert } from "./ui"
-import { useTranslations, useLocale } from "next-intl"
-import { motion } from "framer-motion"
+import * as React from 'react';
+import { Shield, Target, Clock, Coins } from 'lucide-react';
+import type { ProfileScanFormSchemaType } from '@/lib/scans/schema';
+import { Button, Badge, Alert } from './ui';
+import { useTranslations } from 'next-intl';
+import { motion } from 'framer-motion';
+import { Code } from 'lucide-react';
 
 interface ScanSummaryProps {
-  values: ScanFormValues
-  isSubmitting: boolean
-  credits: number | null
-  onPreviewJson: () => void
+  values: ProfileScanFormSchemaType;
+  isSubmitting: boolean;
+  remainingCredits: number;
+  creditBudget: number;
+  maxRuntimeMinutes?: number;
+  isSubmitDisabled?: boolean;
+  disableReason?: string;
+  onPreviewJson: () => void;
 }
 
-export function ScanSummary({ values, isSubmitting, credits, onPreviewJson }: ScanSummaryProps) {
-  const t = useTranslations('scanForm.summary')
-  const locale = useLocale()
-  
-  const targetCount = values.targets ? values.targets.split('\n').filter(t => t.trim()).length : 0
-  const hasAuth = values.target_config.authentication.token || values.target_config.authentication.cookies.length > 0
-  const isSharedMode = process.env.NEXT_PUBLIC_SCAN_SUBMIT_MODE === 'shared'
+export function ScanSummary({
+  values,
+  isSubmitting,
+  remainingCredits,
+  creditBudget,
+  maxRuntimeMinutes,
+  isSubmitDisabled = false,
+  disableReason,
+  onPreviewJson,
+}: ScanSummaryProps) {
+  const t = useTranslations('scanForm.summary');
+  const tCredit = useTranslations('scanForm.creditBudget');
+  const tProfile = useTranslations('scanForm.fields.profile');
+
+  const hasTarget = Boolean(values.targets?.trim() || values.targetId);
+  const effectiveMaxRuntime = maxRuntimeMinutes ? maxRuntimeMinutes * creditBudget : null;
+  const submitDisabled = isSubmitting || isSubmitDisabled || remainingCredits <= 0;
+  const profileLabel = tProfile(`options.${values.profile}.title`);
 
   return (
     <div className="space-y-6">
       <div className="space-y-4">
         <div className="flex items-center justify-between">
           <h3 className="text-lg font-bold text-text-primary">{t('title')}</h3>
-          <Badge variant={targetCount > 0 ? 'success' : 'outline'}>
-            {t('targetsCount', { count: targetCount })}
+          <Badge variant={hasTarget ? 'success' : 'outline'}>
+            {hasTarget ? t('targetReady') : t('targetMissing')}
           </Badge>
         </div>
 
@@ -46,29 +62,28 @@ export function ScanSummary({ values, isSubmitting, credits, onPreviewJson }: Sc
           <div className="flex items-center gap-3 p-3 rounded-xl bg-white/6 border border-cyan-400/14">
             <Target size={18} className="text-cyan-300" />
             <div className="flex-1 min-w-0">
-              <p className="text-[10px] font-bold text-text-muted uppercase tracking-wider">Tool</p>
-              <Badge className="mt-0.5 uppercase font-bold">{values.tool}</Badge>
-              <p className="mt-1 text-[11px] text-text-muted">{values.tool_depth}</p>
+              <p className="text-[10px] font-bold text-text-muted uppercase tracking-wider">{tProfile('summaryLabel')}</p>
+              <Badge className="mt-0.5 uppercase font-bold">{profileLabel}</Badge>
             </div>
           </div>
 
           <div className="flex items-center gap-3 p-3 rounded-xl bg-white/6 border border-cyan-400/14">
-            <Key size={18} className="text-cyan-300" />
+            <Coins size={18} className="text-cyan-300" />
             <div className="flex-1 min-w-0">
-              <p className="text-[10px] font-bold text-text-muted uppercase tracking-wider">{t('auth')}</p>
-              <p className="text-xs font-medium text-text-secondary">
-                {hasAuth ? 'Enabled' : t('noAuth')}
+              <p className="text-[10px] font-bold text-text-muted uppercase tracking-wider">{tCredit('summaryLabel')}</p>
+              <p className="text-sm font-semibold text-text-primary">
+                {tCredit('summaryValue', { budget: creditBudget, remaining: remainingCredits })}
               </p>
             </div>
           </div>
 
-          {values.tool === 'zap' && values.zap_config && (
-            <div className="flex items-center gap-3 p-3 rounded-xl bg-cyan-400/8 border border-cyan-400/20">
-              <Settings2 size={18} className="text-cyan-300" />
+          {effectiveMaxRuntime != null && (
+            <div className="flex items-center gap-3 p-3 rounded-xl bg-white/6 border border-cyan-400/14">
+              <Clock size={18} className="text-cyan-300" />
               <div className="flex-1 min-w-0">
-                <p className="text-[10px] font-bold text-cyan-300 uppercase tracking-wider">{t('zapConfig')}</p>
-                <p className="text-xs font-medium text-text-secondary">
-                  {values.zap_config['scan-type']} spider {values.zap_config.ajax ? '+ ajax' : ''}
+                <p className="text-[10px] font-bold text-text-muted uppercase tracking-wider">{tCredit('maxRuntimeLabel')}</p>
+                <p className="text-sm font-semibold text-text-primary">
+                  {tCredit('maxRuntime', { minutes: effectiveMaxRuntime })}
                 </p>
               </div>
             </div>
@@ -76,45 +91,34 @@ export function ScanSummary({ values, isSubmitting, credits, onPreviewJson }: Sc
         </div>
       </div>
 
-      {values.has_captcha && (
-        <Alert variant="warning">
-          <div className="flex items-start gap-2">
-            <AlertTriangle size={16} className="shrink-0 mt-0.5" />
-            <p className="text-[11px] font-medium leading-relaxed">
-              {t('captchaWarning')}
-            </p>
-          </div>
-        </Alert>
-      )}
-
-      {isSharedMode && credits === 0 && (
+      {remainingCredits <= 0 && (
         <div className="p-4 bg-status-danger/12 border border-status-danger/28 rounded-xl space-y-3">
-          <div className="flex items-center gap-2 text-status-danger">
-            <AlertTriangle size={16} />
-            <span className="text-sm font-bold">{t('creditsError')}</span>
-          </div>
-          <p className="text-xs text-status-danger leading-relaxed">
-            {t('creditsDesc')}
-          </p>
+          <p className="text-xs text-status-danger leading-relaxed">{t('creditsDesc')}</p>
           <Button variant="danger" size="sm" className="w-full text-xs h-9">
             {t('upgrade')}
           </Button>
         </div>
       )}
 
+      {disableReason && (
+        <Alert variant="warning">
+          <p className="text-xs leading-relaxed">{disableReason}</p>
+        </Alert>
+      )}
+
       <div className="space-y-3 pt-2">
-        <Button 
-          type="submit" 
+        <Button
+          type="submit"
           form="scan-form"
           className="w-full shadow-lg shadow-cyan-400/20 py-6 h-auto text-lg"
-          disabled={isSubmitting || (isSharedMode && credits === 0)}
+          disabled={submitDisabled}
         >
           {isSubmitting ? (
             <span className="flex items-center gap-2">
-              <motion.svg 
+              <motion.svg
                 animate={{ rotate: 360 }}
-                transition={{ repeat: Infinity, duration: 1, ease: "linear" }}
-                className="h-5 w-5 text-white" 
+                transition={{ repeat: Infinity, duration: 1, ease: 'linear' }}
+                className="h-5 w-5 text-white"
                 viewBox="0 0 24 24"
               >
                 <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
@@ -122,12 +126,14 @@ export function ScanSummary({ values, isSubmitting, credits, onPreviewJson }: Sc
               </motion.svg>
               {t('starting')}
             </span>
-          ) : t('startScan')}
+          ) : (
+            t('startScan')
+          )}
         </Button>
-        
-        <Button 
+
+        <Button
           type="button"
-          variant="ghost" 
+          variant="ghost"
           onClick={onPreviewJson}
           className="w-full gap-2 text-text-muted hover:text-cyan-300 h-10 text-xs font-bold"
         >
@@ -135,7 +141,5 @@ export function ScanSummary({ values, isSubmitting, credits, onPreviewJson }: Sc
         </Button>
       </div>
     </div>
-  )
+  );
 }
-
-

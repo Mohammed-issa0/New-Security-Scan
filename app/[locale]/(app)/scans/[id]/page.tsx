@@ -17,11 +17,19 @@ import type {
 import { ApiRequestError } from '@/lib/api/client';
 import { 
   Shield, Clock, AlertTriangle, CheckCircle,
-  Terminal, BarChart, AlertCircle, PlayCircle, X, Sparkles
+  Terminal, BarChart, AlertCircle, PlayCircle, X, Sparkles, Coins
 } from 'lucide-react';
 import { toast } from 'sonner';
 import { PanelEmptyState, PanelErrorState, PanelLoadingState } from '@/components/common/AsyncStates';
 import { ConfirmationDialog } from '@/components/common/ConfirmationDialog';
+import { ScanCreditsDisplay } from '@/components/scans/ScanCreditsDisplay';
+import { AddCreditsDialog } from '@/components/scans/AddCreditsDialog';
+import { ScanQueueProgressCard } from '@/components/scans/ScanQueueProgressCard';
+import { ScanProfileBadge } from '@/components/scans/ScanProfileBadge';
+import { ScanStatusBanner } from '@/components/scans/ScanStatusBanner';
+import { normalizeScanStatus, isActiveScanStatus, isTerminalScanStatus, getScanDisplayName } from '@/lib/scans/scanStatus';
+import { buildSeverityCounts, getOverallRiskScore } from '@/lib/scans/reportUtils';
+import { useScanQueueEstimate } from '@/lib/scans/useScanQueueEstimate';
 
 type DetailsTab = 'overview' | 'tools' | 'vulnerabilities' | 'report';
 
@@ -29,6 +37,7 @@ const statusClassMap: Record<string, string> = {
   Pending: 'border border-status-warning/30 bg-status-warning/14 text-status-warning',
   Running: 'border border-cyan-300/30 bg-cyan-400/14 text-cyan-200',
   Completed: 'border border-status-success/28 bg-status-success/14 text-status-success',
+  CompletedWithLimits: 'border border-status-warning/30 bg-status-warning/14 text-status-warning',
   Failed: 'border border-status-danger/30 bg-status-danger/14 text-status-danger',
   Canceled: 'border border-white/14 bg-white/8 text-text-secondary',
   Unknown: 'border border-white/14 bg-white/8 text-text-secondary',
@@ -70,25 +79,7 @@ const formatDuration = (seconds: number | null, t: ReturnType<typeof useTranslat
   return `${mins}m ${secs}s`;
 };
 
-const normalizeStatus = (value: unknown): Scan['status'] | 'Unknown' => {
-  if (typeof value === 'string') {
-    if (['Pending', 'Running', 'Completed', 'Failed', 'Canceled'].includes(value)) {
-      return value as Scan['status'];
-    }
-    return 'Unknown';
-  }
-  if (typeof value === 'number') {
-    const map: Record<number, Scan['status']> = {
-      1: 'Pending',
-      2: 'Running',
-      3: 'Completed',
-      4: 'Failed',
-      5: 'Canceled',
-    };
-    return map[value] || 'Unknown';
-  }
-  return 'Unknown';
-};
+const normalizeStatus = normalizeScanStatus;
 
 const extractAiReportText = (payload: AiPostScanReportResponse | null, fallbackText: string) => {
   if (!payload) {
@@ -114,11 +105,13 @@ const extractAiReportText = (payload: AiPostScanReportResponse | null, fallbackT
 export default function ScanDetailsPage() {
   const { id } = useParams<{ id: string }>();
   const td = useTranslations('landing.scans.details');
+  const tReport = useTranslations('landing.scans.reportPage');
   const tCommon = useTranslations('common.states');
   const queryClient = useQueryClient();
   const locale = useLocale();
   const [activeTab, setActiveTab] = useState<DetailsTab>('overview');
   const [isCancelDialogOpen, setIsCancelDialogOpen] = useState(false);
+  const [isAddCreditsOpen, setIsAddCreditsOpen] = useState(false);
   const [jiraResult, setJiraResult] = useState<CreateJiraTicketsResponse | null>(null);
   const [aiVerbosity, setAiVerbosity] = useState<'brief' | 'detailed' | 'comprehensive'>('detailed');
   const [aiCreateJiraTickets, setAiCreateJiraTickets] = useState(false);
@@ -128,35 +121,52 @@ export default function ScanDetailsPage() {
     queryKey: ['scan', id],
     queryFn: () => scansService.getScanDetails(id),
     refetchInterval: (query) => {
-      const status = query.state.data?.status;
-      return status === 'Pending' || status === 'Running' ? 3000 : false;
+      const status = normalizeScanStatus(query.state.data?.status);
+      return isActiveScanStatus(status) ? 30_000 : false;
     },
+  });
+
+  const { data: queueEstimate } = useScanQueueEstimate({
+    scanId: id,
+    enabled: !!scan && isActiveScanStatus(normalizeScanStatus(scan.status)),
   });
 
   const { data: tools, isLoading: toolsLoading } = useQuery({
     queryKey: ['scan-tools', id],
     queryFn: () => scansService.getScanTools(id),
     enabled: !!scan,
-    refetchInterval: (query) => {
-      return scan?.status === 'Running' ? 3000 : false;
+    refetchInterval: () => {
+      const status = scan ? normalizeScanStatus(scan.status) : 'Unknown';
+      return status === 'Running' ? 3000 : false;
     },
   });
 
-  const { data: vulnerabilities } = useQuery({
+  const { data: vulnerabilities, isLoading: vulnerabilitiesLoading } = useQuery({
     queryKey: ['scan-vulnerabilities', id],
     queryFn: () => scansService.getScanVulnerabilities(id),
     enabled: !!scan,
+    refetchInterval: () => {
+      const status = scan ? normalizeScanStatus(scan.status) : 'Unknown';
+      return isActiveScanStatus(status) ? 10_000 : false;
+    },
   });
 
   const { data: report } = useQuery({
     queryKey: ['scan-report', id],
-    queryFn: () => scansService.getReport(id),
-    enabled: !!scan && scan.status === 'Completed',
+    queryFn: () => scansService.getReportOptional(id),
+    enabled: !!scan && isTerminalScanStatus(normalizeScanStatus(scan.status)),
+    retry: false,
+    refetchOnWindowFocus: false,
   });
 
   const { data: activePlan } = useQuery({
     queryKey: ['plans-active'],
     queryFn: () => plansService.getActivePlan(),
+  });
+
+  const { data: plansData } = useQuery({
+    queryKey: ['plans-public'],
+    queryFn: () => plansService.listPublic(),
   });
 
   const cancelMutation = useMutation({
@@ -246,25 +256,18 @@ export default function ScanDetailsPage() {
     queries: (tools || [])
       .map((tool) => {
         const toolStatus = normalizeToolStatus(tool.status);
-        const isToolPendingOrRunning = toolStatus === 'Pending' || toolStatus === 'Running';
-        if (!tool.id || !scan || !isToolPendingOrRunning) {
+        const isToolRunning = toolStatus === 'Running';
+        if (!tool.id || !scan || !isToolRunning) {
           return null;
         }
         return {
           queryKey: ['scan-tool-eta', id, tool.id],
-          queryFn: async () => {
-            try {
-              return await scansService.getToolEstimatedFinishTime(id, tool.id!);
-            } catch (error) {
-              if (error instanceof ApiRequestError && error.status === 404) {
-                return null;
-              }
-              throw error;
-            }
-          },
-          enabled: scan.status === 'Pending' || scan.status === 'Running',
-          refetchInterval: 30000,
-          staleTime: 10000,
+          queryFn: () => scansService.getToolEstimatedFinishTimeOptional(id, tool.id!),
+          enabled: !!scan && isActiveScanStatus(normalizeScanStatus(scan.status)),
+          retry: false,
+          refetchOnWindowFocus: false,
+          refetchInterval: (query) => (query.state.data === null ? false : 30_000),
+          staleTime: 10_000,
         };
       })
       .filter((query): query is NonNullable<typeof query> => !!query),
@@ -291,15 +294,39 @@ export default function ScanDetailsPage() {
   }
 
   const normalizedStatus = normalizeStatus(scan.status);
-  const statusKey = ['pending', 'running', 'completed', 'failed', 'canceled'].includes(normalizedStatus.toLowerCase())
+  const statusKey = [
+    'pending',
+    'running',
+    'completed',
+    'completedwithlimits',
+    'failed',
+    'canceled',
+  ].includes(normalizedStatus.toLowerCase())
     ? normalizedStatus.toLowerCase()
     : 'unknown';
+
+  const planName = activePlan?.planName?.trim().toLowerCase();
+  const currentPlan = plansData?.find((plan) => plan.planName?.trim().toLowerCase() === planName);
+  const planMaxRuntimeMinutes =
+    currentPlan?.maxRuntimeMinutes ??
+    currentPlan?.max_runtime_minutes ??
+    activePlan?.maxRuntimeMinutes ??
+    activePlan?.max_runtime_minutes ??
+    60;
+  const remainingCredits = activePlan?.remainingCredits ?? 0;
+  const creditBudget = scan.creditBudget ?? 1;
+  const canAddCredits =
+    isActiveScanStatus(normalizedStatus) &&
+    creditBudget < 4 &&
+    remainingCredits > 0;
 
   const toolNames = scan.toolNames && scan.toolNames.length > 0
     ? scan.toolNames
     : (tools || [])
         .map((tool) => tool.toolName)
         .filter((toolName): toolName is string => !!toolName);
+
+  const primaryTool = toolNames[0];
 
   const formatDate = (value?: string) =>
     value ? new Date(value).toLocaleString(locale) : '-';
@@ -335,7 +362,7 @@ export default function ScanDetailsPage() {
   const etaMap = etaQueries.reduce<Record<string, EstimatedFinishTime | null>>((acc, query, index) => {
     const sourceTool = (tools || []).filter((tool) => {
       const toolStatus = normalizeToolStatus(tool.status);
-      return tool.id && (toolStatus === 'Pending' || toolStatus === 'Running');
+      return tool.id && toolStatus === 'Running';
     })[index];
     if (sourceTool?.id) {
       acc[sourceTool.id] = query.data ?? null;
@@ -350,6 +377,21 @@ export default function ScanDetailsPage() {
     .sort((a, b) => new Date(a.estimatedFinishAt || 0).getTime() - new Date(b.estimatedFinishAt || 0).getTime())[0];
 
   const runningOrPendingToolCount = toolRows.filter((tool) => tool.status === 'Pending' || tool.status === 'Running').length;
+  const queueProgressSource = queueEstimate ?? {
+    status: scan.status,
+    queuePosition: scan.queuePosition ?? (normalizedStatus === 'Running' ? 0 : null),
+    estimatedWaitSeconds: scan.estimatedWaitSeconds,
+    estimatedFinishAt: scan.estimatedFinishAt,
+    progressPercent: scan.progressPercent ?? (normalizedStatus === 'Pending' ? 0 : null),
+  };
+  const scanLevelFinishAt = queueProgressSource.estimatedFinishAt ?? null;
+  const displayNextEtaAt = nextEta?.estimatedFinishAt ?? scanLevelFinishAt;
+  const displayJobsAhead = nextEta?.jobsAheadCount ?? null;
+  const isActiveScan = isActiveScanStatus(normalizedStatus);
+  const showEtaUnavailable =
+    isActiveScan &&
+    runningOrPendingToolCount > 0 &&
+    !displayNextEtaAt;
   const aiOutput = extractAiReportText(aiPostScanReport, td('aiReport.emptyOutput'));
   const promptTokens = aiPostScanReport?.tokenUsage?.promptTokens ?? aiPostScanReport?.tokenUsage?.inputTokens;
   const completionTokens = aiPostScanReport?.tokenUsage?.completionTokens ?? aiPostScanReport?.tokenUsage?.outputTokens;
@@ -371,13 +413,14 @@ export default function ScanDetailsPage() {
             <p className="text-xs font-semibold uppercase tracking-[0.18em] text-cyan-300">{td('eyebrow')}</p>
             <h1 className="mt-2 flex items-center gap-2 text-3xl font-bold text-text-primary">
               <Shield className="h-7 w-7 text-cyan-300" />
-              {td('title', { id: scan.id.slice(0, 8) })}
+              {getScanDisplayName(scan) || tReport('title', { id: scan.id.slice(0, 8) })}
             </h1>
             <div className="mt-3 flex flex-wrap items-center gap-2 text-sm text-text-secondary">
               <span className="text-xs font-semibold uppercase tracking-wider text-text-muted">{td('statusLabel')}</span>
               <span className={`inline-flex items-center rounded-full px-2.5 py-1 text-xs font-semibold ${statusClassMap[normalizedStatus] || statusClassMap.Unknown}`}>
                 {td(`status.${statusKey}`)}
               </span>
+              <ScanProfileBadge profile={scan.profile} />
               <span className="text-xs text-text-muted">•</span>
               <span>{td('requestedAt', { date: formatDate(scan.requestedAt) })}</span>
             </div>
@@ -391,6 +434,15 @@ export default function ScanDetailsPage() {
               <BarChart className="h-4 w-4" />
               {td('openReportPage')}
             </Link>
+            <button
+              type="button"
+              onClick={() => setIsAddCreditsOpen(true)}
+              disabled={!canAddCredits}
+              className="inline-flex items-center gap-2 rounded-lg border border-cyan-300/30 bg-cyan-400/12 px-4 py-2 text-sm font-medium text-cyan-200 hover:bg-cyan-400/18 disabled:cursor-not-allowed disabled:opacity-50"
+            >
+              <Coins className="h-4 w-4" />
+              {td('addCredits.button')}
+            </button>
             <button
               type="button"
               onClick={() => createJiraTicketsMutation.mutate()}
@@ -430,33 +482,83 @@ export default function ScanDetailsPage() {
         </div>
       </div>
 
-      <div className="app-panel rounded-2xl p-4">
-        <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-          <div>
-            <p className="text-xs font-semibold uppercase tracking-wider text-cyan-300">{td('eta.title')}</p>
-            <p className="mt-1 text-sm text-text-secondary">{td('eta.subtitle')}</p>
-          </div>
-          <div className="grid grid-cols-1 gap-2 text-sm sm:grid-cols-3">
-            <div className="rounded-lg border border-white/12 bg-white/6 px-3 py-2 text-center">
-              <p className="text-xs text-text-muted">{td('eta.activeTools')}</p>
-              <p className="font-semibold text-text-primary">{runningOrPendingToolCount}</p>
-            </div>
-            <div className="rounded-lg border border-white/12 bg-white/6 px-3 py-2 text-center">
-              <p className="text-xs text-text-muted">{td('eta.jobsAhead')}</p>
-              <p className="font-semibold text-text-primary">{nextEta?.jobsAheadCount ?? '-'}</p>
-            </div>
-            <div className="rounded-lg border border-white/12 bg-white/6 px-3 py-2 text-center">
-              <p className="text-xs text-text-muted">{td('eta.nextEta')}</p>
-              <p className="font-semibold text-text-primary">
-                {nextEta?.estimatedFinishAt ? formatDate(nextEta.estimatedFinishAt) : td('eta.unavailable')}
-              </p>
+      <ScanStatusBanner
+        limitMessage={normalizedStatus !== 'CompletedWithLimits' ? scan.limitMessage : undefined}
+        failureReason={normalizedStatus === 'Failed' ? scan.failureReason : undefined}
+        targetId={scan.targetId}
+      />
+
+      {normalizedStatus === 'CompletedWithLimits' && (
+        <div className="rounded-xl border border-status-warning/30 bg-status-warning/12 p-4 text-sm text-status-warning">
+          <div className="flex items-start gap-2">
+            <AlertTriangle className="h-5 w-5 shrink-0" />
+            <div className="space-y-1">
+              {scan.limitMessage ? <p>{scan.limitMessage}</p> : null}
+              {creditBudget > 1 ? (
+                <p>
+                  {td('completedWithLimits.upgraded', {
+                    credits: creditBudget,
+                    minutes: creditBudget * planMaxRuntimeMinutes,
+                  })}
+                </p>
+              ) : (
+                <p>{td('completedWithLimits.default')}</p>
+              )}
             </div>
           </div>
         </div>
-      </div>
+      )}
+
+      {isActiveScanStatus(normalizedStatus) ? (
+        <ScanQueueProgressCard source={queueProgressSource} variant="full" />
+      ) : null}
+
+      {isActiveScan ? (
+        <div className="app-panel rounded-2xl p-4">
+          <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-wider text-cyan-300">{td('eta.title')}</p>
+              <p className="mt-1 text-sm text-text-secondary">{td('eta.subtitle')}</p>
+            </div>
+            <div className="grid grid-cols-1 gap-2 text-sm sm:grid-cols-3">
+              <div className="rounded-lg border border-white/12 bg-white/6 px-3 py-2 text-center">
+                <p className="text-xs text-text-muted">{td('eta.activeTools')}</p>
+                <p className="font-semibold text-text-primary">{runningOrPendingToolCount}</p>
+              </div>
+              <div className="rounded-lg border border-white/12 bg-white/6 px-3 py-2 text-center">
+                <p className="text-xs text-text-muted">{td('eta.jobsAhead')}</p>
+                <p className="font-semibold text-text-primary">{displayJobsAhead ?? '-'}</p>
+              </div>
+              <div className="rounded-lg border border-white/12 bg-white/6 px-3 py-2 text-center">
+                <p className="text-xs text-text-muted">{td('eta.nextEta')}</p>
+                <p className="font-semibold text-text-primary">
+                  {displayNextEtaAt
+                    ? formatDate(displayNextEtaAt)
+                    : showEtaUnavailable
+                      ? td('eta.unavailable')
+                      : '-'}
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      ) : null}
 
       {/* Summary Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
+        <div className="rounded-xl border border-white/14 bg-white/6 p-4 shadow-sm">
+          <div className="mb-1 flex items-center text-sm text-text-secondary">
+            <Coins className="h-4 w-4 mr-2" />
+            {td('creditsLabel')}
+          </div>
+          <div className="text-sm font-semibold">
+            <ScanCreditsDisplay
+              status={normalizedStatus}
+              creditBudget={creditBudget}
+              creditsConsumed={scan.creditsConsumed}
+            />
+          </div>
+        </div>
         <div className="rounded-xl border border-white/14 bg-white/6 p-4 shadow-sm">
           <div className="mb-1 flex items-center text-sm text-text-secondary">
             <Clock className="h-4 w-4 mr-2" />
@@ -511,13 +613,13 @@ export default function ScanDetailsPage() {
         </div>
       )}
 
-      {(normalizedStatus === 'Failed' || normalizedStatus === 'Canceled') && (
+      {(normalizedStatus === 'Failed' || normalizedStatus === 'Canceled') && scan.error && !scan.limitMessage && (
         <div className="rounded-xl border border-status-danger/30 bg-status-danger/14 p-4 text-status-danger">
           <div className="mb-1 flex items-center gap-2 text-sm font-semibold">
             <AlertCircle className="h-4 w-4" />
             {normalizedStatus === 'Failed' ? td('failureDetailsTitle') : td('terminationDetailsTitle')}
           </div>
-          <p className="text-sm">{scan.error || td('failureDetailsEmpty')}</p>
+          <p className="text-sm">{scan.error}</p>
         </div>
       )}
 
@@ -648,7 +750,11 @@ export default function ScanDetailsPage() {
                   <tr>
                     <td colSpan={7} className="px-4 py-6 text-center text-sm text-text-secondary">{td('toolsEmpty')}</td>
                   </tr>
-                ) : toolRows.map((tool) => (
+                ) : toolRows.map((tool) => {
+                  const isActiveTool = tool.status === 'Pending' || tool.status === 'Running';
+                  const toolEta = tool.id ? etaMap[tool.id] : null;
+
+                  return (
                   <tr key={tool.toolName}>
                     <td className="px-4 py-3 text-sm font-medium text-text-primary">{tool.toolName}</td>
                     <td className="px-4 py-3 text-sm">
@@ -656,24 +762,29 @@ export default function ScanDetailsPage() {
                         {tool.status}
                       </span>
                     </td>
-                    <td className="px-4 py-3 text-sm text-text-secondary">{tool.id ? (etaMap[tool.id]?.queuePosition ?? '-') : '-'}</td>
-                    <td className="px-4 py-3 text-sm text-text-secondary">{tool.id ? (etaMap[tool.id]?.jobsAheadCount ?? '-') : '-'}</td>
                     <td className="px-4 py-3 text-sm text-text-secondary">
-                      {tool.id
-                        ? (etaMap[tool.id]?.estimatedFinishAt
-                          ? formatDate(etaMap[tool.id]?.estimatedFinishAt || undefined)
+                      {isActiveTool ? (toolEta?.queuePosition ?? '-') : '-'}
+                    </td>
+                    <td className="px-4 py-3 text-sm text-text-secondary">
+                      {isActiveTool ? (toolEta?.jobsAheadCount ?? '-') : '-'}
+                    </td>
+                    <td className="px-4 py-3 text-sm text-text-secondary">
+                      {isActiveTool
+                        ? (toolEta?.estimatedFinishAt
+                          ? formatDate(toolEta.estimatedFinishAt)
                           : td('eta.unavailable'))
-                        : td('eta.unavailable')}
+                        : '-'}
                     </td>
                     <td className="px-4 py-3 text-sm text-text-secondary">{formatDate(tool.startTime)}</td>
                     <td className="px-4 py-3 text-sm text-text-secondary">{formatDate(tool.endTime)}</td>
                   </tr>
-                ))}
+                  );
+                })}
               </tbody>
             </table>
           </div>
           {toolsLoading && <p className="text-sm text-text-secondary">{td('loadingTools')}</p>}
-          {!toolsLoading && !hasAnyEta && (
+          {!toolsLoading && runningOrPendingToolCount > 0 && !hasAnyEta && (
             <p className="text-sm text-text-secondary">{td('eta.empty')}</p>
           )}
         </div>
@@ -685,7 +796,11 @@ export default function ScanDetailsPage() {
             <AlertTriangle className="h-5 w-5" />
             {td('vulnerabilities')}
           </h2>
-          {vulnerabilities && vulnerabilities.length > 0 ? (
+          {vulnerabilitiesLoading ? (
+            <div className="rounded-xl border border-white/12 bg-white/6 p-8 text-center text-text-secondary">
+              {tCommon('loading')}
+            </div>
+          ) : vulnerabilities && vulnerabilities.length > 0 ? (
             <div className="space-y-3">
               {vulnerabilities.map((vuln) => (
                 <div key={vuln.id} className="rounded-xl border border-white/12 bg-white/6 p-4 shadow-sm">
@@ -727,7 +842,7 @@ export default function ScanDetailsPage() {
             </div>
           ) : (
             <div className="rounded-xl border border-white/12 bg-white/6 p-8 text-center text-text-secondary">
-              {normalizedStatus === 'Completed' ? td('noVulnerabilities') : td('scanInProgress')}
+              {isActiveScanStatus(normalizedStatus) ? td('scanInProgress') : td('noVulnerabilities')}
             </div>
           )}
         </div>
@@ -847,7 +962,7 @@ export default function ScanDetailsPage() {
             <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
               <div className="rounded-xl border border-white/14 bg-white/6 p-4 lg:col-span-1">
                 <p className="text-sm text-text-secondary">{td('riskScoreLabel')}</p>
-                <p className="mt-2 text-3xl font-bold text-status-danger">{(report.overallRiskScore ?? report.riskScore ?? 0).toFixed(1)}/100</p>
+                <p className="mt-2 text-3xl font-bold text-status-danger">{getOverallRiskScore(report).toFixed(1)}/100</p>
               </div>
               <div className="rounded-xl border border-white/14 bg-white/6 p-4 lg:col-span-2">
                 <p className="text-sm text-text-secondary">{td('reportGeneratedAt', { date: report.generatedAt ? new Date(report.generatedAt).toLocaleString(locale) : '-' })}</p>
@@ -855,13 +970,24 @@ export default function ScanDetailsPage() {
                   {(['Critical', 'High', 'Medium', 'Low', 'Info'] as const).map((severity) => (
                     <div key={severity} className="rounded-lg border border-white/10 bg-white/8 p-2 text-center">
                       <p className="text-xs text-text-muted">{severity}</p>
-                      <p className="font-semibold text-text-primary">{
-                        severity === 'Critical' ? (report.criticalCount ?? report.vulnerabilityCounts?.Critical ?? 0) :
-                        severity === 'High' ? (report.highCount ?? report.vulnerabilityCounts?.High ?? 0) :
-                        severity === 'Medium' ? (report.mediumCount ?? report.vulnerabilityCounts?.Medium ?? 0) :
-                        severity === 'Low' ? (report.lowCount ?? report.vulnerabilityCounts?.Low ?? 0) :
-                        (report.infoCount ?? report.vulnerabilityCounts?.Info ?? 0)
-                      }</p>
+                      <p className="font-semibold text-text-primary">{buildSeverityCounts(report)[severity]}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          ) : (vulnerabilities?.length ?? 0) > 0 ? (
+            <div className="space-y-4">
+              <div className="rounded-xl border border-status-warning/30 bg-status-warning/12 p-4 text-sm text-status-warning">
+                {td('reportUnavailable')}
+              </div>
+              <div className="rounded-xl border border-white/14 bg-white/6 p-4">
+                <p className="text-sm text-text-secondary">{td('vulnerabilitiesCountLabel')}</p>
+                <div className="mt-4 grid grid-cols-2 gap-2 text-sm sm:grid-cols-5">
+                  {(['Critical', 'High', 'Medium', 'Low', 'Info'] as const).map((severity) => (
+                    <div key={severity} className="rounded-lg border border-white/10 bg-white/8 p-2 text-center">
+                      <p className="text-xs text-text-muted">{severity}</p>
+                      <p className="font-semibold text-text-primary">{buildSeverityCounts(null, vulnerabilities)[severity]}</p>
                     </div>
                   ))}
                 </div>
@@ -869,7 +995,7 @@ export default function ScanDetailsPage() {
             </div>
           ) : (
             <div className="rounded-xl border border-white/12 bg-white/6 p-8 text-center text-text-secondary">
-              {normalizedStatus === 'Completed' ? td('reportUnavailable') : td('reportPending')}
+              {isTerminalScanStatus(normalizedStatus) ? td('reportUnavailable') : td('reportPending')}
             </div>
           )}
         </div>
@@ -888,6 +1014,16 @@ export default function ScanDetailsPage() {
         }}
         onConfirm={() => cancelMutation.mutate()}
         isPending={cancelMutation.isPending}
+      />
+
+      <AddCreditsDialog
+        isOpen={isAddCreditsOpen}
+        onClose={() => setIsAddCreditsOpen(false)}
+        scanId={id}
+        creditBudget={creditBudget}
+        remainingCredits={remainingCredits}
+        maxRuntimeMinutes={planMaxRuntimeMinutes}
+        toolName={primaryTool}
       />
     </div>
   );
