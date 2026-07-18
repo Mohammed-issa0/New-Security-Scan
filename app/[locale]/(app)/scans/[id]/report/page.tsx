@@ -502,14 +502,6 @@ export default function ScanReportPage() {
           <h2 className="text-xl font-semibold text-text-primary">{t('summaryTitle')}</h2>
           <dl className="mt-4 space-y-3 text-sm">
             <div className="flex items-center justify-between gap-4">
-              <dt className="text-text-secondary">{td('scanIdLabel')}</dt>
-              <dd className="font-medium text-text-primary">{scan.id}</dd>
-            </div>
-            <div className="flex items-center justify-between gap-4">
-              <dt className="text-text-secondary">{td('targetIdLabel')}</dt>
-              <dd className="font-medium text-text-primary">{scan.targetId}</dd>
-            </div>
-            <div className="flex items-center justify-between gap-4">
               <dt className="text-text-secondary">{td('requestedAtLabel')}</dt>
               <dd className="font-medium text-text-primary">{formatDate(scan.requestedAt)}</dd>
             </div>

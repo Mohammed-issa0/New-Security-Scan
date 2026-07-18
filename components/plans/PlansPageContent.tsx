@@ -13,7 +13,7 @@ import type { UserProfile } from '@/lib/api/types';
 import { plansService } from '@/lib/plans/plansService';
 import type { CheckoutSessionResponse, PlanPublicResponse, PurchaseExtraScanResponse, PurchasePlanResponse } from '@/lib/plans/types';
 import { ApiRequestError } from '@/lib/api/client';
-import { findMatchingPlanDefinition, getCreditsUsagePercent, getPlanDisplayName, getPlanTools } from '@/lib/plans/utils';
+import { findMatchingPlanDefinition, getCreditsUsagePercent, getPlanDisplayName } from '@/lib/plans/utils';
 import { Alert, Badge, Button } from '@/components/scans/ui';
 import { toast } from 'sonner';
 
@@ -231,26 +231,6 @@ export function PlansPageContent({
       key: 'runtime',
       label: t('compare.rows.runtime'),
       render: (plan: PlanPublicResponse) => t('compare.runtimeValue', { minutes: plan.maxRuntimeMinutes }),
-    },
-    {
-      key: 'tools',
-      label: t('compare.rows.tools'),
-      render: (plan: PlanPublicResponse) => {
-        const tools = getPlanTools(plan);
-        return tools.length > 0 ? tools.join(', ') : t('plansSection.toolsAll');
-      },
-    },
-    {
-      key: 'auth',
-      label: t('compare.rows.authScanning'),
-      render: (plan: PlanPublicResponse) =>
-        plan.restrictions?.allow_auth_scanning ? t('plansSection.allowAuth') : t('plansSection.blockAuth'),
-    },
-    {
-      key: 'bruteforce',
-      label: t('compare.rows.bruteforce'),
-      render: (plan: PlanPublicResponse) =>
-        plan.restrictions?.allow_bruteforce ? t('plansSection.allowBrute') : t('plansSection.blockBrute'),
     },
     {
       key: 'extra',
@@ -486,37 +466,6 @@ export function PlansPageContent({
                       <Check size={16} className="mt-0.5 text-cyan-300" />
                       <span>{t('plansSection.runtime', { minutes: formatCredits(plan.maxRuntimeMinutes) })}</span>
                     </li>
-                    <li className="flex items-start gap-2">
-                      <Check size={16} className="mt-0.5 text-cyan-300" />
-                      <span>{t('plansSection.toolsLabel')}</span>
-                    </li>
-                    <div className="flex flex-wrap gap-2">
-                      {getPlanTools(plan).length === 0 ? (
-                        <Badge variant="outline">{t('plansSection.toolsAll')}</Badge>
-                      ) : (
-                        getPlanTools(plan).map((tool) => (
-                          <Badge key={tool} variant="outline">
-                            {tool}
-                          </Badge>
-                        ))
-                      )}
-                    </div>
-                    <li className="flex items-start gap-2">
-                      <Check size={16} className="mt-0.5 text-cyan-300" />
-                      <span>{t('plansSection.restrictionsLabel')}</span>
-                    </li>
-                    <div className="flex flex-wrap gap-2">
-                      <Badge variant={plan.restrictions?.allow_auth_scanning ? 'success' : 'warning'}>
-                        {plan.restrictions?.allow_auth_scanning
-                          ? t('plansSection.allowAuth')
-                          : t('plansSection.blockAuth')}
-                      </Badge>
-                      <Badge variant={plan.restrictions?.allow_bruteforce ? 'success' : 'warning'}>
-                        {plan.restrictions?.allow_bruteforce
-                          ? t('plansSection.allowBrute')
-                          : t('plansSection.blockBrute')}
-                      </Badge>
-                    </div>
                     <li className="flex items-start gap-2">
                       <Check size={16} className="mt-0.5 text-cyan-300" />
                       <span>{t('plansSection.extraCreditLabel')}</span>

@@ -16,6 +16,7 @@ import { ScanSummary } from './ScanSummary';
 import { CreditBudgetSelector } from './CreditBudgetSelector';
 import { ProfileSelector } from './ProfileSelector';
 import { JsonPreviewDialog } from './JsonPreviewDialog';
+import { TargetPicker } from './TargetPicker';
 import { motion } from 'framer-motion';
 import { scansService } from '@/lib/scans/scansService';
 import { plansService } from '@/lib/plans/plansService';
@@ -296,52 +297,27 @@ export default function ScanForm() {
               error={errors.profile?.message}
             />
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="space-y-1.5">
-                <Label required>{t('fields.target.label')}</Label>
-                <select
-                  {...register('targetId', {
-                    onChange: (event) => {
-                      if (event.target.value) {
-                        setManualTargetUrl('');
-                        const target = targetsData?.items?.find((item) => item.id === event.target.value);
-                        if (target) {
-                          setValue('targets', target.url);
-                        }
-                      }
-                    },
-                  })}
-                  disabled={targetsLoading || !targetsData?.items?.length}
-                  className="h-11 w-full rounded-lg border border-cyan-400/18 bg-white/5 px-3 text-sm text-text-primary outline-none focus:border-cyan-300/70 focus:ring-2 focus:ring-cyan-300/45"
-                >
-                  <option value="">
-                    {targetsLoading ? t('fields.target.loading') : t('fields.target.placeholder')}
-                  </option>
-                  {targetsData?.items?.map((target) => (
-                    <option key={target.id} value={target.id}>
-                      {target.url}
-                    </option>
-                  ))}
-                </select>
-                <p className="text-[11px] text-text-muted">{t('fields.target.hint')}</p>
-              </div>
-              <div className="space-y-1.5">
-                <Label>{t('fields.target.orEnterUrl')}</Label>
-                <Input
-                  value={manualTargetUrl}
-                  onChange={(event) => {
-                    const value = event.target.value;
-                    setManualTargetUrl(value);
-                    if (value.trim()) {
-                      setValue('targetId', '');
-                      setValue('targets', value.trim());
-                      clearErrors('targets');
-                    }
-                  }}
-                  placeholder="example.com"
-                />
-                <p className="text-[11px] text-text-muted">{t('fields.target.autoCreateHint')}</p>
-              </div>
+            <div className="space-y-1.5">
+              <TargetPicker
+                targets={targetsData?.items ?? []}
+                loading={targetsLoading}
+                value={manualTargetUrl}
+                selectedId={formValues.targetId || ''}
+                onChange={({ url, targetId }) => {
+                  setManualTargetUrl(url);
+                  setValue('targets', url.trim());
+                  setValue('targetId', targetId);
+                  clearErrors('targets');
+                }}
+                label={t('fields.target.label')}
+                required
+                placeholder={t('fields.target.placeholder')}
+                loadingLabel={t('fields.target.loading')}
+                emptyLabel={t('fields.target.empty')}
+                noMatchesLabel={t('fields.target.noMatches')}
+                hint={t('fields.target.hint')}
+              />
+              <input type="hidden" {...register('targetId')} />
             </div>
 
             <CreditBudgetSelector

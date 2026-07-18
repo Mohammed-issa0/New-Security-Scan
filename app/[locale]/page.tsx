@@ -3,6 +3,7 @@ import { Hero, Features, Tools } from '@/components/landing/MainSections';
 import { HowItWorks, AuthHighlight, TrustSection } from '@/components/landing/SecondarySections';
 import { Personas, FinalCTA, Footer } from '@/components/landing/FinalSections';
 import { LandingAtmosphere } from '@/components/landing/Atmosphere';
+import { LandingHashScroll } from '@/components/landing/LandingHashScroll';
 import { PlansPageContent } from '@/components/plans/PlansPageContent';
 import { FloatingAssistant } from '@/components/guided-setup/FloatingAssistant';
 import { setRequestLocale } from 'next-intl/server';
@@ -15,6 +16,7 @@ export default function LandingPage({ params: { locale } }: { params: { locale: 
   return (
     <main className={`black-brains-landing min-h-screen selection:bg-cyan-200 selection:text-cyan-950 overflow-x-hidden ${fontClass}`}>
       <LandingAtmosphere />
+      <LandingHashScroll />
       <Navbar />
       <div className="relative z-10">
         <Hero />

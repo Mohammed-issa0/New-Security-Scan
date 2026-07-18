@@ -7,6 +7,7 @@ import { Container, Section, GradientText } from "./ui"
 import { useTranslations, useLocale } from "next-intl"
 import { motion } from "framer-motion"
 import { buttonInteraction } from "../scans/ui"
+import { rememberLegalReturnPath } from "@/lib/navigation/legalReturn"
 
 export function Personas() {
   const t = useTranslations('landing.personas') 
@@ -100,10 +101,10 @@ export function Footer() {
             <h5 className="font-bold text-text-primary mb-6 uppercase text-xs tracking-widest">{tf('productTitle')}</h5>
             <ul className="space-y-4 text-sm text-text-secondary font-medium">
               <li>
-                <Link href="#features" className="transition-colors hover:text-cyan-300">{t('nav.features')}</Link>
+                <Link href={`/${locale}/#features`} className="transition-colors hover:text-cyan-300">{t('nav.features')}</Link>
               </li>
               <li>
-                <Link href="#plans" className="transition-colors hover:text-cyan-300">{t('nav.plans')}</Link>
+                <Link href={`/${locale}/#plans`} className="transition-colors hover:text-cyan-300">{t('nav.plans')}</Link>
               </li>
             </ul>
           </div>
@@ -111,8 +112,24 @@ export function Footer() {
           <div>
             <h5 className="font-bold text-text-primary mb-6 uppercase text-xs tracking-widest">{tf('legalTitle')}</h5>
             <ul className="space-y-4 text-sm text-text-secondary font-medium">
-              <li className="cursor-pointer transition-colors hover:text-cyan-300">{tf('privacy')}</li>
-              <li className="cursor-pointer transition-colors hover:text-cyan-300">{tf('terms')}</li>
+              <li>
+                <Link
+                  href={`/${locale}/privacy`}
+                  onClick={rememberLegalReturnPath}
+                  className="transition-colors hover:text-cyan-300"
+                >
+                  {tf('privacy')}
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href={`/${locale}/terms`}
+                  onClick={rememberLegalReturnPath}
+                  className="transition-colors hover:text-cyan-300"
+                >
+                  {tf('terms')}
+                </Link>
+              </li>
             </ul>
           </div>
         </div>

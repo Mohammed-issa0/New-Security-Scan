@@ -11,7 +11,7 @@ import { toast } from 'sonner';
 import { ApiRequestError } from '@/lib/api/client';
 import { plansService } from '@/lib/plans/plansService';
 import type { CheckoutSessionResponse, PurchaseExtraScanResponse } from '@/lib/plans/types';
-import { findMatchingPlanDefinition, getCreditsUsagePercent, getPlanDisplayName, getPlanTools } from '@/lib/plans/utils';
+import { findMatchingPlanDefinition, getCreditsUsagePercent, getPlanDisplayName } from '@/lib/plans/utils';
 import { getPlanMaxConcurrentScans } from '@/lib/scans/concurrency';
 import { Alert, Badge, Button } from '@/components/scans/ui';
 
@@ -59,7 +59,6 @@ export function CurrentPlanPageContent() {
   });
 
   const matchingPlan = findMatchingPlanDefinition(activePlan, plansData);
-  const tools = getPlanTools(matchingPlan || activePlan);
   const usagePercent = getCreditsUsagePercent(activePlan);
   const extraRules = matchingPlan?.extraCredit;
   const maxConcurrentScans = getPlanMaxConcurrentScans(matchingPlan);
@@ -335,37 +334,6 @@ export function CurrentPlanPageContent() {
                 >
                   {extraCreditMutation.isPending ? t('actions.processing') : t('actions.buyExtraCredit')}
                 </Button>
-              </div>
-            </div>
-          </section>
-
-          <section className="grid gap-6 xl:grid-cols-2">
-            <div className="rounded-3xl border border-white/14 bg-white/6 p-6 shadow-sm">
-              <h2 className="text-xl font-bold text-text-primary">{t('access.title')}</h2>
-              <p className="mt-1 text-sm text-text-secondary">{t('access.subtitle')}</p>
-              <div className="mt-6 flex flex-wrap gap-2">
-                {tools.length > 0 ? (
-                  tools.map((tool) => (
-                    <Badge key={tool} variant="outline">
-                      {tool}
-                    </Badge>
-                  ))
-                ) : (
-                  <Badge variant="outline">{t('access.allTools')}</Badge>
-                )}
-              </div>
-            </div>
-
-            <div className="rounded-3xl border border-white/14 bg-white/6 p-6 shadow-sm">
-              <h2 className="text-xl font-bold text-text-primary">{t('restrictions.title')}</h2>
-              <p className="mt-1 text-sm text-text-secondary">{t('restrictions.subtitle')}</p>
-              <div className="mt-6 flex flex-wrap gap-2">
-                <Badge variant={matchingPlan?.restrictions?.allow_auth_scanning ? 'success' : 'warning'}>
-                  {matchingPlan?.restrictions?.allow_auth_scanning ? t('restrictions.authAllowed') : t('restrictions.authBlocked')}
-                </Badge>
-                <Badge variant={matchingPlan?.restrictions?.allow_bruteforce ? 'success' : 'warning'}>
-                  {matchingPlan?.restrictions?.allow_bruteforce ? t('restrictions.bruteforceAllowed') : t('restrictions.bruteforceBlocked')}
-                </Badge>
               </div>
             </div>
           </section>

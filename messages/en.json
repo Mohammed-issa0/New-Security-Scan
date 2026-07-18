@@ -943,9 +943,11 @@
       },
       "target": {
         "label": "Target",
-        "placeholder": "Select target",
+        "placeholder": "Type a URL or choose a saved target",
         "loading": "Loading targets...",
-        "hint": "Choose one existing target for this scan.",
+        "empty": "No saved targets yet. Type a URL to add one.",
+        "noMatches": "No saved target matches. Keep typing to add a new one.",
+        "hint": "Pick an existing target from the list, or type a new URL to create one when the scan starts.",
         "orEnterUrl": "Or enter target URL",
         "autoCreateHint": "A new target will be created automatically when you start the scan.",
         "required": "Target is required."
@@ -1792,6 +1794,96 @@
         "error": "Failed to grant plan."
       }
     }
+  },
+  "privacyPage": {
+    "title": "Privacy Policy",
+    "lastUpdated": "Last updated: July 18, 2026",
+    "back": "Back to previous page",
+    "intro": "blackbrains (\"we\", \"us\", or \"our\") operates an automated security scanning platform. This Privacy Policy explains how we collect, use, store, and protect your information when you use our website and services.",
+    "contact": "Questions about this policy? Contact us at privacy@blackbrains.tech.",
+    "sections": [
+      {
+        "title": "1. Information We Collect",
+        "body": "We may collect account details (name, email), authentication credentials you provide for scans, scan targets and configurations, billing and plan information, usage logs, and technical data such as IP address, browser type, and device information."
+      },
+      {
+        "title": "2. How We Use Your Information",
+        "body": "We use your information to provide and improve the scanning service, authenticate users, process subscriptions and credits, generate reports, send service-related notifications, enforce plan limits, and maintain platform security and integrity."
+      },
+      {
+        "title": "3. Scan Targets and Sensitive Data",
+        "body": "Scan targets, cookies, headers, and other credentials you submit are used solely to perform the scans you request. You are responsible for ensuring you have authorization to scan those targets. We do not sell scan results or target credentials to third parties."
+      },
+      {
+        "title": "4. Sharing of Information",
+        "body": "We may share information with infrastructure and payment providers that help us operate the service, when required by law, or to protect our rights and users. Integrations you enable (such as Jira) will receive only the data needed for that integration."
+      },
+      {
+        "title": "5. Data Retention",
+        "body": "We retain account, scan, and billing records for as long as needed to provide the service, meet legal obligations, resolve disputes, and enforce agreements. You may request deletion of your account subject to applicable retention requirements."
+      },
+      {
+        "title": "6. Security",
+        "body": "We apply administrative and technical measures to protect your data. No method of transmission or storage is completely secure; you use the service at your own risk regarding residual security risks."
+      },
+      {
+        "title": "7. Your Rights",
+        "body": "Depending on your location, you may have rights to access, correct, export, or delete your personal data, or to object to certain processing. Contact us to exercise these rights."
+      },
+      {
+        "title": "8. Changes to This Policy",
+        "body": "We may update this Privacy Policy from time to time. The \"Last updated\" date at the top will reflect the latest revision. Continued use of the service after changes means you accept the updated policy."
+      }
+    ]
+  },
+  "termsPage": {
+    "title": "Terms of Service",
+    "lastUpdated": "Last updated: July 18, 2026",
+    "back": "Back to previous page",
+    "intro": "These Terms of Service (\"Terms\") govern your access to and use of the blackbrains security scanning platform. By creating an account or using the service, you agree to these Terms.",
+    "contact": "Questions about these Terms? Contact us at legal@blackbrains.tech.",
+    "sections": [
+      {
+        "title": "1. Acceptance of Terms",
+        "body": "If you use the service on behalf of an organization, you represent that you have authority to bind that organization to these Terms. If you do not agree, do not use the service."
+      },
+      {
+        "title": "2. Description of Service",
+        "body": "blackbrains provides automated security scanning tools, plan-based credit usage, reporting, and optional integrations. Features and limits depend on your active plan and may change as we improve the platform."
+      },
+      {
+        "title": "3. Authorized Use Only",
+        "body": "You may only scan systems you own or are explicitly authorized to test. Unauthorized scanning, abuse, or attempts to attack systems without permission are prohibited and may result in immediate suspension and legal action."
+      },
+      {
+        "title": "4. Accounts and Security",
+        "body": "You are responsible for maintaining the confidentiality of your credentials and for all activity under your account. Notify us promptly of any unauthorized access."
+      },
+      {
+        "title": "5. Plans, Credits, and Billing",
+        "body": "Paid plans, scan credits, and extra purchases are subject to the pricing and limits shown at checkout or in your billing page. Unused credits may expire according to plan rules. Fees are generally non-refundable except where required by law."
+      },
+      {
+        "title": "6. Acceptable Use",
+        "body": "You agree not to misuse the platform, interfere with other users, reverse engineer the service except where permitted by law, or use results to harm third parties. We may suspend or terminate accounts that violate these Terms."
+      },
+      {
+        "title": "7. Intellectual Property",
+        "body": "The platform, branding, and software remain our property. You retain rights to your content and scan targets. You grant us a limited license to process that content solely to operate the service."
+      },
+      {
+        "title": "8. Disclaimer and Limitation of Liability",
+        "body": "The service is provided \"as is\". Security scans may not find all vulnerabilities. To the maximum extent permitted by law, blackbrains is not liable for indirect, incidental, or consequential damages, or for decisions you make based on scan results."
+      },
+      {
+        "title": "9. Termination",
+        "body": "You may stop using the service at any time. We may suspend or terminate access for violations of these Terms, non-payment, or risk to the platform or other users."
+      },
+      {
+        "title": "10. Changes to the Terms",
+        "body": "We may update these Terms periodically. Continued use after an update constitutes acceptance of the revised Terms."
+      }
+    ]
   }
 }
 
