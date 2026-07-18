@@ -55,16 +55,7 @@ export function CurrentPlanPageContent() {
     refetch,
   } = useQuery({
     queryKey: ['plans-active'],
-    queryFn: async () => {
-      try {
-        return await plansService.getActivePlan();
-      } catch (queryError) {
-        if (queryError instanceof ApiRequestError && queryError.status === 404) {
-          return null;
-        }
-        throw queryError;
-      }
-    },
+    queryFn: () => plansService.getActivePlan(),
   });
 
   const matchingPlan = findMatchingPlanDefinition(activePlan, plansData);

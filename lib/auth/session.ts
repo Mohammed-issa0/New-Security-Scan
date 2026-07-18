@@ -28,6 +28,7 @@ export function clearSensitiveBrowserData() {
 
   localStorage.removeItem('auth_tokens');
   sessionStorage.removeItem('auth_tokens');
+  document.cookie = 'auth_access_token=; Path=/; Max-Age=0; SameSite=Lax';
 }
 
 export function notifySessionEnded(reason: SessionEndReason) {

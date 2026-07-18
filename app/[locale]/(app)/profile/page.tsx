@@ -36,16 +36,7 @@ export default function ProfilePage() {
     refetch: refetchPlan,
   } = useQuery({
     queryKey: ['plans-active'],
-    queryFn: async () => {
-      try {
-        return await plansService.getActivePlan();
-      } catch (error) {
-        if (error instanceof ApiRequestError && error.status === 404) {
-          return null;
-        }
-        throw error;
-      }
-    },
+    queryFn: () => plansService.getActivePlan(),
   });
 
   React.useEffect(() => {

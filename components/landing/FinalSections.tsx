@@ -89,7 +89,7 @@ export function Footer() {
               <div className="p-1.5 bg-gradient-to-br from-cyan-300 via-cyan-400 to-blue-400 rounded-lg text-slate-950 shadow-glow">
                 <Shield size={22} fill="currentColor" />
               </div>
-              <span className="text-xl font-extrabold tracking-tight text-text-primary">{t('title')}</span>
+              <span className="text-xl font-extrabold tracking-tight text-text-primary">{tf('brandName')}</span>
             </Link>
             <p className="text-text-secondary max-w-sm leading-relaxed">
               {tf('tagline')}
@@ -118,7 +118,7 @@ export function Footer() {
         </div>
         
         <div className="pt-8 border-t border-white/8 flex flex-col md:flex-row justify-between items-center gap-4">
-          <p className="text-sm text-text-muted">© 2025 {t('title')}. {tf('rights')}</p>
+          <p className="text-sm text-text-muted">© 2026 {tf('brandName')}. {tf('rights')}</p>
         </div>
       </Container>
     </footer>

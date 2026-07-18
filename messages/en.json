@@ -178,6 +178,7 @@
       ]
     },
     "footer": {
+      "brandName": "blackbrains",
       "tagline": "Unified scanning for web apps, APIs, and infrastructure — from setup to PDF export.",
       "productTitle": "Product",
       "legalTitle": "Legal",

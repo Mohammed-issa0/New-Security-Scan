@@ -39,14 +39,21 @@ export default function LoginPage() {
   const onSubmit = async (data: LoginFormValues) => {
     setLoading(true);
     try {
-      const challenge = await authService.login(data);
+      const result = await authService.login(data);
+
+      if (!result.requiresOtp) {
+        toast.success(locale === 'ar' ? 'تم تسجيل الدخول بنجاح' : 'Signed in successfully');
+        router.replace(`/${locale}`);
+        return;
+      }
+
       setOtpFlowState({
         mode: 'login',
-        challenge,
+        challenge: result,
         createdAt: Date.now(),
         loginData: data,
       });
-      toast.success(`تم إرسال رمز التحقق إلى ${challenge.maskedEmail ?? 'بريدك الإلكتروني'}`);
+      toast.success(`تم إرسال رمز التحقق إلى ${result.maskedEmail ?? 'بريدك الإلكتروني'}`);
       router.push(`/${locale}/verify-otp`);
     } catch (error: any) {
       if (error instanceof ApiRequestError && error.data.details) {
@@ -77,7 +84,8 @@ export default function LoginPage() {
                 </label>
                 <input
                   {...register('email')}
-                  type="text"
+                  type="email"
+                  autoComplete="email"
                   data-testid="login-email"
                   className="appearance-none relative block w-full rounded-lg border border-cyan-400/18 bg-white/5 px-3 py-2 text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:ring-2 focus:ring-cyan-300/45 focus:border-cyan-300/70"
                 />
@@ -93,6 +101,7 @@ export default function LoginPage() {
                   <input
                     {...register('password')}
                     type={showPassword ? 'text' : 'password'}
+                    autoComplete="current-password"
                     data-testid="login-password"
                     className="appearance-none relative block w-full rounded-lg border border-cyan-400/18 bg-white/5 px-3 py-2 pe-10 text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:ring-2 focus:ring-cyan-300/45 focus:border-cyan-300/70"
                   />

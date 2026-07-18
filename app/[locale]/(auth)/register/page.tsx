@@ -84,16 +84,23 @@ export default function RegisterPage() {
       const firstName = data.firstName?.trim();
       const lastName = data.lastName?.trim();
 
-      const challenge = await authService.register({
+      const result = await authService.register({
         fullName: fullName || undefined,
         firstName: fullName ? undefined : firstName || undefined,
         lastName: fullName ? undefined : lastName || undefined,
         email: data.email,
         password: data.password,
       });
+
+      if (!result.requiresOtp) {
+        toast.success(locale === 'ar' ? 'تم إنشاء الحساب بنجاح' : 'Account created successfully');
+        router.replace(`/${locale}`);
+        return;
+      }
+
       setOtpFlowState({
         mode: 'register',
-        challenge,
+        challenge: result,
         createdAt: Date.now(),
         registerData: {
           fullName: fullName || undefined,
@@ -103,7 +110,7 @@ export default function RegisterPage() {
           password: data.password,
         },
       });
-      toast.success(`تم إرسال رمز التحقق إلى ${challenge.maskedEmail ?? 'بريدك الإلكتروني'}`);
+      toast.success(`تم إرسال رمز التحقق إلى ${result.maskedEmail ?? 'بريدك الإلكتروني'}`);
       router.push(`/${locale}/verify-otp`);
     } catch (error: any) {
       if (error instanceof ApiRequestError && error.data.details) {

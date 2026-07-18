@@ -173,14 +173,21 @@ export default function VerifyOtpPage() {
 
     setResending(true);
     try {
-      const nextChallenge =
+      const result =
         flowState.mode === 'login'
           ? await authService.login(flowState.loginData!)
           : await authService.register(flowState.registerData!);
 
+      if (!result.requiresOtp) {
+        clearOtpFlowState();
+        toast.success(labels.success);
+        router.replace(`/${locale}`);
+        return;
+      }
+
       const nextState: OtpFlowState = {
         ...flowState,
-        challenge: nextChallenge,
+        challenge: result,
         createdAt: Date.now(),
       };
 
@@ -188,7 +195,7 @@ export default function VerifyOtpPage() {
       setFlowState(nextState);
       setOtpDigits(Array(OTP_LENGTH).fill(''));
       setResendCooldown(RESEND_COOLDOWN_SECONDS);
-      const expiresAtMs = new Date(nextChallenge.expiresAt).getTime();
+      const expiresAtMs = new Date(result.expiresAt).getTime();
       setSecondsLeft(Math.max(0, Math.ceil((expiresAtMs - Date.now()) / 1000)));
       inputRefs.current[0]?.focus();
       toast.success(labels.resendSuccess);

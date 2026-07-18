@@ -38,6 +38,11 @@ class TokenStore {
             throw new Error('Refresh token expired');
           }
           this.tokens = parsed;
+          // Only sync cookie when access token is still valid; avoid Max-Age=0
+          // while refresh remains usable (cookie will sync after refresh).
+          if (Date.now() < parsed.accessTokenExpiresAt) {
+            this.syncAuthCookies(parsed);
+          }
         } catch (e) {
           localStorage.removeItem('auth_tokens');
         }
