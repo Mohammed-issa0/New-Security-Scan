@@ -67,7 +67,11 @@ export function ProfileSelector({
               key={item.name}
               type="button"
               disabled={!allowed}
-              onClick={() => onChange(item.name, item.defaultCredits)}
+              onClick={(event) => {
+                event.preventDefault();
+                event.stopPropagation();
+                onChange(item.name, item.defaultCredits);
+              }}
               className={`rounded-xl border p-4 text-left transition ${
                 isSelected
                   ? 'border-cyan-300/50 bg-cyan-400/12 ring-1 ring-cyan-300/30'

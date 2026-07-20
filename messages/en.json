@@ -1052,6 +1052,11 @@
       "creditsDesc": "You have 0 credits remaining.",
       "captchaWarning": "CAPTCHA detected. Automated scans will likely fail unless you use session cookies."
     },
+    "jsonPreview": {
+      "title": "JSON Payload Preview",
+      "forDevelopers": "This preview is for developers only",
+      "description": "The exact JSON structure sent to the scanning engine."
+    },
     "messages": {
       "success": "Scan started successfully!",
       "error": "Submission Failed",

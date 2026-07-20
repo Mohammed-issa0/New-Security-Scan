@@ -16,6 +16,7 @@ interface ScanSummaryProps {
   maxRuntimeMinutes?: number;
   isSubmitDisabled?: boolean;
   disableReason?: string;
+  onStartScan: () => void;
   onPreviewJson: () => void;
 }
 
@@ -27,6 +28,7 @@ export function ScanSummary({
   maxRuntimeMinutes,
   isSubmitDisabled = false,
   disableReason,
+  onStartScan,
   onPreviewJson,
 }: ScanSummaryProps) {
   const t = useTranslations('scanForm.summary');
@@ -108,8 +110,8 @@ export function ScanSummary({
 
       <div className="space-y-3 pt-2">
         <Button
-          type="submit"
-          form="scan-form"
+          type="button"
+          onClick={onStartScan}
           className="w-full shadow-lg shadow-cyan-400/20 py-6 h-auto text-lg"
           disabled={submitDisabled}
         >

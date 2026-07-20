@@ -99,9 +99,11 @@ export function TargetPicker({
       return;
     }
 
-    if (event.key === 'Enter' && open && filteredTargets[highlightIndex]) {
+    if (event.key === 'Enter') {
       event.preventDefault();
-      selectTarget(filteredTargets[highlightIndex]);
+      if (open && filteredTargets[highlightIndex]) {
+        selectTarget(filteredTargets[highlightIndex]);
+      }
       return;
     }
 

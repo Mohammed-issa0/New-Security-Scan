@@ -20,7 +20,7 @@ export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElemen
 }
 
 export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ className = "", variant = 'primary', size = 'md', ...props }, ref) => {
+  ({ className = "", variant = 'primary', size = 'md', type = 'button', ...props }, ref) => {
     const baseStyles = "inline-flex items-center justify-center rounded-lg font-semibold transition-all focus:outline-none focus:ring-2 focus:ring-cyan-300/55 focus:ring-offset-2 focus:ring-offset-cyber-bg disabled:opacity-50 disabled:pointer-events-none"
     const variants = {
       primary: "bg-gradient-to-r from-cyan-400 via-cyan-300 to-blue-400 text-slate-950 hover:shadow-[0_0_34px_rgba(0,209,255,0.26)]",
@@ -40,6 +40,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       <motion.button
         {...buttonInteraction}
         ref={ref as any}
+        type={type}
         className={`${baseStyles} ${variants[variant]} ${sizes[size]} ${className}`}
         {...props as any}
       />

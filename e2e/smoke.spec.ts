@@ -232,7 +232,7 @@ test.describe('End-to-end smoke scenarios', () => {
     await page.locator('input[name="name"]').fill(`Smoke Scan ${Date.now()}`);
     await page.locator('select[name="targetId"]').selectOption({ label: targetUrl });
 
-    await page.locator('button[form="scan-form"]').click();
+    await page.getByRole('button', { name: /start security scan/i }).click();
     await expect(page).toHaveURL(/\/en\/scans\/[0-9a-f-]{10,}/i, { timeout: 30000 });
   });
 

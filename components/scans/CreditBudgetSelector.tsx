@@ -49,7 +49,11 @@ export function CreditBudgetSelector({
             <button
               key={option}
               type="button"
-              onClick={() => onChange(option)}
+              onClick={(event) => {
+                event.preventDefault();
+                event.stopPropagation();
+                onChange(option);
+              }}
               className={`min-w-[3rem] rounded-lg border px-4 py-2 text-sm font-semibold transition-colors ${
                 isSelected
                   ? 'border-cyan-300 bg-cyan-400/20 text-cyan-200'

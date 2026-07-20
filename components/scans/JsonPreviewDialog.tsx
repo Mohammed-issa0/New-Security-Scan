@@ -9,15 +9,21 @@ import { motion, AnimatePresence } from "framer-motion"
 interface JsonPreviewDialogProps {
   isOpen: boolean
   onClose: () => void
-  payload: any
+  payload: unknown
 }
 
 export function JsonPreviewDialog({ isOpen, onClose, payload }: JsonPreviewDialogProps) {
   const [copied, setCopied] = React.useState(false)
-  const t = useTranslations('common.buttons')
+  const tButtons = useTranslations('common.buttons')
+  const t = useTranslations('scanForm.jsonPreview')
+
+  const jsonText = React.useMemo(
+    () => JSON.stringify(payload ?? {}, null, 2),
+    [payload]
+  )
 
   const copyToClipboard = () => {
-    navigator.clipboard.writeText(JSON.stringify(payload, null, 2))
+    navigator.clipboard.writeText(jsonText)
     setCopied(true)
     setTimeout(() => setCopied(false), 2000)
   }
@@ -41,8 +47,9 @@ export function JsonPreviewDialog({ isOpen, onClose, payload }: JsonPreviewDialo
           >
             <div className="flex items-center justify-between border-b border-white/10 p-6">
               <div>
-                <h3 className="text-xl font-bold text-text-primary">Payload Preview</h3>
-                <p className="text-sm text-text-muted">The exact JSON structure sent to our scanning engine.</p>
+                <h3 className="text-xl font-bold text-text-primary">{t('title')}</h3>
+                <p className="mt-1 text-sm font-medium text-cyan-300/90">{t('forDevelopers')}</p>
+                <p className="mt-1 text-sm text-text-muted">{t('description')}</p>
               </div>
               <button onClick={onClose} className="rounded-xl p-2 text-text-muted transition-colors hover:bg-white/10 hover:text-text-primary">
                 <X size={20} />
@@ -51,16 +58,16 @@ export function JsonPreviewDialog({ isOpen, onClose, payload }: JsonPreviewDialo
             
             <div className="flex-1 overflow-auto bg-cyber-bg p-6">
               <pre className="font-mono text-sm leading-relaxed text-cyan-200">
-                {JSON.stringify(payload, null, 2)}
+                {jsonText}
               </pre>
             </div>
 
             <div className="flex justify-end gap-3 border-t border-white/10 bg-white/5 p-4">
               <Button variant="outline" size="sm" onClick={copyToClipboard} className="gap-2">
                 {copied ? <Check size={14} className="text-status-success" /> : <Copy size={14} />}
-                {copied ? t('copied') : t('copy')}
+                {copied ? tButtons('copied') : tButtons('copy')}
               </Button>
-              <Button onClick={onClose} size="sm">{t('close')}</Button>
+              <Button onClick={onClose} size="sm">{tButtons('close')}</Button>
             </div>
           </motion.div>
         </div>
@@ -68,5 +75,3 @@ export function JsonPreviewDialog({ isOpen, onClose, payload }: JsonPreviewDialo
     </AnimatePresence>
   )
 }
-
-

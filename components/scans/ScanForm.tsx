@@ -116,9 +116,14 @@ export default function ScanForm() {
       (p) => p.name === selectedProfile
     );
     if (schemaProfile?.defaultCredits != null) {
-      setValue('creditBudget', Math.min(schemaProfile.defaultCredits, remainingCredits || 1));
+      setValue(
+        'creditBudget',
+        Math.min(schemaProfile.defaultCredits, remainingCredits || 1, maxCreditBudget)
+      );
     }
-  }, [selectedProfile, toolConfigSchema?.profiles, remainingCredits, setValue]);
+    // Only sync default credits when profile/schema changes — not when remainingCredits refetches
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- intentional: avoid resetting user's budget pick
+  }, [selectedProfile, toolConfigSchema?.profiles, setValue, maxCreditBudget]);
 
   const onSubmit = async (data: ProfileScanFormSchemaType) => {
     setIsSubmitting(true);
@@ -254,7 +259,15 @@ export default function ScanForm() {
     try {
       return buildProfilePayload(formValues);
     } catch {
-      return null;
+      // Preview for developers even before target is selected
+      return {
+        targetId: formValues.targetId?.trim() || '',
+        profile: formValues.profile,
+        creditBudget: formValues.creditBudget ?? 1,
+        name: formValues.name || undefined,
+        notes: formValues.notes || undefined,
+        scopeSigned: formValues.scopeSigned,
+      };
     }
   })();
 
@@ -271,7 +284,21 @@ export default function ScanForm() {
       transition={{ duration: 0.5 }}
       className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start"
     >
-      <form id="scan-form" onSubmit={handleSubmit(onSubmit)} className="lg:col-span-8 space-y-8">
+      <form
+        id="scan-form"
+        onSubmit={(event) => {
+          // Block native/implicit submits (Enter in inputs, accidental button defaults).
+          // Scans start only via the explicit Start button handler.
+          event.preventDefault();
+        }}
+        onKeyDown={(event) => {
+          if (event.key !== 'Enter') return;
+          const tag = (event.target as HTMLElement)?.tagName;
+          if (tag === 'TEXTAREA') return;
+          event.preventDefault();
+        }}
+        className="lg:col-span-8 space-y-8"
+      >
         <Card>
           <CardHeader
             icon={Globe}
@@ -389,6 +416,7 @@ export default function ScanForm() {
                   ? t('concurrent.blocked', { active: activeScanCount, max: maxConcurrentScans })
                   : undefined
               }
+              onStartScan={() => void handleSubmit(onSubmit)()}
               onPreviewJson={() => setShowJsonPreview(true)}
             />
           </CardContent>
