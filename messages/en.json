@@ -245,7 +245,8 @@
         "eyebrow": "Targets management",
         "title": "Add a new target",
         "description": "Create a website target and attach it to your scanning workspace.",
-        "helper": "Only valid HTTP and HTTPS URLs are accepted. The new target will appear in the list immediately after creation."
+        "helper": "Only valid HTTP and HTTPS URLs are accepted. The new target will appear in the list immediately after creation.",
+        "browserAuthToggle": "Add login credentials for this target (optional)"
       },
       "deleteModal": {
         "title": "Delete target",
@@ -951,6 +952,11 @@
         "orEnterUrl": "Or enter target URL",
         "autoCreateHint": "A new target will be created automatically when you start the scan.",
         "required": "Target is required."
+      },
+      "browserAuth": {
+        "toggleLabel": "Add login credentials for this target (optional)",
+        "hint": "Use this if the scan needs to reach pages protected behind a login.",
+        "alreadyConfigured": "Browser authentication is already configured for this target. Edit it from the Targets page."
       },
       "profile": {
         "label": "Scan profile",

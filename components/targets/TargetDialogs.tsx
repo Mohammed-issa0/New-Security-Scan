@@ -16,7 +16,7 @@ interface CreateTargetDialogProps extends BaseDialogProps {
   initialUrl?: string;
   isSubmitting?: boolean;
   errorMessage?: string | null;
-  onSubmit: (url: string) => void;
+  onSubmit: (url: string, browserAuth: TargetBrowserAuthRequest | null) => void;
 }
 
 interface DeleteTargetDialogProps extends BaseDialogProps {
@@ -97,6 +97,14 @@ function DialogShell({
   );
 }
 
+const emptyBrowserAuth: TargetBrowserAuthRequest = {
+  loginUrl: '',
+  targetUrl: '',
+  username: '',
+  password: '',
+  mfa: false,
+};
+
 export function CreateTargetDialog({
   isOpen,
   onClose,
@@ -107,13 +115,26 @@ export function CreateTargetDialog({
 }: CreateTargetDialogProps) {
   const t = useTranslations('landing.targets');
   const inputId = useId();
+  const loginUrlId = useId();
+  const targetUrlId = useId();
+  const usernameId = useId();
+  const passwordId = useId();
+  const mfaId = useId();
   const [url, setUrl] = useState(initialUrl);
   const [validationError, setValidationError] = useState<string | null>(null);
+  const [showBrowserAuth, setShowBrowserAuth] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [browserAuth, setBrowserAuth] = useState<TargetBrowserAuthRequest>(emptyBrowserAuth);
+  const [browserAuthError, setBrowserAuthError] = useState<string | null>(null);
 
   useEffect(() => {
     if (isOpen) {
       setUrl(initialUrl);
       setValidationError(null);
+      setShowBrowserAuth(false);
+      setShowPassword(false);
+      setBrowserAuth(emptyBrowserAuth);
+      setBrowserAuthError(null);
     }
   }, [initialUrl, isOpen]);
 
@@ -145,7 +166,40 @@ export function CreateTargetDialog({
       return;
     }
 
-    onSubmit(url.trim());
+    const hasBrowserAuthInput =
+      showBrowserAuth &&
+      Boolean(
+        browserAuth.loginUrl?.trim() ||
+          browserAuth.targetUrl?.trim() ||
+          browserAuth.username?.trim() ||
+          browserAuth.password?.trim() ||
+          browserAuth.mfa
+      );
+
+    if (hasBrowserAuthInput) {
+      if (!browserAuth.username?.trim()) {
+        setBrowserAuthError(t('browserAuth.validation.usernameRequired'));
+        return;
+      }
+      if (!browserAuth.password?.trim()) {
+        setBrowserAuthError(t('browserAuth.validation.passwordRequired'));
+        return;
+      }
+    }
+
+    setBrowserAuthError(null);
+    onSubmit(
+      url.trim(),
+      hasBrowserAuthInput
+        ? {
+            loginUrl: browserAuth.loginUrl?.trim() || null,
+            targetUrl: browserAuth.targetUrl?.trim() || null,
+            username: browserAuth.username!.trim(),
+            password: browserAuth.password!.trim(),
+            mfa: browserAuth.mfa,
+          }
+        : null
+    );
   };
 
   return (
@@ -209,6 +263,101 @@ export function CreateTargetDialog({
             <p className="mt-2 text-sm text-status-danger">{errorMessage}</p>
           ) : null}
         </div>
+
+        {!showBrowserAuth ? (
+          <button
+            type="button"
+            onClick={() => setShowBrowserAuth(true)}
+            className="flex items-center gap-2 text-sm font-medium text-cyan-300 transition hover:text-cyan-200"
+          >
+            <ShieldCheck className="h-4 w-4" />
+            {t('createModal.browserAuthToggle')}
+          </button>
+        ) : (
+          <div className="rounded-2xl border border-cyan-400/15 bg-cyan-500/10 p-4">
+            <div className="flex items-start gap-3">
+              <div className="rounded-xl bg-white/8 p-2 text-cyan-300 shadow-sm">
+                <ShieldCheck className="h-5 w-5" />
+              </div>
+              <div className="w-full space-y-3">
+                <div>
+                  <p className="text-sm font-semibold text-text-primary">{t('browserAuth.cardTitle')}</p>
+                  <p className="mt-1 text-sm text-text-muted">{t('browserAuth.cardDescription')}</p>
+                </div>
+                <div className="grid gap-4 sm:grid-cols-2">
+                  <div>
+                    <Label htmlFor={loginUrlId}>{t('browserAuth.loginUrl')}</Label>
+                    <Input
+                      id={loginUrlId}
+                      type="url"
+                      value={browserAuth.loginUrl ?? ''}
+                      onChange={(event) => setBrowserAuth((current) => ({ ...current, loginUrl: event.target.value }))}
+                      placeholder={url || t('placeholder')}
+                    />
+                    <p className="mt-1 text-[11px] text-text-muted">{t('browserAuth.loginUrlAutoDetectHint')}</p>
+                  </div>
+                  <div>
+                    <Label htmlFor={targetUrlId}>{t('browserAuth.targetUrl')}</Label>
+                    <Input
+                      id={targetUrlId}
+                      type="url"
+                      value={browserAuth.targetUrl ?? ''}
+                      onChange={(event) => setBrowserAuth((current) => ({ ...current, targetUrl: event.target.value }))}
+                      placeholder={url || t('placeholder')}
+                    />
+                  </div>
+                  <div>
+                    <Label htmlFor={usernameId} required>{t('browserAuth.username')}</Label>
+                    <Input
+                      id={usernameId}
+                      value={browserAuth.username ?? ''}
+                      onChange={(event) => setBrowserAuth((current) => ({ ...current, username: event.target.value }))}
+                      autoComplete="username"
+                      placeholder={t('browserAuth.usernamePlaceholder')}
+                    />
+                  </div>
+                  <div>
+                    <Label htmlFor={passwordId} required>{t('browserAuth.password')}</Label>
+                    <div className="relative">
+                      <Input
+                        id={passwordId}
+                        type={showPassword ? 'text' : 'password'}
+                        value={browserAuth.password ?? ''}
+                        onChange={(event) => setBrowserAuth((current) => ({ ...current, password: event.target.value }))}
+                        autoComplete="new-password"
+                        placeholder={t('browserAuth.passwordPlaceholder')}
+                        className="pr-11"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setShowPassword((current) => !current)}
+                        className="absolute inset-y-0 right-0 flex w-11 items-center justify-center text-text-muted transition hover:text-text-secondary"
+                        aria-label={showPassword ? t('browserAuth.hidePassword') : t('browserAuth.showPassword')}
+                      >
+                        {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
+                <label htmlFor={mfaId} className="flex items-start gap-3 rounded-2xl border border-white/10 bg-white/5 px-4 py-3">
+                  <Checkbox
+                    id={mfaId}
+                    checked={browserAuth.mfa}
+                    onChange={(event) => setBrowserAuth((current) => ({ ...current, mfa: event.target.checked }))}
+                    className="mt-0.5"
+                  />
+                  <div>
+                    <p className="text-sm font-medium text-text-primary">{t('browserAuth.mfa')}</p>
+                    <p className="mt-1 text-sm text-text-muted">{t('browserAuth.mfaDescription')}</p>
+                  </div>
+                </label>
+
+                {browserAuthError ? <p className="text-sm text-status-danger">{browserAuthError}</p> : null}
+              </div>
+            </div>
+          </div>
+        )}
 
         <div className="flex items-center justify-end gap-3 border-t border-white/10 pt-5">
           <Button type="button" variant="outline" onClick={onClose} disabled={isSubmitting}>

@@ -8,6 +8,7 @@ import { useTranslations, useLocale } from "next-intl"
 import { motion } from "framer-motion"
 import { buttonInteraction } from "../scans/ui"
 import { rememberLegalReturnPath } from "@/lib/navigation/legalReturn"
+import { tokenStore } from "@/lib/auth/tokenStore"
 
 export function Personas() {
   const t = useTranslations('landing.personas') 
@@ -37,6 +38,14 @@ export function FinalCTA() {
   const bt = useTranslations('common.buttons')
   const locale = useLocale()
   const isRtl = locale === 'ar'
+  const [isAuthenticated, setIsAuthenticated] = React.useState(false)
+
+  React.useEffect(() => {
+    setIsAuthenticated(!!tokenStore.getTokens()?.accessToken)
+    return tokenStore.subscribe((tokens) => {
+      setIsAuthenticated(!!tokens?.accessToken)
+    })
+  }, [])
 
   return (
     <Section className="pb-0">
@@ -51,14 +60,16 @@ export function FinalCTA() {
               {t('subtitle')}
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
-              <Link href={`/${locale}/scans/new`}>
-                <motion.button 
-                  {...buttonInteraction}
-                  className="w-full rounded-full px-10 py-5 text-lg font-bold text-slate-950 transition-all sm:w-auto bg-gradient-to-r from-cyan-300 via-cyan-200 to-blue-300 hover:shadow-[0_0_38px_rgba(0,209,255,0.32)]"
-                >
-                  {bt('createAccount')}
-                </motion.button>
-              </Link>
+              {!isAuthenticated && (
+                <Link href={`/${locale}/scans/new`}>
+                  <motion.button
+                    {...buttonInteraction}
+                    className="w-full rounded-full px-10 py-5 text-lg font-bold text-slate-950 transition-all sm:w-auto bg-gradient-to-r from-cyan-300 via-cyan-200 to-blue-300 hover:shadow-[0_0_38px_rgba(0,209,255,0.32)]"
+                  >
+                    {bt('createAccount')}
+                  </motion.button>
+                </Link>
+              )}
               <Link href={`/${locale}/scans/new`}>
                 <motion.button 
                   {...buttonInteraction}

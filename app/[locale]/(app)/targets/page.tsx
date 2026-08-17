@@ -64,8 +64,22 @@ export default function TargetsPage() {
   };
 
   const createMutation = useMutation({
-    mutationFn: (url: string) => scansService.createTarget(url),
-    onSuccess: async (createdTarget) => {
+    mutationFn: async ({ url, browserAuth }: { url: string; browserAuth: TargetBrowserAuthRequest | null }) => {
+      const createdTarget = await scansService.createTarget(url);
+
+      if (!browserAuth) {
+        return { target: createdTarget, browserAuthError: null as string | null };
+      }
+
+      try {
+        await scansService.setTargetBrowserAuth(createdTarget.id, browserAuth);
+        return { target: { ...createdTarget, browserAuthConfigured: true }, browserAuthError: null as string | null };
+      } catch (authError: any) {
+        const message = authError?.data?.message || authError?.message || t('browserAuth.feedback.saveError');
+        return { target: createdTarget, browserAuthError: message };
+      }
+    },
+    onSuccess: async ({ target: createdTarget, browserAuthError }) => {
       setPage(1);
       setIsCreateOpen(false);
       setCreateError(null);
@@ -85,6 +99,9 @@ export default function TargetsPage() {
       });
       await queryClient.invalidateQueries({ queryKey: ['targets'] });
       toast.success(t('feedback.createSuccess'));
+      if (browserAuthError) {
+        toast.error(browserAuthError);
+      }
     },
     onError: (error: any) => {
       const backendMessage = error?.data?.message || error?.message || t('feedback.createError');
@@ -329,7 +346,7 @@ export default function TargetsPage() {
       <CreateTargetDialog
         isOpen={isCreateOpen}
         onClose={closeCreateDialog}
-        onSubmit={(url) => createMutation.mutate(url)}
+        onSubmit={(url, browserAuth) => createMutation.mutate({ url, browserAuth })}
         isSubmitting={createMutation.isPending}
         errorMessage={createError}
       />

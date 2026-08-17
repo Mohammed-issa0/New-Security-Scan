@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useId } from 'react';
 import { useForm } from 'react-hook-form';
 import { useQuery } from '@tanstack/react-query';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -10,7 +10,7 @@ import { startScanWithAdapter } from '@/lib/scans/adapter';
 import { useTranslations, useLocale } from 'next-intl';
 import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
-import { Globe, AlertCircle } from 'lucide-react';
+import { Globe, AlertCircle, ShieldCheck, Eye, EyeOff } from 'lucide-react';
 import { Button, Card, CardHeader, CardContent, Input, Label, Textarea, Checkbox, Alert } from './ui';
 import { ScanSummary } from './ScanSummary';
 import { CreditBudgetSelector } from './CreditBudgetSelector';
@@ -24,20 +24,38 @@ import { ApiRequestError } from '@/lib/api/client';
 import { countActiveScans, getPlanMaxConcurrentScans } from '@/lib/scans/concurrency';
 import { parseScanCreateError } from '@/lib/scans/errorMessages';
 import { getCreditMinutesPerUnit, getMaxCreditBudget } from '@/lib/plans/creditBudget';
-import type { ScanProfile } from '@/lib/api/types';
+import type { ScanProfile, TargetBrowserAuthRequest } from '@/lib/api/types';
 
 import { ensureTargetUrlScheme, isValidTargetUrl, normalizeTargetUrlForCompare } from '@/lib/targets/urlUtils';
 
+const emptyBrowserAuth: TargetBrowserAuthRequest = {
+  loginUrl: '',
+  targetUrl: '',
+  username: '',
+  password: '',
+  mfa: false,
+};
+
 export default function ScanForm() {
   const t = useTranslations('scanForm');
+  const tTargetAuth = useTranslations('landing.targets.browserAuth');
   const locale = useLocale();
   const router = useRouter();
+  const loginUrlId = useId();
+  const targetUrlOverrideId = useId();
+  const usernameId = useId();
+  const passwordId = useId();
+  const mfaId = useId();
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showJsonPreview, setShowJsonPreview] = useState(false);
   const [submissionError, setSubmissionError] = useState<string | null>(null);
   const [submissionSuccess, setSubmissionSuccess] = useState(false);
   const [manualTargetUrl, setManualTargetUrl] = useState('');
+  const [showBrowserAuth, setShowBrowserAuth] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [browserAuth, setBrowserAuth] = useState<TargetBrowserAuthRequest>(emptyBrowserAuth);
+  const [browserAuthError, setBrowserAuthError] = useState<string | null>(null);
 
   const {
     register,
@@ -70,6 +88,13 @@ export default function ScanForm() {
     queryKey: ['scan-form-targets'],
     queryFn: () => scansService.getTargets(1, 100),
   });
+
+  const selectedExistingTarget = useMemo(
+    () => targetsData?.items?.find((target) => target.id === formValues.targetId),
+    [targetsData?.items, formValues.targetId]
+  );
+  const canConfigureBrowserAuth =
+    Boolean(manualTargetUrl.trim()) && !selectedExistingTarget?.browserAuthConfigured;
 
   const { data: toolConfigSchema } = useQuery({
     queryKey: ['scan-tool-config-schema'],
@@ -183,6 +208,55 @@ export default function ScanForm() {
     setValue('targetId', data.targetId);
     clearErrors('targets');
 
+    const hasBrowserAuthInput =
+      canConfigureBrowserAuth &&
+      showBrowserAuth &&
+      Boolean(
+        browserAuth.loginUrl?.trim() ||
+          browserAuth.targetUrl?.trim() ||
+          browserAuth.username?.trim() ||
+          browserAuth.password?.trim() ||
+          browserAuth.mfa
+      );
+
+    if (hasBrowserAuthInput) {
+      if (!browserAuth.username?.trim()) {
+        const message = tTargetAuth('validation.usernameRequired');
+        setBrowserAuthError(message);
+        setSubmissionError(message);
+        toast.error(message);
+        setIsSubmitting(false);
+        return;
+      }
+      if (!browserAuth.password?.trim()) {
+        const message = tTargetAuth('validation.passwordRequired');
+        setBrowserAuthError(message);
+        setSubmissionError(message);
+        toast.error(message);
+        setIsSubmitting(false);
+        return;
+      }
+
+      try {
+        await scansService.setTargetBrowserAuth(data.targetId, {
+          loginUrl: browserAuth.loginUrl?.trim() || null,
+          targetUrl: browserAuth.targetUrl?.trim() || null,
+          username: browserAuth.username.trim(),
+          password: browserAuth.password.trim(),
+          mfa: browserAuth.mfa,
+        });
+        setBrowserAuthError(null);
+      } catch (error: unknown) {
+        const err = error as { data?: { message?: string }; message?: string };
+        const message = err?.data?.message || err?.message || tTargetAuth('feedback.saveError');
+        setBrowserAuthError(message);
+        setSubmissionError(message);
+        toast.error(message);
+        setIsSubmitting(false);
+        return;
+      }
+    }
+
     if (hasNoCreditsRemaining) {
       const message = t('messages.noCreditsRemaining');
       setSubmissionError(message);
@@ -229,6 +303,10 @@ export default function ScanForm() {
       setSubmissionSuccess(true);
       reset();
       setManualTargetUrl('');
+      setShowBrowserAuth(false);
+      setShowPassword(false);
+      setBrowserAuth(emptyBrowserAuth);
+      setBrowserAuthError(null);
       if (createdScan?.id) {
         router.push(`/${locale}/scans/${createdScan.id}`);
       } else {
@@ -346,6 +424,110 @@ export default function ScanForm() {
               />
               <input type="hidden" {...register('targetId')} />
             </div>
+
+            {selectedExistingTarget?.browserAuthConfigured && (
+              <p className="flex items-center gap-2 text-xs text-text-muted">
+                <ShieldCheck className="h-3.5 w-3.5 text-cyan-300" />
+                {tTargetAuth('alreadyConfigured')}
+              </p>
+            )}
+
+            {canConfigureBrowserAuth && (
+              !showBrowserAuth ? (
+                <button
+                  type="button"
+                  onClick={() => setShowBrowserAuth(true)}
+                  className="flex items-center gap-2 text-sm font-medium text-cyan-300 transition hover:text-cyan-200"
+                >
+                  <ShieldCheck className="h-4 w-4" />
+                  {tTargetAuth('toggleLabel')}
+                </button>
+              ) : (
+                <div className="rounded-2xl border border-cyan-400/15 bg-cyan-500/10 p-4">
+                  <div className="flex items-start gap-3">
+                    <div className="rounded-xl bg-white/8 p-2 text-cyan-300 shadow-sm">
+                      <ShieldCheck className="h-5 w-5" />
+                    </div>
+                    <div className="w-full space-y-3">
+                      <div>
+                        <p className="text-sm font-semibold text-text-primary">{tTargetAuth('cardTitle')}</p>
+                        <p className="mt-1 text-sm text-text-muted">{tTargetAuth('hint')}</p>
+                      </div>
+                      <div className="grid gap-4 sm:grid-cols-2">
+                        <div>
+                          <Label htmlFor={loginUrlId}>{tTargetAuth('loginUrl')}</Label>
+                          <Input
+                            id={loginUrlId}
+                            type="url"
+                            value={browserAuth.loginUrl ?? ''}
+                            onChange={(event) => setBrowserAuth((current) => ({ ...current, loginUrl: event.target.value }))}
+                            placeholder={manualTargetUrl || t('fields.target.placeholder')}
+                          />
+                          <p className="mt-1 text-[11px] text-text-muted">{tTargetAuth('loginUrlAutoDetectHint')}</p>
+                        </div>
+                        <div>
+                          <Label htmlFor={targetUrlOverrideId}>{tTargetAuth('targetUrl')}</Label>
+                          <Input
+                            id={targetUrlOverrideId}
+                            type="url"
+                            value={browserAuth.targetUrl ?? ''}
+                            onChange={(event) => setBrowserAuth((current) => ({ ...current, targetUrl: event.target.value }))}
+                            placeholder={manualTargetUrl || t('fields.target.placeholder')}
+                          />
+                        </div>
+                        <div>
+                          <Label htmlFor={usernameId} required>{tTargetAuth('username')}</Label>
+                          <Input
+                            id={usernameId}
+                            value={browserAuth.username ?? ''}
+                            onChange={(event) => setBrowserAuth((current) => ({ ...current, username: event.target.value }))}
+                            autoComplete="username"
+                            placeholder={tTargetAuth('usernamePlaceholder')}
+                          />
+                        </div>
+                        <div>
+                          <Label htmlFor={passwordId} required>{tTargetAuth('password')}</Label>
+                          <div className="relative">
+                            <Input
+                              id={passwordId}
+                              type={showPassword ? 'text' : 'password'}
+                              value={browserAuth.password ?? ''}
+                              onChange={(event) => setBrowserAuth((current) => ({ ...current, password: event.target.value }))}
+                              autoComplete="new-password"
+                              placeholder={tTargetAuth('passwordPlaceholder')}
+                              className="pr-11"
+                            />
+                            <button
+                              type="button"
+                              onClick={() => setShowPassword((current) => !current)}
+                              className="absolute inset-y-0 right-0 flex w-11 items-center justify-center text-text-muted transition hover:text-text-secondary"
+                              aria-label={showPassword ? tTargetAuth('hidePassword') : tTargetAuth('showPassword')}
+                            >
+                              {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+
+                      <label htmlFor={mfaId} className="flex items-start gap-3 rounded-2xl border border-white/10 bg-white/5 px-4 py-3">
+                        <Checkbox
+                          id={mfaId}
+                          checked={browserAuth.mfa}
+                          onChange={(event) => setBrowserAuth((current) => ({ ...current, mfa: event.target.checked }))}
+                          className="mt-0.5"
+                        />
+                        <div>
+                          <p className="text-sm font-medium text-text-primary">{tTargetAuth('mfa')}</p>
+                          <p className="mt-1 text-sm text-text-muted">{tTargetAuth('mfaDescription')}</p>
+                        </div>
+                      </label>
+
+                      {browserAuthError ? <p className="text-sm text-status-danger">{browserAuthError}</p> : null}
+                    </div>
+                  </div>
+                </div>
+              )
+            )}
 
             <CreditBudgetSelector
               value={creditBudget}

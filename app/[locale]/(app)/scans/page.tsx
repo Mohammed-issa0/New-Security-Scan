@@ -1,13 +1,14 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
+import { useRouter } from 'next/navigation';
 import { useTranslations, useLocale } from 'next-intl';
 import { scansService } from '@/lib/scans/scansService';
 import { plansService } from '@/lib/plans/plansService';
 import Link from 'next/link';
 import { Eye } from 'lucide-react';
-import { Scan, ScanStatus } from '@/lib/api/types';
+import { ScanStatus } from '@/lib/api/types';
 import { TableEmptyRow, TableErrorRow, TableSkeletonRows } from '@/components/common/AsyncStates';
 import { ScanCreditsDisplay } from '@/components/scans/ScanCreditsDisplay';
 import { ScanQueueProgressCard } from '@/components/scans/ScanQueueProgressCard';
@@ -38,18 +39,11 @@ const StatusBadge = ({ status }: { status: ScanStatus | 'Unknown' }) => {
   );
 };
 
-type StatusFilter = 'All' | ScanStatus;
-
 export default function ScansPage() {
   const t = useTranslations('landing.scans');
   const locale = useLocale();
+  const router = useRouter();
   const [page, setPage] = useState(1);
-  const [statusFilter, setStatusFilter] = useState<StatusFilter>('All');
-  const [toolFilter, setToolFilter] = useState<'All' | 'zap' | 'ffuf' | 'nmap' | 'wpscan' | 'sqlmap'>('All');
-
-  useEffect(() => {
-    setPage(1);
-  }, [statusFilter, toolFilter]);
 
   const tCommon = useTranslations('common.states');
   const tButtons = useTranslations('common.buttons');
@@ -73,12 +67,8 @@ export default function ScansPage() {
   const isPageVisible = usePageVisibility();
 
   const { data: scansData, isLoading, isError, error, refetch } = useQuery({
-    queryKey: ['scans', page, statusFilter, toolFilter],
-    queryFn: () =>
-      scansService.getScans(page, 10, {
-        status: statusFilter === 'All' ? undefined : statusFilter,
-        tool: toolFilter === 'All' ? undefined : toolFilter,
-      }),
+    queryKey: ['scans', page],
+    queryFn: () => scansService.getScans(page, 10),
     refetchInterval: (query) => {
       if (!isPageVisible) {
         return false;
@@ -105,35 +95,13 @@ export default function ScansPage() {
     [scansData?.items]
   );
 
-  const filteredScans = useMemo(() => {
-    const items = scansData?.items ?? [];
-
-    return items.filter((scan) => {
-      const normalizedStatus = normalizeScanStatus(scan.status);
-      const statusMatches = statusFilter === 'All' || normalizedStatus === statusFilter;
-      const toolMatches =
-        toolFilter === 'All' ||
-        (Array.isArray(scan.toolNames) && scan.toolNames.some((tool) => tool.toLowerCase() === toolFilter));
-
-      return statusMatches && toolMatches;
-    });
-  }, [scansData?.items, statusFilter, toolFilter]);
+  const scans = scansData?.items ?? [];
 
   const totalPages = scansData?.totalPages ?? (scansData ? Math.max(1, Math.ceil(scansData.totalCount / scansData.pageSize)) : 1);
 
-  const statusFilters: StatusFilter[] = [
-    'All',
-    'Pending',
-    'Running',
-    'Completed',
-    'CompletedWithLimits',
-    'Failed',
-    'Canceled',
-  ];
-
   return (
     <div className="space-y-6">
-      <div className="flex justify-between items-center">
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <h1 className="text-2xl font-bold text-text-primary">{t('title')}</h1>
           <p className="text-text-secondary">{t('subtitle')}</p>
@@ -145,56 +113,14 @@ export default function ScansPage() {
         </div>
         <Link
           href={`/${locale}/scans/new`}
-          className="inline-flex items-center rounded-lg bg-gradient-to-r from-cyan-400 via-cyan-300 to-blue-400 px-4 py-2 text-sm font-semibold text-slate-950 hover:shadow-[0_0_26px_rgba(0,209,255,0.24)] focus:outline-none focus:ring-2 focus:ring-cyan-300/55 focus:ring-offset-2 focus:ring-offset-cyber-bg"
+          className="inline-flex w-full items-center justify-center rounded-lg bg-gradient-to-r from-cyan-400 via-cyan-300 to-blue-400 px-4 py-2 text-sm font-semibold text-slate-950 hover:shadow-[0_0_26px_rgba(0,209,255,0.24)] focus:outline-none focus:ring-2 focus:ring-cyan-300/55 focus:ring-offset-2 focus:ring-offset-cyber-bg sm:w-auto"
         >
           {tButtons('startNow')}
         </Link>
       </div>
 
-      <div className="app-panel flex flex-col gap-3 rounded-xl p-4 sm:flex-row sm:items-center sm:justify-between">
-        <div className="space-y-2">
-          <div className="text-sm text-text-secondary">{t('filters.label')}</div>
-          <div className="flex flex-wrap items-center gap-2">
-            {statusFilters.map((status) => (
-              <button
-                key={status}
-                type="button"
-                onClick={() => setStatusFilter(status)}
-                className={`rounded-full border px-3 py-1.5 text-xs font-semibold transition ${
-                  statusFilter === status
-                    ? 'border-cyan-300/40 bg-cyan-400/16 text-cyan-200'
-                    : 'border-white/14 bg-white/5 text-text-secondary hover:border-cyan-300/30 hover:text-text-primary'
-                }`}
-              >
-                {status === 'All'
-                  ? t('filters.all')
-                  : t(`details.status.${status === 'CompletedWithLimits' ? 'completedwithlimits' : status.toLowerCase()}`)}
-              </button>
-            ))}
-          </div>
-        </div>
-        <div className="space-y-2">
-          <div className="text-sm text-text-secondary">{t('filters.toolLabel')}</div>
-          <div className="flex flex-wrap items-center gap-2">
-            {(['All', 'zap', 'ffuf', 'nmap', 'wpscan', 'sqlmap'] as const).map((tool) => (
-              <button
-                key={tool}
-                type="button"
-                onClick={() => setToolFilter(tool)}
-                className={`rounded-full border px-3 py-1.5 text-xs font-semibold uppercase transition ${
-                  toolFilter === tool
-                    ? 'border-cyan-300/40 bg-cyan-400/16 text-cyan-200'
-                    : 'border-white/14 bg-white/5 text-text-secondary hover:border-cyan-300/30 hover:text-text-primary'
-                }`}
-              >
-                {tool === 'All' ? t('filters.allTools') : tool}
-              </button>
-            ))}
-          </div>
-        </div>
-      </div>
-
       <div className="app-panel overflow-hidden shadow sm:rounded-lg">
+        <div className="overflow-x-auto">
         <table className="min-w-full divide-y divide-white/10">
           <thead className="bg-white/6">
             <tr>
@@ -232,16 +158,20 @@ export default function ScansPage() {
                 retryLabel={tCommon('retry')}
                 onRetry={() => refetch()}
               />
-            ) : filteredScans.length === 0 ? (
+            ) : scans.length === 0 ? (
               <TableEmptyRow columns={7} title={t('noScans')} />
             ) : (
-              filteredScans.map((scan) => {
+              scans.map((scan) => {
                 const normalizedStatus = normalizeScanStatus(scan.status);
                 const showConcurrentSlot =
                   maxConcurrentScans > 0 && isActiveScanStatus(normalizedStatus);
 
                 return (
-                  <tr key={scan.id} className="hover:bg-white/6">
+                  <tr
+                    key={scan.id}
+                    onClick={() => router.push(`/${locale}/scans/${scan.id}`)}
+                    className="cursor-pointer hover:bg-white/6"
+                  >
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="space-y-1">
                         <StatusBadge status={normalizedStatus} />
@@ -300,6 +230,7 @@ export default function ScansPage() {
             )}
           </tbody>
         </table>
+        </div>
 
         {scansData && totalPages > 1 && (
           <div className="flex items-center justify-between border-t border-white/10 bg-transparent px-4 py-3 sm:px-6">
