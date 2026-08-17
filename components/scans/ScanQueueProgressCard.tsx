@@ -7,6 +7,7 @@ import { AnimatedProgressBar } from './AnimatedProgressBar';
 import { formatDuration, remainingSecondsUntil } from '@/lib/scans/formatDuration';
 import { normalizeScanStatus } from '@/lib/scans/scanStatus';
 import type { ScanQueueProgressSource } from '@/lib/scans/useScanQueueEstimate';
+import { useIsAdmin } from '@/lib/hooks/useIsAdmin';
 
 interface ScanQueueProgressCardProps {
   source: ScanQueueProgressSource;
@@ -20,6 +21,7 @@ export function ScanQueueProgressCard({
   className = '',
 }: ScanQueueProgressCardProps) {
   const t = useTranslations('landing.scans.queueEstimate');
+  const isAdmin = useIsAdmin();
   const status = normalizeScanStatus(source.status);
   const isRunning = status === 'Running';
   const isPending = status === 'Pending';
@@ -67,7 +69,7 @@ export function ScanQueueProgressCard({
             <span className="text-text-secondary">
               {t('estimatedStart', { duration: waitLabel })}
             </span>
-            {queuePosition > 0 ? (
+            {isAdmin && queuePosition > 0 ? (
               <span className="rounded-full border border-status-warning/30 bg-status-warning/12 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-status-warning">
                 {t('position', { position: queuePosition })}
               </span>

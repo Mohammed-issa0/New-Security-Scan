@@ -30,6 +30,7 @@ import { ScanStatusBanner } from '@/components/scans/ScanStatusBanner';
 import { normalizeScanStatus, isActiveScanStatus, isTerminalScanStatus, getScanDisplayName } from '@/lib/scans/scanStatus';
 import { buildSeverityCounts, getOverallRiskScore } from '@/lib/scans/reportUtils';
 import { useScanQueueEstimate } from '@/lib/scans/useScanQueueEstimate';
+import { useIsAdmin } from '@/lib/hooks/useIsAdmin';
 
 type DetailsTab = 'overview' | 'tools' | 'vulnerabilities' | 'report';
 
@@ -109,6 +110,7 @@ export default function ScanDetailsPage() {
   const tCommon = useTranslations('common.states');
   const queryClient = useQueryClient();
   const locale = useLocale();
+  const isAdmin = useIsAdmin();
   const [activeTab, setActiveTab] = useState<DetailsTab>('overview');
   const [isCancelDialogOpen, setIsCancelDialogOpen] = useState(false);
   const [isAddCreditsOpen, setIsAddCreditsOpen] = useState(false);
@@ -739,7 +741,9 @@ export default function ScanDetailsPage() {
                 <tr>
                   <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-text-muted">{td('tools')}</th>
                   <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-text-muted">{td('statusLabel')}</th>
-                  <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-text-muted">{td('eta.queuePosition')}</th>
+                  {isAdmin && (
+                    <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-text-muted">{td('eta.queuePosition')}</th>
+                  )}
                   <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-text-muted">{td('eta.jobsAhead')}</th>
                   <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-text-muted">{td('eta.estimatedFinishAt')}</th>
                   <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-text-muted">{td('startedAtLabel')}</th>
@@ -749,7 +753,7 @@ export default function ScanDetailsPage() {
               <tbody className="divide-y divide-white/10 bg-transparent">
                 {toolRows.length === 0 ? (
                   <tr>
-                    <td colSpan={7} className="px-4 py-6 text-center text-sm text-text-secondary">{td('toolsEmpty')}</td>
+                    <td colSpan={isAdmin ? 7 : 6} className="px-4 py-6 text-center text-sm text-text-secondary">{td('toolsEmpty')}</td>
                   </tr>
                 ) : toolRows.map((tool) => {
                   const isActiveTool = tool.status === 'Pending' || tool.status === 'Running';
@@ -763,9 +767,11 @@ export default function ScanDetailsPage() {
                         {tool.status}
                       </span>
                     </td>
-                    <td className="px-4 py-3 text-sm text-text-secondary">
-                      {isActiveTool ? (toolEta?.queuePosition ?? '-') : '-'}
-                    </td>
+                    {isAdmin && (
+                      <td className="px-4 py-3 text-sm text-text-secondary">
+                        {isActiveTool ? (toolEta?.queuePosition ?? '-') : '-'}
+                      </td>
+                    )}
                     <td className="px-4 py-3 text-sm text-text-secondary">
                       {isActiveTool ? (toolEta?.jobsAheadCount ?? '-') : '-'}
                     </td>

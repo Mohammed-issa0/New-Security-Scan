@@ -246,7 +246,8 @@
         "title": "Add a new target",
         "description": "Create a website target and attach it to your scanning workspace.",
         "helper": "Only valid HTTP and HTTPS URLs are accepted. The new target will appear in the list immediately after creation.",
-        "browserAuthToggle": "Add login credentials for this target (optional)"
+        "browserAuthToggle": "Add login credentials for this target (optional)",
+        "browserAuthHint": "If this site needs a login to reach the pages you want scanned, click here to enter credentials now — or skip this and add them later from the target's details page."
       },
       "deleteModal": {
         "title": "Delete target",

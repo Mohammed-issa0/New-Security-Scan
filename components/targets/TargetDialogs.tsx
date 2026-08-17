@@ -266,14 +266,17 @@ export function CreateTargetDialog({
         </div>
 
         {!showBrowserAuth ? (
-          <button
-            type="button"
-            onClick={() => setShowBrowserAuth(true)}
-            className="flex items-center gap-2 text-sm font-medium text-cyan-300 transition hover:text-cyan-200"
-          >
-            <ShieldCheck className="h-4 w-4" />
-            {t('createModal.browserAuthToggle')}
-          </button>
+          <div className="space-y-2 rounded-2xl border border-white/10 bg-white/5 p-4">
+            <button
+              type="button"
+              onClick={() => setShowBrowserAuth(true)}
+              className="flex items-center gap-2 text-sm font-medium text-cyan-300 transition hover:text-cyan-200"
+            >
+              <ShieldCheck className="h-4 w-4" />
+              {t('createModal.browserAuthToggle')}
+            </button>
+            <p className="text-xs leading-relaxed text-text-muted">{t('createModal.browserAuthHint')}</p>
+          </div>
         ) : (
           <div className="rounded-2xl border border-cyan-400/15 bg-cyan-500/10 p-4">
             <div className="flex items-start gap-3">
