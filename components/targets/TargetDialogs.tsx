@@ -6,6 +6,7 @@ import { Check, Copy, Eye, EyeOff, Globe, ShieldCheck, TriangleAlert, X } from '
 import { useTranslations } from 'next-intl';
 import { Button, Checkbox, Input, Label } from '@/components/scans/ui';
 import type { Target, TargetBrowserAuthRequest } from '@/lib/api/types';
+import { ensureTargetUrlScheme } from '@/lib/targets/urlUtils';
 
 interface BaseDialogProps {
   isOpen: boolean;
@@ -146,7 +147,7 @@ export function CreateTargetDialog({
     }
 
     try {
-      const parsedUrl = new URL(trimmedValue);
+      const parsedUrl = new URL(ensureTargetUrlScheme(trimmedValue));
       if (!['http:', 'https:'].includes(parsedUrl.protocol)) {
         return t('validation.httpOnly');
       }
@@ -189,11 +190,11 @@ export function CreateTargetDialog({
 
     setBrowserAuthError(null);
     onSubmit(
-      url.trim(),
+      ensureTargetUrlScheme(url.trim()),
       hasBrowserAuthInput
         ? {
-            loginUrl: browserAuth.loginUrl?.trim() || null,
-            targetUrl: browserAuth.targetUrl?.trim() || null,
+            loginUrl: browserAuth.loginUrl?.trim() ? ensureTargetUrlScheme(browserAuth.loginUrl.trim()) : null,
+            targetUrl: browserAuth.targetUrl?.trim() ? ensureTargetUrlScheme(browserAuth.targetUrl.trim()) : null,
             username: browserAuth.username!.trim(),
             password: browserAuth.password!.trim(),
             mfa: browserAuth.mfa,
