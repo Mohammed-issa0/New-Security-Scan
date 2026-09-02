@@ -194,7 +194,11 @@
       "password": "Password",
       "submit": "Sign In",
       "noAccount": "Don't have an account?",
-      "register": "Register here"
+      "register": "Register here",
+      "emailRequired": "Email is required.",
+      "emailInvalid": "Please enter a valid email address.",
+      "passwordTooShort": "Password must be at least 6 characters.",
+      "passwordTooLong": "Password must not exceed 128 characters."
     },
     "register": {
       "title": "Create Account",
@@ -212,9 +216,15 @@
       "nameRequired": "Enter a full name or both first and last name.",
       "splitNameRequired": "Both first and last name are required when full name is empty.",
       "nameTooShort": "Full name must be at least 2 characters.",
+      "nameTooLong": "Name must not exceed 60 characters.",
+      "nameInvalidChars": "Name can only contain letters, without numbers or symbols.",
+      "emailRequired": "Email is required.",
+      "emailInvalid": "Please enter a valid email address.",
+      "emailTooLong": "Email is too long.",
       "confirmPasswordMismatch": "Passwords don't match",
       "passwordRules": {
         "minLength": "Password must be at least 8 characters.",
+        "maxLength": "Password must not exceed 128 characters.",
         "uppercase": "Password must contain at least one uppercase letter.",
         "lowercase": "Password must contain at least one lowercase letter.",
         "special": "Password must contain at least one special character.",

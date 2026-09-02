@@ -21,18 +21,22 @@ export default function RegisterPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
+  // Latin and Arabic letters plus spaces, apostrophes, and hyphens — no digits or other symbols.
+  const nameRegex = /^[A-Za-zÀ-ſ؀-ۿݐ-ݿ\s'-]+$/;
+
   const registerSchema = z.object({
     fullName: z.string().trim().optional().or(z.literal('')),
     firstName: z.string().trim().optional().or(z.literal('')),
     lastName: z.string().trim().optional().or(z.literal('')),
-    email: z.string().email(),
+    email: z.string().trim().min(1, t('emailRequired')).max(254, t('emailTooLong')).email(t('emailInvalid')),
     password: z
       .string()
       .min(8, t('passwordRules.minLength'))
+      .max(128, t('passwordRules.maxLength'))
       .regex(/[A-Z]/, t('passwordRules.uppercase'))
       .regex(/[a-z]/, t('passwordRules.lowercase'))
       .regex(/[^a-zA-Z0-9]/, t('passwordRules.special')),
-    confirmPassword: z.string().min(8),
+    confirmPassword: z.string().min(8, t('passwordRules.minLength')).max(128, t('passwordRules.maxLength')),
   }).superRefine((data, ctx) => {
     const fullName = data.fullName?.trim();
     const firstName = data.firstName?.trim();
@@ -64,6 +68,20 @@ export default function RegisterPage() {
     if (fullName && fullName.length < 2) {
       ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('nameTooShort'), path: ['fullName'] });
     }
+
+    const checkNamePart = (value: string | undefined, path: 'fullName' | 'firstName' | 'lastName') => {
+      if (!value) return;
+      if (value.length > 60) {
+        ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('nameTooLong'), path: [path] });
+      }
+      if (!nameRegex.test(value)) {
+        ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('nameInvalidChars'), path: [path] });
+      }
+    };
+
+    checkNamePart(fullName, 'fullName');
+    checkNamePart(firstName, 'firstName');
+    checkNamePart(lastName, 'lastName');
   });
 
   type RegisterFormValues = z.infer<typeof registerSchema>;
@@ -142,6 +160,8 @@ export default function RegisterPage() {
                 <input
                   {...register('fullName')}
                   type="text"
+                  inputMode="text"
+                  maxLength={60}
                   className="appearance-none relative block w-full rounded-lg border border-cyan-400/18 bg-white/5 px-3 py-2 text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:ring-2 focus:ring-cyan-300/45 focus:border-cyan-300/70"
                 />
                 {errors.fullName && (
@@ -157,6 +177,8 @@ export default function RegisterPage() {
                   <input
                     {...register('firstName')}
                     type="text"
+                    inputMode="text"
+                    maxLength={60}
                     className="appearance-none relative block w-full rounded-lg border border-cyan-400/18 bg-white/5 px-3 py-2 text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:ring-2 focus:ring-cyan-300/45 focus:border-cyan-300/70"
                   />
                   {errors.firstName && (
@@ -170,6 +192,8 @@ export default function RegisterPage() {
                   <input
                     {...register('lastName')}
                     type="text"
+                    inputMode="text"
+                    maxLength={60}
                     className="appearance-none relative block w-full rounded-lg border border-cyan-400/18 bg-white/5 px-3 py-2 text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:ring-2 focus:ring-cyan-300/45 focus:border-cyan-300/70"
                   />
                   {errors.lastName && (
@@ -184,6 +208,8 @@ export default function RegisterPage() {
                 <input
                   {...register('email')}
                   type="email"
+                  autoComplete="email"
+                  maxLength={254}
                   className="appearance-none relative block w-full rounded-lg border border-cyan-400/18 bg-white/5 px-3 py-2 text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:ring-2 focus:ring-cyan-300/45 focus:border-cyan-300/70"
                 />
                 {errors.email && (
@@ -198,6 +224,8 @@ export default function RegisterPage() {
                   <input
                     {...register('password')}
                     type={showPassword ? 'text' : 'password'}
+                    autoComplete="new-password"
+                    maxLength={128}
                     className="appearance-none relative block w-full rounded-lg border border-cyan-400/18 bg-white/5 px-3 py-2 pe-10 text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:ring-2 focus:ring-cyan-300/45 focus:border-cyan-300/70"
                   />
                   <button
@@ -222,6 +250,8 @@ export default function RegisterPage() {
                   <input
                     {...register('confirmPassword')}
                     type={showConfirmPassword ? 'text' : 'password'}
+                    autoComplete="new-password"
+                    maxLength={128}
                     className="appearance-none relative block w-full rounded-lg border border-cyan-400/18 bg-white/5 px-3 py-2 pe-10 text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:ring-2 focus:ring-cyan-300/45 focus:border-cyan-300/70"
                   />
                   <button

@@ -15,6 +15,11 @@ const PROFILE_ICONS: Record<ScanProfile, typeof Radar> = {
   deep: Radar,
 };
 
+// Profiles the app ships localized copy for (messages/*.json: scanForm.fields.profile.options).
+// The backend's `display`/`description` text is English-only, so we prefer our translation
+// for these known profiles and only fall back to the API text for unrecognized profile names.
+const LOCALIZED_PROFILE_NAMES: ScanProfile[] = ['recon', 'quick', 'standard', 'deep'];
+
 interface ProfileSelectorProps {
   value: ScanProfile;
   onChange: (profile: ScanProfile, defaultCredits: number) => void;
@@ -59,8 +64,9 @@ export function ProfileSelector({
           const allowed = isProfileAllowedForPlan(item.name, planName, item.planTiers);
           const Icon = PROFILE_ICONS[item.name] || Shield;
           const isSelected = value === item.name;
-          const displayName = item.display || t(`options.${item.name}.title`);
-          const description = item.description || t(`options.${item.name}.description`);
+          const isLocalized = LOCALIZED_PROFILE_NAMES.includes(item.name);
+          const displayName = isLocalized ? t(`options.${item.name}.title`) : item.display || item.name;
+          const description = isLocalized ? t(`options.${item.name}.description`) : item.description || '';
 
           return (
             <button

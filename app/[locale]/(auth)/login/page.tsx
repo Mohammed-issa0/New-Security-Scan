@@ -13,19 +13,19 @@ import { ApiRequestError } from '@/lib/api/client';
 import { AuthPageShell } from '@/components/auth/AuthPageShell';
 import { Eye, EyeOff } from 'lucide-react';
 
-const loginSchema = z.object({
-  email: z.string().min(1),
-  password: z.string().min(6),
-});
-
-type LoginFormValues = z.infer<typeof loginSchema>;
-
 export default function LoginPage() {
   const t = useTranslations('landing.login');
   const locale = useLocale();
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+
+  const loginSchema = z.object({
+    email: z.string().trim().min(1, t('emailRequired')).email(t('emailInvalid')),
+    password: z.string().min(6, t('passwordTooShort')).max(128, t('passwordTooLong')),
+  });
+
+  type LoginFormValues = z.infer<typeof loginSchema>;
 
   const {
     register,
@@ -86,6 +86,7 @@ export default function LoginPage() {
                   {...register('email')}
                   type="email"
                   autoComplete="email"
+                  maxLength={254}
                   data-testid="login-email"
                   className="appearance-none relative block w-full rounded-lg border border-cyan-400/18 bg-white/5 px-3 py-2 text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:ring-2 focus:ring-cyan-300/45 focus:border-cyan-300/70"
                 />
@@ -102,6 +103,7 @@ export default function LoginPage() {
                     {...register('password')}
                     type={showPassword ? 'text' : 'password'}
                     autoComplete="current-password"
+                    maxLength={128}
                     data-testid="login-password"
                     className="appearance-none relative block w-full rounded-lg border border-cyan-400/18 bg-white/5 px-3 py-2 pe-10 text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:ring-2 focus:ring-cyan-300/45 focus:border-cyan-300/70"
                   />
