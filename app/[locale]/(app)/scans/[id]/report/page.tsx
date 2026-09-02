@@ -8,7 +8,7 @@ import { useParams } from 'next/navigation';
 import { AlertTriangle, ArrowLeft, BarChart, CalendarClock, RefreshCw, Search, ShieldAlert, Sparkles, X, Download  } from 'lucide-react';
 import { scansService } from '@/lib/scans/scansService';
 import { normalizeScanStatus, isActiveScanStatus, isTerminalScanStatus, getScanDisplayName, getScanStatusTranslationKey, scanStatusClassMap } from '@/lib/scans/scanStatus';
-import { buildSeverityCounts, getOverallRiskScore, getTotalVulnerabilities } from '@/lib/scans/reportUtils';
+import { buildSeverityCounts, getOverallRiskScore, getTotalVulnerabilities, stripHtmlToText } from '@/lib/scans/reportUtils';
 import type { GenerateReportResponse, ReportStatusResponse, Vulnerability } from '@/lib/api/types';
 import { toast } from 'sonner';
 import { PanelEmptyState, PanelErrorState, PanelLoadingState } from '@/components/common/AsyncStates';
@@ -753,7 +753,7 @@ export default function ScanReportPage() {
                 <tr key={vulnerability.id} className="hover:bg-white/8">
                   <td className="px-4 py-3 text-sm text-text-primary">
                     <div className="font-medium">{vulnerability.name || vulnerability.type || td('vulnerabilityFallback')}</div>
-                    <div className="mt-1 line-clamp-2 text-xs text-text-muted">{vulnerability.description || '-'}</div>
+                    <div className="mt-1 line-clamp-2 text-xs text-text-muted">{stripHtmlToText(vulnerability.description) || '-'}</div>
                   </td>
                   <td className="px-4 py-3 text-sm">
                     <span className={`inline-flex rounded-full border px-2 py-1 text-xs font-semibold ${severityStyles[vulnerability.severity] || 'border-white/14 bg-white/8 text-text-secondary'}`}>
@@ -821,7 +821,7 @@ export default function ScanReportPage() {
 
               <div>
                 <p className="text-xs font-semibold uppercase tracking-wide text-text-muted">{t('vulnerabilities.sections.description')}</p>
-                <p className="mt-2 text-sm leading-7 text-text-secondary">{selectedVulnerability.description || '-'}</p>
+                <p className="mt-2 whitespace-pre-line text-sm leading-7 text-text-secondary">{stripHtmlToText(selectedVulnerability.description) || '-'}</p>
               </div>
 
               <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
@@ -837,7 +837,7 @@ export default function ScanReportPage() {
 
               <div>
                 <p className="text-xs font-semibold uppercase tracking-wide text-text-muted">{t('vulnerabilities.sections.recommendation')}</p>
-                <p className="mt-2 text-sm leading-7 text-text-secondary">{selectedVulnerability.recommendation || '-'}</p>
+                <p className="mt-2 whitespace-pre-line text-sm leading-7 text-text-secondary">{stripHtmlToText(selectedVulnerability.recommendation) || '-'}</p>
               </div>
 
               <div>

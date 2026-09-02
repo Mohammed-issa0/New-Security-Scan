@@ -1,5 +1,6 @@
 import { endpoints } from '../api/endpoints';
 import { ApiRequestError, client } from '../api/client';
+import { normalizeVulnerabilitySeverities } from './reportUtils';
 import type {
   CreateScanRequest,
   AddCreditsToScanRequest,
@@ -94,7 +95,8 @@ export const scansService = {
     return endpoints.scans.createJiraTickets(scanId);
   },
   async getScanVulnerabilities(id: string) {
-    return endpoints.scans.getVulnerabilities(id);
+    const vulnerabilities = await endpoints.scans.getVulnerabilities(id);
+    return normalizeVulnerabilitySeverities(vulnerabilities);
   },
 
   // Reports

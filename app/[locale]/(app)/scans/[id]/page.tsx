@@ -28,7 +28,7 @@ import { ScanQueueProgressCard } from '@/components/scans/ScanQueueProgressCard'
 import { ScanProfileBadge } from '@/components/scans/ScanProfileBadge';
 import { ScanStatusBanner } from '@/components/scans/ScanStatusBanner';
 import { normalizeScanStatus, isActiveScanStatus, isTerminalScanStatus, getScanDisplayName } from '@/lib/scans/scanStatus';
-import { buildSeverityCounts, getOverallRiskScore } from '@/lib/scans/reportUtils';
+import { buildSeverityCounts, getOverallRiskScore, stripHtmlToText } from '@/lib/scans/reportUtils';
 import { useScanQueueEstimate } from '@/lib/scans/useScanQueueEstimate';
 import { useIsAdmin } from '@/lib/hooks/useIsAdmin';
 
@@ -822,8 +822,8 @@ export default function ScanDetailsPage() {
                     </span>
                     <span className="text-xs text-text-muted">{vuln.toolName || '-'}</span>
                   </div>
-                  <h3 className="font-semibold text-text-primary">{vuln.type || td('vulnerabilityFallback')}</h3>
-                  <p className="mt-1 text-sm text-text-secondary">{vuln.description || '-'}</p>
+                  <h3 className="font-semibold text-text-primary">{vuln.name || vuln.type || td('vulnerabilityFallback')}</h3>
+                  <p className="mt-1 whitespace-pre-line text-sm text-text-secondary">{stripHtmlToText(vuln.description) || '-'}</p>
                   {(vuln.jiraTickets?.length ?? 0) > 0 && (
                     <div className="mt-2 flex flex-wrap gap-2">
                       {vuln.jiraTickets?.map((ticket) => (
@@ -840,8 +840,8 @@ export default function ScanDetailsPage() {
                     </div>
                   )}
                   {vuln.recommendation && (
-                    <p className="mt-2 rounded-lg border border-white/10 bg-white/8 p-3 text-sm text-text-secondary">
-                      {vuln.recommendation}
+                    <p className="mt-2 whitespace-pre-line rounded-lg border border-white/10 bg-white/8 p-3 text-sm text-text-secondary">
+                      {stripHtmlToText(vuln.recommendation)}
                     </p>
                   )}
                 </div>
