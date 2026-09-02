@@ -30,7 +30,8 @@
       "close": "Close",
       "copy": "Copy Payload",
       "copied": "Copied!",
-      "add": "Add"
+      "add": "Add",
+      "apply": "Apply to Form"
     }
   },
   "landing": {
@@ -1062,7 +1063,10 @@
     "jsonPreview": {
       "title": "JSON Payload Preview",
       "forDevelopers": "This preview is for developers only",
-      "description": "The exact JSON structure sent to the scanning engine."
+      "description": "The exact JSON structure sent to the scanning engine.",
+      "editableHint": "You can edit this JSON directly and apply it back to the form.",
+      "invalidJson": "Invalid JSON. Please fix the syntax before applying.",
+      "applied": "JSON applied to the form."
     },
     "messages": {
       "success": "Scan started successfully!",

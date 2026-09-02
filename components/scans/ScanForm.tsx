@@ -334,20 +334,70 @@ export default function ScanForm() {
   };
 
   const currentPayload = (() => {
-    try {
-      return buildProfilePayload(formValues);
-    } catch {
-      // Preview for developers even before target is selected
-      return {
-        targetId: formValues.targetId?.trim() || '',
-        profile: formValues.profile,
-        creditBudget: formValues.creditBudget ?? 1,
-        name: formValues.name || undefined,
-        notes: formValues.notes || undefined,
-        scopeSigned: formValues.scopeSigned,
-      };
-    }
+    const base = (() => {
+      try {
+        return buildProfilePayload(formValues);
+      } catch {
+        // Preview for developers even before target is selected
+        return {
+          targetId: formValues.targetId?.trim() || '',
+          profile: formValues.profile,
+          creditBudget: formValues.creditBudget ?? 1,
+          name: formValues.name || undefined,
+          notes: formValues.notes || undefined,
+          scopeSigned: formValues.scopeSigned,
+        };
+      }
+    })();
+
+    return {
+      ...base,
+      // Not part of the scan-creation request body, but resolved into a
+      // target before submit — shown here so the preview reflects the
+      // full create flow, not just the final POST payload.
+      targets: formValues.targets || manualTargetUrl || undefined,
+      ...(showBrowserAuth && canConfigureBrowserAuth ? { browserAuth } : {}),
+    };
   })();
+
+  const handleApplyJsonPayload = (parsed: unknown): boolean => {
+    if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed)) {
+      return false;
+    }
+    const data = parsed as Record<string, unknown>;
+    const setOptions = { shouldValidate: true, shouldDirty: true } as const;
+
+    if (typeof data.name === 'string') setValue('name', data.name, setOptions);
+    if (typeof data.notes === 'string') setValue('notes', data.notes, setOptions);
+    if (typeof data.profile === 'string') {
+      setValue('profile', data.profile as ProfileScanFormSchemaType['profile'], setOptions);
+    }
+    if (typeof data.creditBudget === 'number') setValue('creditBudget', data.creditBudget, setOptions);
+    if (typeof data.scopeSigned === 'boolean') setValue('scopeSigned', data.scopeSigned, setOptions);
+    if (typeof data.targetId === 'string') setValue('targetId', data.targetId, setOptions);
+    if (typeof data.targets === 'string') {
+      setValue('targets', data.targets, setOptions);
+      setManualTargetUrl(data.targets);
+    }
+
+    if (data.browserAuth && typeof data.browserAuth === 'object' && !Array.isArray(data.browserAuth)) {
+      const auth = data.browserAuth as Record<string, unknown>;
+      const nextAuth: TargetBrowserAuthRequest = {
+        loginUrl: typeof auth.loginUrl === 'string' ? auth.loginUrl : '',
+        targetUrl: typeof auth.targetUrl === 'string' ? auth.targetUrl : '',
+        username: typeof auth.username === 'string' ? auth.username : '',
+        password: typeof auth.password === 'string' ? auth.password : '',
+        mfa: typeof auth.mfa === 'boolean' ? auth.mfa : false,
+      };
+      setBrowserAuth(nextAuth);
+      if (nextAuth.username || nextAuth.password || nextAuth.loginUrl || nextAuth.targetUrl) {
+        setShowBrowserAuth(true);
+      }
+    }
+
+    toast.success(t('jsonPreview.applied'));
+    return true;
+  };
 
   const handleProfileChange = (profile: ScanProfile, defaultCredits: number) => {
     setValue('profile', profile);
@@ -609,6 +659,7 @@ export default function ScanForm() {
         isOpen={showJsonPreview}
         onClose={() => setShowJsonPreview(false)}
         payload={currentPayload}
+        onApply={handleApplyJsonPayload}
       />
     </motion.div>
   );
