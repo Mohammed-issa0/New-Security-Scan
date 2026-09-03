@@ -2,7 +2,7 @@
 
 import * as React from "react"
 import Link from "next/link"
-import { ArrowRight, Play, CheckCircle2, Shield, Search, Zap, Cpu, Server, Lock } from "lucide-react"
+import { ArrowRight, Play, CheckCircle2, Shield, Search, Zap, Cpu, Server } from "lucide-react"
 import { Container, Section, GradientText, FeatureCard } from "./ui"
 import { useTranslations, useLocale } from "next-intl"
 import { motion } from "framer-motion"
@@ -77,10 +77,9 @@ export function Hero() {
           </Link>
         </motion.div>
 
-        <div className="mt-20 grid grid-cols-2 md:grid-cols-4 gap-4 max-w-5xl mx-auto">
+        <div className="mt-20 grid grid-cols-2 md:grid-cols-3 gap-4 max-w-5xl mx-auto">
           {[
-            { icon: Shield, label: 'ISO 27001' },
-            { icon: Lock, label: 'SOC2 Type II' },
+            { icon: Shield, label: 'ISO 27001 Aligned' },
             { icon: Server, label: 'GDPR Ready' },
             { icon: CheckCircle2, label: 'OWASP Compliance' },
           ].map((item) => (
