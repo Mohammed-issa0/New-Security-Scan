@@ -48,11 +48,9 @@ function getErrorMessage(error: unknown, fallback: string) {
 export function PlansPageContent({
   variant = 'public',
   mode = 'full',
-  blurPrice = false,
 }: {
   variant?: 'public' | 'app';
   mode?: 'full' | 'section';
-  blurPrice?: boolean;
 }) {
   const t = useTranslations('plansPage');
   const locale = useLocale();
@@ -218,7 +216,6 @@ export function PlansPageContent({
 
   const showFull = mode === 'full';
   const isLandingSection = mode === 'section';
-  const shouldBlurPrice = isLandingSection || blurPrice;
   const compareRows = [
     {
       key: 'price',
@@ -453,7 +450,7 @@ export function PlansPageContent({
                     </p>
                   </div>
                   <div className="rounded-2xl border border-white/10 bg-white/8 p-4">
-                    <div className={`text-3xl font-extrabold text-text-primary ${shouldBlurPrice ? 'blur-md select-none' : ''}`}>
+                    <div className="text-3xl font-extrabold text-text-primary">
                       {formatPrice(plan)}
                     </div>
                     <div className="text-xs font-semibold uppercase tracking-widest text-text-muted">
@@ -518,7 +515,7 @@ export function PlansPageContent({
                       <th key={plan.planName || getPlanDisplayName(plan) || 'plan'} className="px-6 py-4 text-left font-semibold text-text-primary">
                         <div className="space-y-1">
                           <div>{getLocalizedPlanName(plan, locale) || t('plansSection.planFallback')}</div>
-                          <div className={`text-xs font-medium text-text-muted ${shouldBlurPrice ? 'blur-sm select-none' : ''}`}>{formatPrice(plan)}</div>
+                          <div className="text-xs font-medium text-text-muted">{formatPrice(plan)}</div>
                         </div>
                       </th>
                     ))}

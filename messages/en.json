@@ -16,7 +16,6 @@
     },
     "nav": {
       "features": "Features",
-      "tools": "Tools",
       "plans": "Plans",
       "billing": "Billing",
       "profile": "Profile",
@@ -119,21 +118,6 @@
       "distributed": {
         "title": "Actionable Reports",
         "desc": "Export PDF reports, summarize vulnerabilities, and push tickets to Jira when you need them."
-      }
-    },
-    "tools": {
-      "title": "The scanners you already trust",
-      "subtitle": "Use the same industry tools with normalized output, predictable limits, and consistent results.",
-      "viewAll": "See Tool Options",
-      "integrated": "Integrated",
-      "comingSoon": "Coming Soon",
-      "items": {
-        "zap": "Industry-standard web and API scanning with structured findings.",
-        "ffuf": "High-speed endpoint discovery with queue-aware execution.",
-        "nmap": "Network discovery and service fingerprinting at scale.",
-        "wpscan": "Targeted WordPress vulnerability intelligence.",
-        "sqlmap": "Automated SQL injection testing with curated configs.",
-        "custom": "AI summaries, PDF exports, and Jira ticket creation."
       }
     },
     "howItWorks": {

@@ -3,7 +3,7 @@
 import * as React from "react"
 import Link from "next/link"
 import { ArrowRight, Play, CheckCircle2, Shield, Search, Zap, Cpu, Server, Lock } from "lucide-react"
-import { Container, Section, GradientText, FeatureCard, ToolBadge } from "./ui"
+import { Container, Section, GradientText, FeatureCard } from "./ui"
 import { useTranslations, useLocale } from "next-intl"
 import { motion } from "framer-motion"
 import { buttonInteraction } from "../scans/ui"
@@ -128,53 +128,6 @@ export function Features() {
                 title={[t('discovery.title'), t('analysis.title'), t('distributed.title')][index]}
                 description={[t('discovery.desc'), t('analysis.desc'), t('distributed.desc')][index]}
               />
-            </motion.div>
-          ))}
-        </div>
-      </Container>
-    </Section>
-  )
-}
-
-export function Tools() {
-  const t = useTranslations('landing.tools')
-  const locale = useLocale()
-  const isRtl = locale === 'ar'
-
-  const tools = [
-    { name: "OWASP ZAP", desc: t('items.zap'), badge: t('integrated') },
-    { name: "FFUF", desc: t('items.ffuf'), badge: t('integrated') },
-    { name: "Nmap", desc: t('items.nmap'), badge: t('integrated') },
-    { name: "WPScan", desc: t('items.wpscan'), badge: t('integrated') },
-    { name: "SQLMap", desc: t('items.sqlmap'), badge: t('integrated') },
-    { name: "Custom Engines", desc: t('items.custom'), badge: t('comingSoon') },
-  ]
-
-  return (
-    <Section id="tools" className="relative">
-      <Container>
-        <div className="flex flex-col md:flex-row justify-between items-end mb-16 gap-8">
-          <div className="max-w-2xl">
-            <h2 className="text-3xl md:text-4xl font-bold text-text-primary mb-6">{t('title')}</h2>
-            <p className="text-lg text-text-secondary leading-relaxed">{t('subtitle')}</p>
-          </div>
-          <Link href={`/${locale}/scans/new`} className="text-cyan-300 font-bold flex items-center gap-2 hover:gap-3 transition-all">
-            {t('viewAll')} <ArrowRight size={18} className={isRtl ? "rotate-180" : ""} />
-          </Link>
-        </div>
-
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {tools.map((tool) => (
-            <motion.div 
-              key={tool.name} 
-              whileHover={{ y: -5 }}
-              className="cyber-card cyber-card-hover p-6 rounded-2xl transition-colors"
-            >
-              <div className="flex items-center justify-between mb-4">
-                <h4 className="text-lg font-bold text-text-primary">{tool.name}</h4>
-                <ToolBadge>{tool.badge}</ToolBadge>
-              </div>
-              <p className="text-sm text-text-secondary leading-relaxed">{tool.desc}</p>
             </motion.div>
           ))}
         </div>

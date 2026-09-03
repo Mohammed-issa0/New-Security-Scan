@@ -31,10 +31,9 @@ export function Navbar() {
     }
     return pathname
   }, [pathname])
-  const landingSections = React.useMemo(() => ['features', 'tools', 'plans', 'how-it-works'], [])
+  const landingSections = React.useMemo(() => ['features', 'plans', 'how-it-works'], [])
   const landingNavItems = React.useMemo(() => ([
     { id: 'features', label: t('nav.features') },
-    { id: 'tools', label: t('nav.tools') },
     { id: 'plans', label: t('nav.plans') },
     { id: 'how-it-works', label: t('nav.howItWorks') },
   ]), [t])
