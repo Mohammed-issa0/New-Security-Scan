@@ -1872,91 +1872,143 @@
   },
   "privacyPage": {
     "title": "Privacy Policy",
-    "lastUpdated": "Last updated: July 18, 2026",
+    "lastUpdated": "Last updated: September 3, 2026",
     "back": "Back to previous page",
-    "intro": "blackbrains (\"we\", \"us\", or \"our\") operates an automated security scanning platform. This Privacy Policy explains how we collect, use, store, and protect your information when you use our website and services.",
-    "contact": "Questions about this policy? Contact us at privacy@blackbrains.tech.",
+    "intro": "BlackBrains (\"we\", \"us\", or \"our\") operates the automated security-scanning platform at blackbrains.tech. This policy explains what personal data we collect, why, how long we keep it, and what rights you have.",
+    "contact": "Questions about this policy? Contact us at info@blackbrains.tech.",
     "sections": [
       {
-        "title": "1. Information We Collect",
-        "body": "We may collect account details (name, email), authentication credentials you provide for scans, scan targets and configurations, billing and plan information, usage logs, and technical data such as IP address, browser type, and device information."
+        "title": "1. Who we are and what this covers",
+        "body": "You register a website you own, we run automated security tools against it, and we return a report describing the weaknesses found.\n\nThis policy covers the website, the API, the browser extension and the mobile app."
       },
       {
-        "title": "2. How We Use Your Information",
-        "body": "We use your information to provide and improve the scanning service, authenticate users, process subscriptions and credits, generate reports, send service-related notifications, enforce plan limits, and maintain platform security and integrity."
+        "title": "2.1 Account data — you give us this",
+        "body": "Full name — to address you in the product and in emails.\nEmail address — login identifier, security codes, scan notifications, receipts.\nPassword — authentication. Stored only as a PBKDF2-HMAC-SHA256 hash (100,000 iterations, unique 16-byte salt). We never store or transmit your password in readable form and cannot recover it."
       },
       {
-        "title": "3. Scan Targets and Sensitive Data",
-        "body": "Scan targets, cookies, headers, and other credentials you submit are used solely to perform the scans you request. You are responsible for ensuring you have authorization to scan those targets. We do not sell scan results or target credentials to third parties."
+        "title": "2.2 Scan data — created when you use the service",
+        "body": "• Target website addresses you register\n• Scan configuration (which checks, how deep, excluded paths)\n• Scan results: vulnerabilities found, severity, affected URLs, and technical evidence (request/response fragments captured by the tools)\n• Timing and status of each scan"
       },
       {
-        "title": "4. Sharing of Information",
-        "body": "We may share information with infrastructure and payment providers that help us operate the service, when required by law, or to protect our rights and users. Integrations you enable (such as Jira) will receive only the data needed for that integration."
+        "title": "2.3 Credentials for authenticated scanning — optional",
+        "body": "If you ask us to scan an area of your site that requires login, you may store a username and password for your own site. These are encrypted at rest and are decrypted only for the duration of a scan. They are never shown back to you and never included in reports.\n\nDo not enter credentials for any system you do not control."
       },
       {
-        "title": "5. Data Retention",
-        "body": "We retain account, scan, and billing records for as long as needed to provide the service, meet legal obligations, resolve disputes, and enforce agreements. You may request deletion of your account subject to applicable retention requirements."
+        "title": "2.4 Technical and security data — collected automatically",
+        "body": "• IP address, endpoint accessed, HTTP method, and the outcome of the action\n• Timestamps and the role you acted under\n\nWe keep this as a security audit log to detect abuse and investigate incidents. It is retained for 90 days and then automatically deleted."
       },
       {
-        "title": "6. Security",
-        "body": "We apply administrative and technical measures to protect your data. No method of transmission or storage is completely secure; you use the service at your own risk regarding residual security risks."
+        "title": "2.5 Browser extension",
+        "body": "The extension submits the details of the page you choose to scan (URL, page structure, form and script metadata) plus a device fingerprint and your IP address, which we use solely to enforce free-tier rate limits and prevent abuse. The extension does not read pages you have not asked it to scan."
       },
       {
-        "title": "7. Your Rights",
-        "body": "Depending on your location, you may have rights to access, correct, export, or delete your personal data, or to object to certain processing. Contact us to exercise these rights."
+        "title": "2.6 Payment data",
+        "body": "Payments are processed by Stripe. Card numbers never reach our servers — we receive only the subscription status and a transaction reference. Stripe processes this as an independent controller under its own privacy policy."
       },
       {
-        "title": "8. Changes to This Policy",
-        "body": "We may update this Privacy Policy from time to time. The \"Last updated\" date at the top will reflect the latest revision. Continued use of the service after changes means you accept the updated policy."
+        "title": "2.7 What we do not collect",
+        "body": "We do not use advertising trackers, we do not sell personal data, and we do not profile you for marketing. We do not collect special-category data (health, biometrics, political opinions, and so on) and ask that you do not submit any."
+      },
+      {
+        "title": "3. Why we process it, and our legal basis",
+        "body": "Creating and running your account — performance of a contract.\nRunning scans and producing reports — performance of a contract.\nSending security codes and service emails — performance of a contract.\nTaking payment and issuing receipts — performance of a contract / legal obligation.\nSecurity audit logging and abuse prevention — legitimate interests (keeping the platform and its users safe).\nResponding to your support or contact messages — legitimate interests.\n\nWe do not rely on consent for any of the above, so there is no consent to withdraw — but you can close your account at any time (see \"Your rights\")."
+      },
+      {
+        "title": "4. Automated analysis (AI)",
+        "body": "Scan findings may be sent to a third-party AI provider to be de-duplicated, prioritised and explained in plain language for your report.\n\nWhat is sent: the technical findings produced by the scanning tools, plus the target address.\nWhat is not sent: your name, email address, password, payment details, or any credentials you stored for authenticated scanning.\n\nThe provider currently used is configurable; at the time of writing it is OpenAI. Providers are used as processors under contract and are not permitted to use your data to train their models. If you do not want AI processing, contact us and we will disable it for your account — you will still receive the full technical report.\n\nThere is no automated decision-making that produces legal or similarly significant effects about you."
+      },
+      {
+        "title": "5. Who we share it with",
+        "body": "We share personal data only with the providers needed to run the service:\n\nStripe — payment processing. Data shared: email, subscription and transaction data.\nAI provider (see \"Automated analysis\") — report enrichment. Data shared: scan findings, target address.\nHostinger (SMTP) — sending our emails. Data shared: email address, message content.\nVercel — hosting the web frontend. Data shared: technical request data.\nAtlassian (Jira) — only if you connect Jira. Data shared: scan findings you choose to export as tickets.\n\nWe also disclose data where we are legally required to, or to establish or defend legal claims. We do not sell personal data, and we do not share it for anyone else's marketing."
+      },
+      {
+        "title": "6. Where your data is held, and for how long",
+        "body": "Scan data and account data are held on our own servers. Some providers listed above process data outside your country; where that involves a transfer out of the UK/EEA it is covered by the provider's Standard Contractual Clauses or an adequacy decision.\n\nAccount details — until you delete your account.\nScans, findings and reports — until you delete them, or until account deletion.\nStored scan credentials — until you remove them, or until account deletion.\nRaw tool output files on the scanner — deleted immediately after results are saved.\nSecurity audit logs — 90 days, then deleted automatically.\nGuided-setup chat sessions — 24 hours.\nLogin sessions — access tokens expire after 30 minutes; refresh tokens after 30 days.\nBilling records — as required by tax and accounting law."
+      },
+      {
+        "title": "7. Your rights",
+        "body": "Under UK/EU GDPR you have the right to access, correct, delete, restrict, object to, and port your personal data, and to complain to a supervisory authority.\n\nDeleting your account. You can erase your account yourself from the \"Delete account\" section of your profile page. This is immediate and irreversible. It permanently removes your account, scans, findings, reports, targets, stored credentials, plan and credit records, Jira connections and chat sessions.\n\nWe keep the security audit log entries, but we anonymise them first: your user ID is removed and your IP address is replaced with an irreversible pseudonym, so the remaining records cannot be linked back to you. This lets us keep an accurate security history without keeping your data.\n\nFor any other request, email info@blackbrains.tech. We respond within one month."
+      },
+      {
+        "title": "8. How we protect your data",
+        "body": "• Passwords hashed with PBKDF2-HMAC-SHA256, 100,000 iterations, unique salt per user\n• Stored scan credentials encrypted at rest; scanner-side credential bundles encrypted with authenticated encryption (ChaCha20-Poly1305)\n• All traffic over HTTPS/TLS\n• Two-factor email verification on login\n• Role-based access control; internal services authenticate to each other with separate secrets\n• Scanner runs in an isolated container per job, and its working files are wiped after each job\n• Security audit logging with automatic 90-day expiry\n\nNo system is perfectly secure, but this is the standard we hold ourselves to."
+      },
+      {
+        "title": "9. Children",
+        "body": "The service is not directed at children and is not intended for anyone under 18. We do not knowingly collect data from children. If you believe a child has given us data, contact us and we will delete it."
+      },
+      {
+        "title": "10. Cookies",
+        "body": "We use only what is necessary to run the service: a session/authentication token, and a cookie remembering your language choice. We do not use advertising or analytics cookies that track you across sites."
+      },
+      {
+        "title": "11. Changes",
+        "body": "If we make a material change we will notify registered users by email at least 14 days before it takes effect. The \"last updated\" date above always reflects the current version."
+      },
+      {
+        "title": "12. Contact",
+        "body": "Email: info@blackbrains.tech\n\nIf you are in the UK or EEA and are unhappy with our response, you may complain to your national data protection authority."
       }
     ]
   },
   "termsPage": {
-    "title": "Terms of Service",
-    "lastUpdated": "Last updated: July 18, 2026",
+    "title": "Terms and Conditions",
+    "lastUpdated": "Last updated: September 3, 2026",
     "back": "Back to previous page",
-    "intro": "These Terms of Service (\"Terms\") govern your access to and use of the blackbrains security scanning platform. By creating an account or using the service, you agree to these Terms.",
-    "contact": "Questions about these Terms? Contact us at legal@blackbrains.tech.",
+    "intro": "These Terms and Conditions (\"Terms\") govern your access to and use of the BlackBrains security-scanning platform, available at blackbrains.tech.",
+    "contact": "Questions about these Terms? Contact us at info@blackbrains.tech.",
     "sections": [
       {
-        "title": "1. Acceptance of Terms",
-        "body": "If you use the service on behalf of an organization, you represent that you have authority to bind that organization to these Terms. If you do not agree, do not use the service."
+        "title": "1. Agreement",
+        "body": "By creating an account or using BlackBrains, you agree to these Terms. If you are agreeing on behalf of a company, you confirm you are authorised to bind it. If you do not agree, do not use the service."
       },
       {
-        "title": "2. Description of Service",
-        "body": "blackbrains provides automated security scanning tools, plan-based credit usage, reporting, and optional integrations. Features and limits depend on your active plan and may change as we improve the platform."
+        "title": "2. What the service does",
+        "body": "BlackBrains runs automated security tools against websites you nominate and returns a report on the weaknesses found. The tools currently used include OWASP ZAP, Nmap, ffuf, sqlmap and WPScan. We also provide an optional AI layer that explains findings in plain language, a browser extension for single-page checks, and an optional Jira integration.\n\nAutomated scanning is not a penetration test and is not a substitute for one."
       },
       {
-        "title": "3. Authorized Use Only",
-        "body": "You may only scan systems you own or are explicitly authorized to test. Unauthorized scanning, abuse, or attempts to attack systems without permission are prohibited and may result in immediate suspension and legal action."
+        "title": "3. Accounts",
+        "body": "• You must be 18 or older.\n• You must give accurate registration details and keep your password confidential.\n• You are responsible for everything done through your account.\n• Login requires a code sent to your email address.\n• Tell us immediately at info@blackbrains.tech if you suspect unauthorised access.\n\nWe may suspend or terminate an account that breaches these Terms, and we will do so immediately for a breach of section 4 (Authorisation to scan)."
       },
       {
-        "title": "4. Accounts and Security",
-        "body": "You are responsible for maintaining the confidentiality of your credentials and for all activity under your account. Notify us promptly of any unauthorized access."
+        "title": "4. Authorisation to scan — the most important term",
+        "body": "You may only scan systems you own, or that you have explicit written permission to test.\n\nBefore starting any scan you represent and warrant that:\n\n1. You own the target, or you hold documented authorisation from its owner to have it security-tested by a third party on your behalf;\n2. That authorisation covers automated and intrusive testing, including request flooding, directory brute-forcing and SQL-injection probing;\n3. You have the authority to grant us permission to test it; and\n4. Your testing complies with the law everywhere you and the target are located.\n\nWhy this matters. Scanning a system without authorisation is a criminal offence in most countries — for example under the UK Computer Misuse Act 1990, the US Computer Fraud and Abuse Act, and equivalent laws elsewhere. Running an unauthorised scan through our platform does not make it lawful, and does not shift responsibility to us.\n\nYou accept that:\n\n• We do not and cannot verify that you are authorised. We rely entirely on your word.\n• We keep records (account, IP address, target, timestamp) and will disclose them to law enforcement on a valid legal request.\n• Any account used for unauthorised scanning will be terminated immediately and without refund.\n• You indemnify us in full for any claim arising from a scan you were not authorised to run.\n\nScanning can disrupt the target. Active tools send large volumes of traffic and deliberately malformed input. This can slow a site, fill logs, trigger alerts and rate limits, create junk records through forms, or in some cases cause an outage. Scan systems you can afford to disrupt, scan outside peak hours, and take a backup first. You accept this risk. Use the excluded-paths setting to keep sensitive areas (checkout, admin, payment flows) out of scope."
       },
       {
-        "title": "5. Plans, Credits, and Billing",
-        "body": "Paid plans, scan credits, and extra purchases are subject to the pricing and limits shown at checkout or in your billing page. Unused credits may expire according to plan rules. Fees are generally non-refundable except where required by law."
+        "title": "5. Acceptable use",
+        "body": "You must not:\n\n• Scan any system you are not authorised to scan;\n• Use the service to attack, disrupt, or gain unauthorised access to anything;\n• Use it against critical national infrastructure, medical or safety-critical systems;\n• Attempt to break out of, overload, reverse engineer or bypass the limits of our platform;\n• Resell or white-label the service without our written agreement;\n• Share your account, or automate access outside the documented API;\n• Upload malware, or use the platform to store or distribute unlawful content;\n• Enter credentials for any system you do not control."
       },
       {
-        "title": "6. Acceptable Use",
-        "body": "You agree not to misuse the platform, interfere with other users, reverse engineer the service except where permitted by law, or use results to harm third parties. We may suspend or terminate accounts that violate these Terms."
+        "title": "6. Plans, credits and payment",
+        "body": "Plans are sold as scan credit packs:\n\nBasic — Light Scan Pack: $15.00, 2 scan credits.\nProfessional — Standard Scan Pack: $45.00, 5 scan credits.\nAdvanced — Deep Audit Pack: $119.00, 10 scan credits.\n\n• Payment is handled by Stripe. By subscribing you also accept Stripe's terms.\n• A scan reserves credits when it starts; unused credits from a completed scan are returned.\n• Credits consumed by a scan that ran are not refundable, including where the scan finished early at its time limit or where a tool failed after starting.\n• Plans include limits on tools, scan depth and runtime. Exceeding them requires an upgrade.\n• We may change pricing with 30 days' notice to existing subscribers."
       },
       {
-        "title": "7. Intellectual Property",
-        "body": "The platform, branding, and software remain our property. You retain rights to your content and scan targets. You grant us a limited license to process that content solely to operate the service."
+        "title": "7. Scan results — what we promise and what we do not",
+        "body": "We do not promise to find every vulnerability. Automated tools miss things. A clean report means the tools we ran did not detect a problem — it is not a certificate that your site is secure, and must not be presented as one.\n\nReports may also contain false positives: findings that look like vulnerabilities but are not. Verify findings before acting on them, and before reporting them to anyone else.\n\nResults reflect a single point in time. Your site changes; so does its risk.\n\nYou own your scan results. You may use, export and share them. We process them only to provide and improve the service, as described in the Privacy Policy.\n\nPartial results. If some tools fail while others succeed, we still give you the findings from the tools that worked, and we label the result as partial. Partial results cover less than a complete scan — treat them accordingly."
       },
       {
-        "title": "8. Disclaimer and Limitation of Liability",
-        "body": "The service is provided \"as is\". Security scans may not find all vulnerabilities. To the maximum extent permitted by law, blackbrains is not liable for indirect, incidental, or consequential damages, or for decisions you make based on scan results."
+        "title": "8. Availability",
+        "body": "We aim for high availability but do not guarantee uninterrupted service. We may take the platform down for maintenance, and scans are queued and may wait during busy periods."
       },
       {
-        "title": "9. Termination",
-        "body": "You may stop using the service at any time. We may suspend or terminate access for violations of these Terms, non-payment, or risk to the platform or other users."
+        "title": "9. Our intellectual property, and yours",
+        "body": "The platform, its code, interface and branding are ours or our licensors'. We grant you a limited, non-exclusive, non-transferable right to use it under these Terms.\n\nYour data, your targets and your scan results remain yours.\n\nThe service incorporates third-party open-source tools, each under its own licence."
       },
       {
-        "title": "10. Changes to the Terms",
-        "body": "We may update these Terms periodically. Continued use after an update constitutes acceptance of the revised Terms."
+        "title": "10. Liability",
+        "body": "Nothing in these Terms limits liability for death or personal injury caused by negligence, for fraud, or for anything else that cannot lawfully be limited.\n\nSubject to that:\n\n• The service is provided \"as is\". We exclude all implied warranties to the extent the law allows.\n• We are not liable for indirect or consequential loss, loss of profit, loss of data, business interruption, or reputational damage.\n• We are not liable for damage to a target system caused by a scan you authorised, nor for loss arising from a vulnerability our tools did not find, nor for your reliance on a finding that turns out to be a false positive.\n• Our total liability in any 12-month period is limited to the amount you paid us in that period.\n\nYou indemnify us against claims arising from your breach of these Terms, and in particular from any scan you ran without authorisation."
+      },
+      {
+        "title": "11. Ending the agreement",
+        "body": "You may stop using the service and delete your account at any time from account settings. Deletion is immediate and irreversible, and permanently erases your account and scan data as described in the Privacy Policy. Deleting your account does not automatically refund an unused plan — request that separately before deleting.\n\nWe may suspend or terminate your access if you breach these Terms, if payment fails, or if required by law. For a breach of section 4 (Authorisation to scan) we will act immediately and without notice.\n\nSections 4, 7, 9, 10 and 12 survive termination."
+      },
+      {
+        "title": "12. General",
+        "body": "• If a provision is unenforceable, the rest stands.\n• We may update these Terms; material changes will be emailed to registered users at least 14 days before they take effect. Continuing to use the service after that means you accept them.\n• These Terms, with the Privacy Policy, are the whole agreement between us.\n• You may not transfer your rights under these Terms without our consent."
+      },
+      {
+        "title": "13. Contact",
+        "body": "Email: info@blackbrains.tech\nSupport: support@blackbrains.tech"
       }
     ]
   }
