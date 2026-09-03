@@ -5,6 +5,7 @@ import { NextIntlClientProvider } from 'next-intl';
 import { getMessages, getTranslations, setRequestLocale } from 'next-intl/server';
 import QueryProvider from '@/components/providers/QueryProvider';
 import ToastProvider from '@/components/providers/ToastProvider';
+import { FloatingAssistant } from '@/components/guided-setup/FloatingAssistant';
 
 const inter = Inter({ subsets: ["latin"], variable: '--font-inter' });
 const cairo = Cairo({ subsets: ["arabic"], variable: '--font-cairo' });
@@ -59,6 +60,7 @@ export default async function RootLayout({
           <QueryProvider>
             {children}
             <ToastProvider />
+            <FloatingAssistant />
           </QueryProvider>
         </NextIntlClientProvider>
       </body>

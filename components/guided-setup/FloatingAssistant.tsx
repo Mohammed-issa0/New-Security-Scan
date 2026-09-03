@@ -405,18 +405,14 @@ export function FloatingAssistant() {
   return (
     <>
       <motion.button
-        whileHover={{ scale: 1.03 }}
-        whileTap={{ scale: 0.96 }}
+        whileHover={{ scale: 1.06 }}
+        whileTap={{ scale: 0.94 }}
         onClick={() => setIsOpen(true)}
-        className="fixed bottom-6 right-6 z-[60] flex items-center gap-3 rounded-2xl border border-cyan-300/32 bg-[linear-gradient(135deg,rgba(8,18,31,0.98),rgba(7,14,24,0.98))] px-4 py-3 text-sm text-text-primary shadow-[0_20px_54px_rgba(0,173,255,0.24)] backdrop-blur-xl transition-all hover:border-cyan-300/55 hover:shadow-[0_24px_66px_rgba(0,191,255,0.32)] rtl:right-auto rtl:left-6"
+        aria-label={t('openButton')}
+        title={t('openButton')}
+        className="fixed bottom-6 right-6 z-[60] flex h-14 w-14 items-center justify-center rounded-full bg-gradient-to-br from-cyan-300 via-cyan-400 to-blue-400 text-slate-950 shadow-[0_20px_54px_rgba(0,173,255,0.32)] backdrop-blur-xl transition-all hover:shadow-[0_24px_66px_rgba(0,191,255,0.42)] rtl:right-auto rtl:left-6"
       >
-        <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br from-cyan-300 via-cyan-400 to-blue-400 text-slate-950 shadow-[0_0_24px_rgba(0,209,255,0.34)]">
-          <Sparkles size={20} />
-        </span>
-        <span className="hidden sm:block text-left rtl:text-right">
-          <span className="block text-[10px] font-semibold uppercase tracking-[0.28em] text-cyan-200/80">{t('badge')}</span>
-          <span className="block text-sm font-bold text-text-primary">{t('openButton')}</span>
-        </span>
+        <Bot size={26} />
       </motion.button>
 
       <AnimatePresence>
