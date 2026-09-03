@@ -4,7 +4,13 @@ import { NextResponse } from 'next/server';
 
 const intlMiddleware = createMiddleware({
   locales: ['en', 'ar'],
-  defaultLocale: 'en'
+  defaultLocale: 'en',
+  // Language preference only (not sensitive). Secure hardens transport;
+  // HttpOnly is intentionally omitted so client code can still read the locale.
+  localeCookie: {
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'lax'
+  }
 });
 
 const getLocaleFromPath = (pathname: string) => {
