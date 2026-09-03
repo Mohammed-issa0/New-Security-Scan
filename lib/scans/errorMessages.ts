@@ -14,13 +14,26 @@ export interface ParsedScanError {
   action: ScanErrorAction;
 }
 
-function getErrorText(data?: ApiError, fallback = 'Request failed'): string {
-  return (data?.message || data?.error || data?.detail || fallback).trim();
+/** What the user sees: `error` is the backend's localized label. */
+function getDisplayText(data?: ApiError, fallback = 'Request failed'): string {
+  return (data?.error || data?.detail || data?.message || fallback).trim();
+}
+
+/**
+ * What we classify on. The rules below match English phrases, and `message` is
+ * the backend's untranslated diagnostic field — so matching against everything
+ * keeps the rules working once `error` comes back in Arabic.
+ */
+function getMatchText(data?: ApiError, fallback = ''): string {
+  return [data?.message, data?.detail, data?.error, fallback]
+    .filter(Boolean)
+    .join(' ')
+    .toLowerCase();
 }
 
 export function parseScanCreateError(data?: ApiError, fallback?: string): ParsedScanError {
-  const message = getErrorText(data, fallback);
-  const lower = message.toLowerCase();
+  const message = getDisplayText(data, fallback);
+  const lower = getMatchText(data, fallback);
 
   if (lower.includes('credit_budget must be between')) {
     return { message, action: 'inline_credit_budget' };
@@ -49,8 +62,8 @@ export function parseScanCreateError(data?: ApiError, fallback?: string): Parsed
 }
 
 export function parseAddCreditsError(data?: ApiError, fallback?: string): ParsedScanError {
-  const message = getErrorText(data, fallback);
-  const lower = message.toLowerCase();
+  const message = getDisplayText(data, fallback);
+  const lower = getMatchText(data, fallback);
 
   if (lower.includes('completed while credits were being added')) {
     return { message, action: 'toast_refund' };

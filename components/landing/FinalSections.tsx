@@ -117,6 +117,9 @@ export function Footer() {
               <li>
                 <Link href={`/${locale}/#plans`} className="transition-colors hover:text-cyan-300">{t('nav.plans')}</Link>
               </li>
+              <li>
+                <Link href={`/${locale}/contact`} className="transition-colors hover:text-cyan-300">{t('nav.contact')}</Link>
+              </li>
             </ul>
           </div>
           

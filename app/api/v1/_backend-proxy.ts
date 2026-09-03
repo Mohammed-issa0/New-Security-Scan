@@ -33,6 +33,13 @@ export function createBackendHeaders(
     Accept: request.headers.get('accept') || 'application/json',
   };
 
+  // The backend localizes user-facing error labels off this header, so it has to
+  // survive the hop — this is an allow-list, nothing is forwarded implicitly.
+  const acceptLanguage = request.headers.get('accept-language');
+  if (acceptLanguage) {
+    headers['Accept-Language'] = acceptLanguage;
+  }
+
   if (forwardedHost) {
     headers['X-Forwarded-Host'] = forwardedHost;
   }

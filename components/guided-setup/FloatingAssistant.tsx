@@ -8,8 +8,9 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { ArrowRight, Bot, CheckCircle2, Info, Loader2, RefreshCcw, Send, Sparkles, Target, X } from 'lucide-react';
 
 import {
+  ActiveGuidedSetupResponse,
+  GuidedSetupLanguage,
   GuidedSetupQuestion,
-  GuidedSetupSessionResponse,
   GuidedSetupStepResponse,
   ScanRecommendation,
   StartGuidedSetupResponse,
@@ -31,16 +32,6 @@ type ChatMessage = {
   content: string;
 };
 
-type StoredAssistantState = {
-  sessionId?: string;
-  targetUrl?: string;
-  question?: GuidedSetupQuestion | null;
-  recommendation?: ScanRecommendation | null;
-  messages?: ChatMessage[];
-};
-
-const STORAGE_KEY = 'securityscan.ai-assistant.state';
-
 function makeId(prefix: string) {
   if (typeof crypto !== 'undefined' && 'randomUUID' in crypto) {
     return `${prefix}-${crypto.randomUUID()}`;
@@ -50,28 +41,11 @@ function makeId(prefix: string) {
 }
 
 function normalizeQuestion(question?: GuidedSetupQuestion | null): GuidedSetupQuestion | null {
-  if (!question) {
-    return null;
-  }
-
-  return question;
+  return question ?? null;
 }
 
-function safeParseState(raw: string | null): StoredAssistantState | null {
-  if (!raw) {
-    return null;
-  }
-
-  try {
-    return JSON.parse(raw) as StoredAssistantState;
-  } catch {
-    return null;
-  }
-}
-
-// Backend errors sometimes nest the real text under an `error`/`detail` object
-// (e.g. { error: { message: "..." } }) instead of a flat string field. Drill into
-// one level of nesting so we never fall back to stringifying a raw object.
+// Backend errors carry a localized user-facing `error` plus an untranslated
+// diagnostic `message` meant for their logs — only ever show the former.
 function extractMessage(value: unknown): string | undefined {
   if (typeof value === 'string' && value.trim()) {
     return value;
@@ -79,7 +53,7 @@ function extractMessage(value: unknown): string | undefined {
 
   if (value && typeof value === 'object') {
     const nested = value as Record<string, unknown>;
-    const nestedMessage = nested.message ?? nested.detail ?? nested.title ?? nested.error;
+    const nestedMessage = nested.error ?? nested.detail ?? nested.title;
     if (typeof nestedMessage === 'string' && nestedMessage.trim()) {
       return nestedMessage;
     }
@@ -92,11 +66,9 @@ function getApiErrorMessage(error: ApiRequestError, fallback: string) {
   const payload = (error.data ?? {}) as Record<string, unknown>;
 
   return (
-    extractMessage(payload.message) ||
+    extractMessage(payload.error) ||
     extractMessage(payload.detail) ||
     extractMessage(payload.title) ||
-    extractMessage(payload.error) ||
-    extractMessage(error.message) ||
     fallback
   );
 }
@@ -110,6 +82,7 @@ function isPlanGateError(error: ApiRequestError) {
 export function FloatingAssistant() {
   const t = useTranslations('landing.guidedSetup');
   const locale = useLocale();
+  const language: GuidedSetupLanguage = locale === 'ar' ? 'ar' : 'en';
   const router = useRouter();
   const initialMessages = React.useMemo<ChatMessage[]>(() => ([
     {
@@ -125,14 +98,12 @@ export function FloatingAssistant() {
   const [isBusy, setIsBusy] = React.useState(false);
   const [sessionId, setSessionId] = React.useState<string | null>(null);
   const [targetUrl, setTargetUrl] = React.useState('');
+  const [composerDraft, setComposerDraft] = React.useState('');
   const [messages, setMessages] = React.useState<ChatMessage[]>(initialMessages);
   const [currentQuestion, setCurrentQuestion] = React.useState<GuidedSetupQuestion | null>(null);
-  const [draftAnswer, setDraftAnswer] = React.useState('');
   const [recommendation, setRecommendation] = React.useState<ScanRecommendation | null>(null);
   const [upgradeMessage, setUpgradeMessage] = React.useState<string | null>(null);
-  const [sessionExpiresAt, setSessionExpiresAt] = React.useState<string | null>(null);
   const [sessionStatus, setSessionStatus] = React.useState<string | null>(null);
-  const [sessionUrl, setSessionUrl] = React.useState<string | null>(null);
   const [showSessionDetails, setShowSessionDetails] = React.useState(false);
   const messagesEndRef = React.useRef<HTMLDivElement | null>(null);
 
@@ -143,110 +114,96 @@ export function FloatingAssistant() {
     });
   }, []);
 
-  React.useEffect(() => {
-    if (typeof window === 'undefined') {
-      return;
-    }
-
-    if (isAuthenticated) {
-      return;
-    }
-
-    setIsOpen(false);
+  const resetLocalState = React.useCallback(() => {
     setSessionId(null);
-    setSessionExpiresAt(null);
     setSessionStatus(null);
-    setSessionUrl(null);
-    setShowSessionDetails(false);
     setTargetUrl('');
+    setComposerDraft('');
     setMessages(initialMessages);
     setCurrentQuestion(null);
-    setDraftAnswer('');
     setRecommendation(null);
     setUpgradeMessage(null);
-    window.localStorage.removeItem(STORAGE_KEY);
-  }, [initialMessages, isAuthenticated]);
+    setShowSessionDetails(false);
+  }, [initialMessages]);
 
   React.useEffect(() => {
-    if (!isAuthenticated || typeof window === 'undefined') {
-      return;
+    if (!isAuthenticated) {
+      setIsOpen(false);
+      resetLocalState();
     }
-
-    const stored = safeParseState(window.localStorage.getItem(STORAGE_KEY));
-    if (!stored) {
-      setMessages(initialMessages);
-      return;
-    }
-
-    setSessionId(stored.sessionId ?? null);
-    setTargetUrl(stored.targetUrl ?? '');
-    setMessages(stored.messages?.length ? stored.messages : initialMessages);
-    setCurrentQuestion(normalizeQuestion(stored.question));
-    setRecommendation(stored.recommendation ?? null);
-  }, [initialMessages, isAuthenticated]);
+  }, [isAuthenticated, resetLocalState]);
 
   React.useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth', block: 'end' });
-  }, [messages, currentQuestion, recommendation, isBusy]);
-
-  React.useEffect(() => {
-    if (!isAuthenticated || typeof window === 'undefined') {
-      return;
-    }
-
-    if (!sessionId && !targetUrl && !currentQuestion && !recommendation && messages.length === 0) {
-      window.localStorage.removeItem(STORAGE_KEY);
-      return;
-    }
-
-    const state: StoredAssistantState = {
-      sessionId: sessionId ?? undefined,
-      targetUrl: targetUrl || undefined,
-      question: currentQuestion,
-      recommendation,
-      messages,
-    };
-
-    window.localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-  }, [currentQuestion, isAuthenticated, messages, recommendation, sessionId, targetUrl]);
-
-  const persistSessionMeta = React.useCallback((response: StartGuidedSetupResponse | GuidedSetupSessionResponse) => {
-    setSessionId(response.sessionId);
-    if ('expiresAt' in response) {
-      setSessionExpiresAt(response.expiresAt);
-    }
-    if ('status' in response) {
-      setSessionStatus(response.status ?? null);
-    }
-    if ('targetUrl' in response) {
-      setSessionUrl(response.targetUrl ?? null);
-    }
-  }, []);
+  }, [messages, currentQuestion, recommendation, isBusy, isBootstrapping]);
 
   const appendMessage = React.useCallback((role: ChatRole, content: string) => {
     setMessages((previous) => [...previous, { id: makeId(role), role, content }]);
   }, []);
 
-  const resetSession = React.useCallback(() => {
-    setSessionId(null);
-    setSessionExpiresAt(null);
-    setSessionStatus(null);
-    setSessionUrl(null);
-    setTargetUrl('');
-    setMessages(initialMessages);
-    setCurrentQuestion(null);
-    setDraftAnswer('');
-    setRecommendation(null);
-    setUpgradeMessage(null);
+  // The transcript lives on the server now: each stored answer replays as the
+  // question we asked followed by what the user replied.
+  const hydrateFromActiveSession = React.useCallback((active: ActiveGuidedSetupResponse) => {
+    const transcript: ChatMessage[] = [...initialMessages];
 
-    if (typeof window !== 'undefined') {
-      window.localStorage.removeItem(STORAGE_KEY);
+    for (const answer of active.answers ?? []) {
+      if (answer.question_text?.trim()) {
+        transcript.push({ id: makeId('assistant'), role: 'assistant', content: answer.question_text });
+      }
+      if (answer.answer?.trim()) {
+        transcript.push({ id: makeId('user'), role: 'user', content: answer.answer });
+      }
     }
+
+    setSessionId(active.sessionId);
+    setSessionStatus(active.status ?? null);
+    setTargetUrl(active.targetUrl ?? '');
+    setMessages(transcript);
+    setCurrentQuestion(normalizeQuestion(active.currentQuestion));
+    setRecommendation(active.recommendation ?? null);
+    setComposerDraft('');
+    setUpgradeMessage(null);
   }, [initialMessages]);
 
-  const startGuidedSetup = React.useCallback(async () => {
-    const trimmedTarget = targetUrl.trim();
-    if (!trimmedTarget) {
+  const loadActiveSession = React.useCallback(async () => {
+    setIsBootstrapping(true);
+    try {
+      const active = await guidedSetupService.getActiveSession();
+      if (active?.sessionId) {
+        hydrateFromActiveSession(active);
+      } else {
+        // 204 — nothing saved, so this is a fresh conversation.
+        resetLocalState();
+      }
+    } catch (error) {
+      const message = error instanceof ApiRequestError
+        ? getApiErrorMessage(error, t('messages.resumeError'))
+        : t('messages.resumeError');
+      appendMessage('system', message);
+    } finally {
+      setIsBootstrapping(false);
+    }
+  }, [appendMessage, hydrateFromActiveSession, resetLocalState, t]);
+
+  // Restore the saved conversation every time the panel is opened.
+  React.useEffect(() => {
+    if (isOpen && isAuthenticated) {
+      void loadActiveSession();
+    }
+    // loadActiveSession is intentionally omitted: it changes identity with `t`,
+    // which would refetch the session on every locale/message change.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isOpen, isAuthenticated]);
+
+  const startNewChat = React.useCallback(() => {
+    // Dropping local state is enough: the next send POSTs /guided-setup, which
+    // abandons the previous conversation server-side.
+    resetLocalState();
+  }, [resetLocalState]);
+
+  const startGuidedSetup = React.useCallback(async (firstMessage: string) => {
+    const trimmed = firstMessage.trim();
+    if (!trimmed) {
       appendMessage('system', t('messages.targetRequired'));
       return;
     }
@@ -254,18 +211,23 @@ export function FloatingAssistant() {
     setIsBusy(true);
     setUpgradeMessage(null);
     try {
-      const response = await guidedSetupService.startSession({ targetUrl: trimmedTarget });
-      persistSessionMeta(response);
-      setSessionUrl(trimmedTarget);
-      setShowSessionDetails(false);
+      // targetUrl is optional now — if this is not a URL the wizard asks for one
+      // later as a free-text question.
+      const response: StartGuidedSetupResponse = await guidedSetupService.startSession({
+        targetUrl: trimmed,
+        language,
+      });
+
+      setSessionId(response.sessionId);
+      setTargetUrl(response.targetUrl ?? '');
+      setSessionStatus(null);
       setMessages([
         ...initialMessages,
-        { id: makeId('user-target'), role: 'user', content: trimmedTarget },
+        { id: makeId('user'), role: 'user', content: trimmed },
       ]);
       setCurrentQuestion(normalizeQuestion(response.question));
       setRecommendation(null);
-      setDraftAnswer('');
-      setIsOpen(true);
+      setComposerDraft('');
     } catch (error) {
       const message = error instanceof ApiRequestError
         ? getApiErrorMessage(error, t('messages.startError'))
@@ -274,9 +236,9 @@ export function FloatingAssistant() {
     } finally {
       setIsBusy(false);
     }
-  }, [appendMessage, initialMessages, persistSessionMeta, targetUrl, t]);
+  }, [appendMessage, initialMessages, language, t]);
 
-  const submitAnswer = React.useCallback(async (answer: string, displayLabel?: string) => {
+  const submitAnswer = React.useCallback(async (answer: string) => {
     if (!sessionId || !currentQuestion) {
       return;
     }
@@ -289,26 +251,29 @@ export function FloatingAssistant() {
 
     const submittedQuestion = currentQuestion;
     setCurrentQuestion(null);
-    appendMessage('user', displayLabel?.trim() || trimmedAnswer);
-    setDraftAnswer('');
+    appendMessage('user', trimmedAnswer);
+    setComposerDraft('');
     setIsBusy(true);
     setUpgradeMessage(null);
 
     try {
-      await new Promise<void>((resolve) => {
-        setTimeout(() => resolve(), 320);
-      });
-
-      const response = await guidedSetupService.submitAnswer(sessionId, {
+      const response: GuidedSetupStepResponse = await guidedSetupService.submitAnswer(sessionId, {
         questionId: submittedQuestion.question_id,
         questionText: submittedQuestion.text ?? null,
         answer: trimmedAnswer,
+        language,
       });
+
+      // Every step echoes the captured target back, including the one the user
+      // just supplied mid-conversation.
+      if (response.targetUrl) {
+        setTargetUrl(response.targetUrl);
+      }
 
       if (response.question) {
         setCurrentQuestion(response.question);
         setRecommendation(null);
-      } else if (response.stepType === 'recommendation' && response.recommendation) {
+      } else if (response.recommendation) {
         setCurrentQuestion(null);
         setRecommendation(response.recommendation);
         appendMessage('assistant', t('messages.recommendationReady'));
@@ -322,10 +287,10 @@ export function FloatingAssistant() {
     } finally {
       setIsBusy(false);
     }
-  }, [appendMessage, currentQuestion, sessionId, t]);
+  }, [appendMessage, currentQuestion, language, sessionId, t]);
 
   const createScan = React.useCallback(async () => {
-    if (!sessionId || !recommendation) {
+    if (!sessionId || !recommendation || recommendation.target_required) {
       return;
     }
 
@@ -341,7 +306,7 @@ export function FloatingAssistant() {
         creditBudget,
       });
 
-      resetSession();
+      resetLocalState();
       setIsOpen(false);
 
       if (response.scanId) {
@@ -352,10 +317,9 @@ export function FloatingAssistant() {
     } catch (error) {
       if (error instanceof ApiRequestError) {
         const backendMessage = getApiErrorMessage(error, t('messages.createError'));
-        const requiresUpgrade = isPlanGateError(error);
         appendMessage('system', backendMessage);
 
-        if (requiresUpgrade) {
+        if (isPlanGateError(error)) {
           setUpgradeMessage(backendMessage || t('upgrade.fallbackMessage'));
         }
 
@@ -369,56 +333,30 @@ export function FloatingAssistant() {
     } finally {
       setIsBusy(false);
     }
-  }, [appendMessage, locale, recommendation, router, resetSession, sessionId, targetUrl, t]);
+  }, [appendMessage, locale, recommendation, resetLocalState, router, sessionId, targetUrl, t]);
 
-  const restoreSession = React.useCallback(async () => {
-    if (!sessionId) {
+  const hasRecommendation = !!recommendation;
+  const targetRequired = !!recommendation?.target_required;
+  const currentQuestionChoices = currentQuestion?.choices?.filter((choice) => Boolean(choice?.label || choice?.value)) ?? [];
+  const hasQuestionChoices = currentQuestionChoices.length > 0;
+  const showThinking = isBusy;
+  const composerMode = !sessionId ? 'start' : currentQuestion ? 'answer' : 'idle';
+  const composerPlaceholder = composerMode === 'start' ? t('targetPlaceholder') : t('answerPlaceholder');
+
+  const handleComposerSubmit = React.useCallback(() => {
+    if (isBusy) {
       return;
     }
 
-    setIsBootstrapping(true);
-    try {
-      const response = await guidedSetupService.getSession(sessionId);
-      setSessionStatus(response.status ?? null);
-      setSessionUrl(response.targetUrl ?? null);
-      setRecommendation(response.recommendation ?? null);
-      if (response.recommendation) {
-        setCurrentQuestion(null);
-      }
-    } catch (error) {
-      const message = error instanceof ApiRequestError
-        ? getApiErrorMessage(error, t('messages.resumeError'))
-        : t('messages.resumeError');
-      appendMessage('system', message);
-    } finally {
-      setIsBootstrapping(false);
-    }
-  }, [appendMessage, sessionId, t]);
-
-  React.useEffect(() => {
-    if (sessionId && isOpen && !currentQuestion && !recommendation && !isBootstrapping) {
-      void restoreSession();
-    }
-  }, [currentQuestion, isBootstrapping, isOpen, recommendation, restoreSession, sessionId]);
-
-  const hasRecommendation = !!recommendation;
-  const currentQuestionChoices = currentQuestion?.choices?.filter((choice) => Boolean(choice?.label || choice?.value)) ?? [];
-  const hasQuestionChoices = currentQuestionChoices.length > 0;
-  const showThinking = isBusy && (Boolean(currentQuestion) || hasRecommendation || Boolean(sessionId));
-  const composerMode = !sessionId && !currentQuestion && !hasRecommendation ? 'target' : currentQuestion ? 'answer' : 'idle';
-  const composerValue = composerMode === 'target' ? targetUrl : draftAnswer;
-  const composerPlaceholder = composerMode === 'target' ? t('targetPlaceholder') : t('answerPlaceholder');
-  const composerSendLabel = composerMode === 'target' ? t('send') : t('send');
-  const handleComposerSubmit = React.useCallback(() => {
-    if (composerMode === 'target') {
-      void startGuidedSetup();
+    if (composerMode === 'start') {
+      void startGuidedSetup(composerDraft);
       return;
     }
 
     if (composerMode === 'answer') {
-      void submitAnswer(draftAnswer);
+      void submitAnswer(composerDraft);
     }
-  }, [composerMode, draftAnswer, startGuidedSetup, submitAnswer]);
+  }, [composerDraft, composerMode, isBusy, startGuidedSetup, submitAnswer]);
 
   if (!isAuthenticated) {
     return null;
@@ -464,28 +402,23 @@ export function FloatingAssistant() {
                   <h3 className="text-lg font-black tracking-tight text-text-primary">{t('title')}</h3>
                   <p className="text-sm leading-relaxed text-text-secondary">{t('subtitle')}</p>
                 </div>
-                <motion.span
-                  initial={{ opacity: 0.5 }}
-                  animate={{ opacity: [0.5, 1, 0.5] }}
-                  transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
-                  className="absolute top-5 end-24 hidden h-2 w-2 rounded-full bg-emerald-300 shadow-[0_0_10px_rgba(110,231,183,0.9)] sm:block"
-                />
                 <div className="flex items-center gap-2">
                   <button
                     type="button"
                     onClick={() => setShowSessionDetails((previous) => !previous)}
                     className="rounded-xl border border-white/12 p-2 text-text-muted transition-colors hover:bg-white/8 hover:text-text-primary"
-                    aria-label={showSessionDetails ? 'Hide session details' : 'Show session details'}
-                    title={showSessionDetails ? 'Hide session details' : 'Show session details'}
+                    aria-label={t('sessionDetails')}
+                    title={t('sessionDetails')}
                   >
                     <Info size={16} />
                   </button>
                   <button
                     type="button"
-                    onClick={restoreSession}
-                    disabled={!sessionId || isBootstrapping}
+                    onClick={startNewChat}
+                    disabled={isBusy || isBootstrapping}
                     className="rounded-xl border border-white/12 p-2 text-text-muted transition-colors hover:bg-white/8 hover:text-text-primary disabled:cursor-not-allowed disabled:opacity-40"
-                    title={sessionId ? t('restore') : t('restore')}
+                    aria-label={t('newChat')}
+                    title={t('newChat')}
                   >
                     {isBootstrapping ? <Loader2 size={16} className="animate-spin" /> : <RefreshCcw size={16} />}
                   </button>
@@ -510,15 +443,14 @@ export function FloatingAssistant() {
                     className="border-b border-white/10 px-5 pb-4 sm:px-6"
                   >
                     <div className="rounded-2xl border border-white/10 bg-white/6 p-4 text-xs text-text-muted">
-                      {(sessionId || sessionStatus || sessionUrl || sessionExpiresAt) ? (
+                      {(sessionId || sessionStatus || targetUrl) ? (
                         <div className="grid gap-2 sm:grid-cols-2">
-                          {sessionId && <div><span className="font-semibold text-text-secondary">Session:</span> {sessionId}</div>}
-                          {sessionStatus && <div><span className="font-semibold text-text-secondary">Status:</span> {sessionStatus}</div>}
-                          {sessionUrl && <div className="sm:col-span-2"><span className="font-semibold text-text-secondary">Target:</span> {sessionUrl}</div>}
-                          {sessionExpiresAt && <div className="sm:col-span-2"><span className="font-semibold text-text-secondary">Expires:</span> {sessionExpiresAt}</div>}
+                          {sessionId && <div className="sm:col-span-2 break-all"><span className="font-semibold text-text-secondary">{t('sessionLabel')}:</span> {sessionId}</div>}
+                          {sessionStatus && <div><span className="font-semibold text-text-secondary">{t('statusLabel')}:</span> {sessionStatus}</div>}
+                          {targetUrl && <div className="break-all"><span className="font-semibold text-text-secondary">{t('targetLabel')}:</span> {targetUrl}</div>}
                         </div>
                       ) : (
-                        <div className="text-sm text-text-secondary">No session details yet.</div>
+                        <div className="text-sm text-text-secondary">{t('noSessionDetails')}</div>
                       )}
                     </div>
                   </motion.div>
@@ -558,7 +490,7 @@ export function FloatingAssistant() {
                     ))}
                     </AnimatePresence>
 
-                    {!sessionId && !currentQuestion && !hasRecommendation && (
+                    {!sessionId && !isBootstrapping && (
                       <motion.div
                         initial={{ opacity: 0, y: 8 }}
                         animate={{ opacity: 1, y: 0 }}
@@ -576,7 +508,7 @@ export function FloatingAssistant() {
                     )}
 
                     <AnimatePresence>
-                      {showThinking && (
+                      {(showThinking || isBootstrapping) && (
                         <motion.div
                           initial={{ opacity: 0, y: 8 }}
                           animate={{ opacity: 1, y: 0 }}
@@ -603,14 +535,15 @@ export function FloatingAssistant() {
                         {hasQuestionChoices && (
                           <div className="mt-4 grid gap-2 sm:grid-cols-2">
                             {currentQuestionChoices.map((choice, index) => {
-                              const choiceValue = choice.value?.trim() || choice.label?.trim() || '';
-                              const choiceLabel = choice.label?.trim() || choiceValue || `Option ${index + 1}`;
+                              // `value` is the backend's internal key; the label is both what
+                              // we show and what we send back as the answer.
+                              const choiceLabel = choice.label?.trim() || choice.value?.trim() || `Option ${index + 1}`;
 
                               return (
                                 <button
-                                  key={`${currentQuestion.question_id}-${choiceValue || index}`}
+                                  key={`${currentQuestion.question_id}-${choice.value ?? index}`}
                                   type="button"
-                                  onClick={() => void submitAnswer(choiceValue || choiceLabel, choiceLabel)}
+                                  onClick={() => void submitAnswer(choiceLabel)}
                                   disabled={isBusy}
                                   className="rounded-2xl border border-cyan-300/18 bg-slate-950/35 px-3 py-2 text-left text-sm font-medium text-text-primary transition-colors hover:border-cyan-300/40 hover:bg-cyan-300/10 disabled:cursor-not-allowed disabled:opacity-50"
                                 >
@@ -631,6 +564,16 @@ export function FloatingAssistant() {
                         {recommendation.plain_summary && <p className="text-sm leading-relaxed text-text-primary">{recommendation.plain_summary}</p>}
 
                         <div className="mt-4 grid gap-3 text-sm text-text-secondary">
+                          {targetUrl && (
+                            <div>
+                              <div className="text-xs font-bold uppercase tracking-[0.24em] text-text-muted">{t('targetLabel')}</div>
+                              <div className="mt-1 flex items-center gap-2 break-all">
+                                <Target size={14} className="shrink-0 text-emerald-200" />
+                                {targetUrl}
+                              </div>
+                            </div>
+                          )}
+
                           <div>
                             <div className="text-xs font-bold uppercase tracking-[0.24em] text-text-muted">{t('estimatedMinutes')}</div>
                             <div>{recommendation.estimated_minutes} min</div>
@@ -639,34 +582,26 @@ export function FloatingAssistant() {
                           {recommendation.what_we_check?.length ? (
                             <div>
                               <div className="text-xs font-bold uppercase tracking-[0.24em] text-text-muted">{t('whatWeCheck')}</div>
-                              <ul className="mt-2 list-disc space-y-1 pl-5">
+                              <ul className="mt-2 list-disc space-y-1 pl-5 rtl:pl-0 rtl:pr-5">
                                 {recommendation.what_we_check.map((item) => (
                                   <li key={item}>{item}</li>
                                 ))}
                               </ul>
                             </div>
                           ) : null}
-
-                          {recommendation.tools_with_depths?.length ? (
-                            <div>
-                              <div className="text-xs font-bold uppercase tracking-[0.24em] text-text-muted">{t('toolsWithDepths')}</div>
-                              <ul className="mt-2 space-y-1">
-                                {recommendation.tools_with_depths.map((item) => (
-                                  <li key={`${item.tool_id ?? 'tool'}-${item.depth ?? 'depth'}`}>
-                                    <span className="font-semibold text-text-primary">{item.tool_id ?? '-'}</span>
-                                    <span className="text-text-muted"> · {item.depth ?? '-'}</span>
-                                  </li>
-                                ))}
-                              </ul>
-                            </div>
-                          ) : null}
                         </div>
+
+                        {targetRequired && (
+                          <div className="mt-4 rounded-2xl border border-status-warning/28 bg-status-warning/12 p-3 text-sm text-status-warning">
+                            {recommendation.notice || t('messages.targetRequired')}
+                          </div>
+                        )}
 
                         <div className="mt-4 flex flex-wrap gap-3">
                           <Button
                             type="button"
                             onClick={() => void createScan()}
-                            disabled={isBusy}
+                            disabled={isBusy || targetRequired}
                             size="sm"
                             className="rounded-full bg-gradient-to-r from-emerald-300 via-cyan-300 to-blue-300 text-slate-950 hover:shadow-[0_0_24px_rgba(96,234,160,0.26)]"
                           >
@@ -680,7 +615,7 @@ export function FloatingAssistant() {
 
                           <button
                             type="button"
-                            onClick={resetSession}
+                            onClick={startNewChat}
                             className="rounded-full border border-white/12 bg-transparent px-4 py-2.5 text-sm font-semibold text-text-muted transition-colors hover:bg-white/8 hover:text-text-primary"
                           >
                             {t('restart')}
@@ -726,15 +661,10 @@ export function FloatingAssistant() {
                   <div className="min-w-0 flex-1">
                     {composerMode !== 'idle' ? (
                       <Input
-                        value={composerValue}
-                        onChange={(event) => {
-                          if (composerMode === 'target') {
-                            setTargetUrl(event.target.value);
-                          } else {
-                            setDraftAnswer(event.target.value);
-                          }
-                        }}
+                        value={composerDraft}
+                        onChange={(event) => setComposerDraft(event.target.value)}
                         placeholder={composerPlaceholder}
+                        disabled={isBusy || isBootstrapping}
                         className="h-11 rounded-2xl border-cyan-300/20 bg-white/6 px-4 text-sm"
                         onKeyDown={(event) => {
                           if (event.key === 'Enter') {
@@ -754,12 +684,12 @@ export function FloatingAssistant() {
                     <Button
                       type="button"
                       onClick={handleComposerSubmit}
-                      disabled={isBusy}
+                      disabled={isBusy || isBootstrapping}
                       size="sm"
                       className="h-11 shrink-0 rounded-2xl px-4"
                     >
                       {isBusy ? <Loader2 size={16} className="animate-spin" /> : <Send size={16} />}
-                      <span className="hidden sm:inline">{composerSendLabel}</span>
+                      <span className="hidden sm:inline">{t('send')}</span>
                     </Button>
                   )}
                 </div>

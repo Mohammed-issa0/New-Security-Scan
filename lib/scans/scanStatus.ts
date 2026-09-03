@@ -46,6 +46,15 @@ export function isTerminalScanStatus(status: ScanStatus | 'Unknown'): boolean {
   return status !== 'Unknown' && !isActiveScanStatus(status);
 }
 
+/**
+ * A scan is marked Failed when *any* tool fails, yet the tools that succeeded
+ * still recorded findings and a report can still be generated from them — so
+ * Failed scans carry results too, and only Canceled ones never do.
+ */
+export function hasScanResults(status: ScanStatus | 'Unknown'): boolean {
+  return status === 'Completed' || status === 'CompletedWithLimits' || status === 'Failed';
+}
+
 export function getScanStatusTranslationKey(status: unknown): string {
   const normalized = normalizeScanStatus(status);
   const key = normalized.toLowerCase();

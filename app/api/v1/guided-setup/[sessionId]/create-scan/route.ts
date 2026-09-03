@@ -2,6 +2,10 @@ import { NextRequest } from 'next/server';
 
 import { enforceConcurrentScanLimit, proxyBackendRequest } from '../../../_scan-concurrency';
 
+// Runs a concurrency pre-check plus the backend call, so it needs the same
+// generous ceiling as the rest of the guided-setup flow.
+export const maxDuration = 60;
+
 export async function POST(
   request: NextRequest,
   context: { params: Promise<{ sessionId: string }> }

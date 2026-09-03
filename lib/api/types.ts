@@ -74,6 +74,12 @@ export interface Scan {
   estimatedWaitSeconds?: number | null;
   estimatedStartAt?: string | null;
   failureReason?: string | null;
+  // Coverage split: a Failed scan can still carry findings from the tools that
+  // succeeded, in which case `partialResults` is true.
+  toolsTotal?: number | null;
+  toolsSucceeded?: number | null;
+  toolsFailed?: number | null;
+  partialResults?: boolean | null;
 }
 
 export interface ScanQueueEstimate {
@@ -448,28 +454,38 @@ export interface ToolDepth {
   depth?: string | null;
 }
 
+export type GuidedSetupLanguage = 'en' | 'ar';
+
 export interface ScanRecommendation {
   plain_summary?: string | null;
   what_we_check?: string[] | null;
   estimated_minutes: number;
   confidence?: string | null;
+  // Configuration for create-scan — never rendered to the user.
   tools_with_depths?: ToolDepth[] | null;
+  // Set when the wizard finished without ever capturing a target URL.
+  target_required?: boolean | null;
+  notice?: string | null;
 }
 
 export interface StartGuidedSetupRequest {
   targetUrl?: string | null;
+  language?: GuidedSetupLanguage | null;
 }
 
 export interface StartGuidedSetupResponse {
   sessionId: string;
   question?: GuidedSetupQuestion | null;
   expiresAt: string;
+  targetUrl?: string | null;
+  language?: string | null;
 }
 
 export interface AnswerGuidedSetupRequest {
   questionId: number;
   questionText?: string | null;
   answer?: string | null;
+  language?: GuidedSetupLanguage | null;
 }
 
 export type GuidedSetupStepType = 'question' | 'recommendation';
@@ -478,6 +494,19 @@ export interface GuidedSetupStepResponse {
   sessionId: string;
   stepType?: GuidedSetupStepType | null;
   question?: GuidedSetupQuestion | null;
+  recommendation?: ScanRecommendation | null;
+  targetUrl?: string | null;
+  language?: string | null;
+}
+
+// GET /guided-setup/active — the saved conversation, or null when the API replies 204.
+export interface ActiveGuidedSetupResponse {
+  sessionId: string;
+  status?: string | null;
+  language?: string | null;
+  targetUrl?: string | null;
+  answers?: GuidedSetupAnswerRecord[] | null;
+  currentQuestion?: GuidedSetupQuestion | null;
   recommendation?: ScanRecommendation | null;
 }
 
@@ -515,5 +544,29 @@ export interface PaginatedResponse<T> {
   pageNumber: number;
   pageSize: number;
   totalPages?: number;
+}
+
+export interface ContactRequest {
+  name: string;
+  email: string;
+  subject: string;
+  message: string;
+}
+
+export interface ContactResponse {
+  message?: string | null;
+}
+
+export interface DeleteAccountRequest {
+  password: string;
+  /** Must be exactly "DELETE". */
+  confirmation: string;
+}
+
+export interface DeleteAccountResponse {
+  message?: string | null;
+  scansDeleted?: number;
+  targetsDeleted?: number;
+  auditLogsAnonymized?: number;
 }
 

@@ -30,12 +30,12 @@ const itemVariants = {
 function getErrorMessage(error: unknown, fallback: string) {
   if (error instanceof ApiRequestError) {
     const payload = error.data as Record<string, unknown> | undefined;
+    const apiError = payload?.error;
     const detail = payload?.detail;
     const title = payload?.title;
-    const message = payload?.message;
-    const apiError = payload?.error;
 
-    return String(message || detail || title || apiError || error.message || fallback);
+    // `error` is the localized label; the untranslated `message` is diagnostic only.
+    return String(apiError || detail || title || fallback);
   }
 
   if (error instanceof Error) {

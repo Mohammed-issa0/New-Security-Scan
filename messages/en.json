@@ -17,6 +17,7 @@
     "nav": {
       "features": "Features",
       "plans": "Plans",
+      "contact": "Contact",
       "billing": "Billing",
       "profile": "Profile",
       "howItWorks": "How it works",
@@ -69,10 +70,13 @@
       "recommendationTitle": "Recommendation ready",
       "estimatedMinutes": "Estimated duration",
       "whatWeCheck": "What we check",
-      "toolsWithDepths": "Tools and depth",
       "createScan": "Create scan now",
       "restart": "Start over",
-      "restore": "Restore saved session",
+      "newChat": "Start new chat",
+      "sessionDetails": "Session details",
+      "sessionLabel": "Session",
+      "statusLabel": "Status",
+      "noSessionDetails": "No session details yet.",
       "close": "Close assistant",
       "footerHint": "Your session is saved locally so you can resume if you close this panel.",
       "upgrade": {
@@ -680,7 +684,12 @@
         "reportUnavailable": "Report is not available for this scan.",
         "reportPending": "Report will appear when the scan is completed.",
         "openReportPage": "Open standalone report",
-        "reportGeneratedAt": "Generated at {date}"
+        "reportGeneratedAt": "Generated at {date}",
+        "partialResults": {
+          "title": "Partial results",
+          "description": "{failed} of {total} checks did not complete — these results are partial.",
+          "descriptionGeneric": "Some checks did not complete — these results are partial."
+        }
       },
       "reportPage": {
         "eyebrow": "Standalone report view",
@@ -1387,6 +1396,57 @@
       "loadErrorDesc": "Please try again.",
       "empty": "No profile data available.",
       "emptyDesc": "Try refreshing the page."
+    },
+    "danger": {
+      "title": "Delete account",
+      "subtitle": "Permanently erase your account and everything linked to it.",
+      "warningTitle": "This cannot be undone",
+      "warningBody": "Your scans, findings, reports, targets, saved credentials, plan and credit records, and Jira connections are deleted permanently. Security audit logs are kept in anonymised form.",
+      "passwordLabel": "Current password",
+      "passwordPlaceholder": "Enter your password to continue",
+      "deleteButton": "Delete my account",
+      "confirmTitle": "Delete your account permanently?",
+      "confirmDescription": "You will be signed out immediately and this data cannot be recovered.",
+      "confirmPrompt": "Type {token} to confirm",
+      "deleted": "Your account and all associated data have been permanently deleted.",
+      "deleteError": "Could not delete the account."
+    }
+  },
+  "contactPage": {
+    "badge": "Contact us",
+    "title": "Talk to our team",
+    "subtitle": "Questions about plans, scanning, or your account? Send us a message and we will reply by email.",
+    "fields": {
+      "name": "Your name",
+      "email": "Email address",
+      "subject": "Subject",
+      "message": "Message"
+    },
+    "placeholders": {
+      "name": "Jane Smith",
+      "email": "you@example.com",
+      "subject": "Question about plans",
+      "message": "Tell us how we can help..."
+    },
+    "submit": "Send message",
+    "sending": "Sending...",
+    "success": {
+      "title": "Thanks for getting in touch",
+      "description": "We received your message and will reply by email."
+    },
+    "errors": {
+      "nameRequired": "Your name is required.",
+      "nameTooLong": "Name must not exceed 100 characters.",
+      "emailRequired": "Email is required.",
+      "emailInvalid": "Please enter a valid email address.",
+      "emailTooLong": "Email is too long.",
+      "subjectRequired": "Subject is required.",
+      "subjectTooLong": "Subject must not exceed 150 characters.",
+      "messageRequired": "Message is required.",
+      "messageTooLong": "Message must not exceed 5000 characters.",
+      "sendFailed": "Could not send your message. Please try again.",
+      "rateLimited": "Too many messages sent. Please try again in a little while.",
+      "unavailable": "Messaging is temporarily unavailable. Please try again later."
     }
   },
   "admin": {

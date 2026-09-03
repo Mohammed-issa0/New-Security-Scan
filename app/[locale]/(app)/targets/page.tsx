@@ -75,7 +75,7 @@ export default function TargetsPage() {
         await scansService.setTargetBrowserAuth(createdTarget.id, browserAuth);
         return { target: { ...createdTarget, browserAuthConfigured: true }, browserAuthError: null as string | null };
       } catch (authError: any) {
-        const message = authError?.data?.message || authError?.message || t('browserAuth.feedback.saveError');
+        const message = authError?.message || t('browserAuth.feedback.saveError');
         return { target: createdTarget, browserAuthError: message };
       }
     },
@@ -104,7 +104,7 @@ export default function TargetsPage() {
       }
     },
     onError: (error: any) => {
-      const backendMessage = error?.data?.message || error?.message || t('feedback.createError');
+      const backendMessage = error?.message || t('feedback.createError');
       setCreateError(backendMessage);
       toast.error(backendMessage);
     },
@@ -162,7 +162,7 @@ export default function TargetsPage() {
       toast.success(t('browserAuth.feedback.saveSuccess'));
     },
     onError: (error: any) => {
-      toast.error(error?.data?.message || error?.message || t('browserAuth.feedback.saveError'));
+      toast.error(error?.message || t('browserAuth.feedback.saveError'));
     },
   });
 
@@ -177,7 +177,7 @@ export default function TargetsPage() {
       toast.success(t('browserAuth.feedback.deleteSuccess'));
     },
     onError: (error: any) => {
-      toast.error(error?.data?.message || error?.message || t('browserAuth.feedback.deleteError'));
+      toast.error(error?.message || t('browserAuth.feedback.deleteError'));
     },
   });
 

@@ -184,7 +184,7 @@ export default function ScanForm() {
           data.targetId = createdTarget.id;
         } catch (error: unknown) {
           const err = error as { data?: { message?: string }; message?: string };
-          const backendMessage = err?.data?.message || err?.message || t('messages.error');
+          const backendMessage = err?.message || t('messages.error');
           setError('targets', { message: backendMessage });
           setSubmissionError(backendMessage);
           toast.error(backendMessage);
@@ -248,7 +248,7 @@ export default function ScanForm() {
         setBrowserAuthError(null);
       } catch (error: unknown) {
         const err = error as { data?: { message?: string }; message?: string };
-        const message = err?.data?.message || err?.message || tTargetAuth('feedback.saveError');
+        const message = err?.message || tTargetAuth('feedback.saveError');
         setBrowserAuthError(message);
         setSubmissionError(message);
         toast.error(message);

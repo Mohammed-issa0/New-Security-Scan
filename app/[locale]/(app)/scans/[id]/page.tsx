@@ -27,7 +27,8 @@ import { AddCreditsDialog } from '@/components/scans/AddCreditsDialog';
 import { ScanQueueProgressCard } from '@/components/scans/ScanQueueProgressCard';
 import { ScanProfileBadge } from '@/components/scans/ScanProfileBadge';
 import { ScanStatusBanner } from '@/components/scans/ScanStatusBanner';
-import { normalizeScanStatus, isActiveScanStatus, isTerminalScanStatus, getScanDisplayName } from '@/lib/scans/scanStatus';
+import { PartialResultsNotice } from '@/components/scans/PartialResultsNotice';
+import { normalizeScanStatus, isActiveScanStatus, isTerminalScanStatus, hasScanResults, getScanDisplayName } from '@/lib/scans/scanStatus';
 import { buildSeverityCounts, getOverallRiskScore, stripHtmlToText } from '@/lib/scans/reportUtils';
 import { useScanQueueEstimate } from '@/lib/scans/useScanQueueEstimate';
 import { useIsAdmin } from '@/lib/hooks/useIsAdmin';
@@ -491,6 +492,8 @@ export default function ScanDetailsPage() {
         targetId={scan.targetId}
       />
 
+      <PartialResultsNotice scan={scan} />
+
       {normalizedStatus === 'CompletedWithLimits' && (
         <div className="rounded-xl border border-status-warning/30 bg-status-warning/12 p-4 text-sm text-status-warning">
           <div className="flex items-start gap-2">
@@ -906,9 +909,9 @@ export default function ScanDetailsPage() {
             <button
               type="button"
               onClick={() => generateAiReportMutation.mutate()}
-              disabled={generateAiReportMutation.isPending || normalizedStatus !== 'Completed'}
+              disabled={generateAiReportMutation.isPending || !hasScanResults(normalizedStatus)}
               className="inline-flex items-center gap-2 rounded-lg border border-cyan-300/26 bg-cyan-400/10 px-4 py-2 text-sm font-medium text-cyan-200 hover:bg-cyan-400/14 disabled:cursor-not-allowed disabled:opacity-50"
-              title={normalizedStatus !== 'Completed' ? td('aiReport.availableWhenCompleted') : undefined}
+              title={!hasScanResults(normalizedStatus) ? td('aiReport.availableWhenCompleted') : undefined}
             >
               <Sparkles className="h-4 w-4" />
               {generateAiReportMutation.isPending ? td('aiReport.generating') : td('aiReport.generateButton')}

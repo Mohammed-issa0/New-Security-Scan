@@ -44,8 +44,13 @@ import {
   AnswerGuidedSetupRequest,
   GuidedSetupStepResponse,
   GuidedSetupSessionResponse,
+  ActiveGuidedSetupResponse,
   CreateScanFromRecommendationRequest,
-  CreateScanFromRecommendationResponse
+  CreateScanFromRecommendationResponse,
+  ContactRequest,
+  ContactResponse,
+  DeleteAccountRequest,
+  DeleteAccountResponse
 } from './types';
 import {
   AdminUser,
@@ -79,6 +84,14 @@ export const endpoints = {
   users: {
     me: (): Promise<UserProfile> => client.get('/users/me'),
     updateMe: (data: Partial<UserProfile>): Promise<UserProfile> => client.put('/users/me', data),
+  },
+  account: {
+    // GDPR erasure — irreversible, and the session is dead as soon as it returns.
+    delete: (data: DeleteAccountRequest): Promise<DeleteAccountResponse> =>
+      client.delete('/account', data),
+  },
+  contact: {
+    send: (data: ContactRequest): Promise<ContactResponse> => client.post('/contact', data),
   },
   targets: {
     create: (url: string): Promise<Target> => client.post('/targets', { url }),
@@ -146,6 +159,9 @@ export const endpoints = {
   guidedSetup: {
     start: (data: StartGuidedSetupRequest): Promise<StartGuidedSetupResponse> =>
       client.post('/guided-setup', data),
+    // 204 (no saved conversation) comes back as null from the client.
+    getActive: (): Promise<ActiveGuidedSetupResponse | null> =>
+      client.get('/guided-setup/active'),
     get: (sessionId: string): Promise<GuidedSetupSessionResponse> =>
       client.get(`/guided-setup/${sessionId}`),
     answer: (sessionId: string, data: AnswerGuidedSetupRequest): Promise<GuidedSetupStepResponse> =>

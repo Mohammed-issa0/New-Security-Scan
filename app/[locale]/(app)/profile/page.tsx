@@ -3,21 +3,27 @@
 import * as React from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useTranslations } from 'next-intl';
-import { User, Mail, AlertCircle, CheckCircle2, ShieldCheck, CreditCard } from 'lucide-react';
+import { User, Mail, AlertCircle, CheckCircle2, ShieldCheck, CreditCard, TriangleAlert } from 'lucide-react';
 import { toast } from 'sonner';
 
-import { profileService } from '@/lib/profile/profileService';
+import { profileService, DELETE_ACCOUNT_CONFIRMATION } from '@/lib/profile/profileService';
 import { plansService } from '@/lib/plans/plansService';
+import { authService } from '@/lib/auth/authService';
 import { ApiRequestError } from '@/lib/api/client';
 import { Card, CardHeader, CardContent, Input, Label, Button, Alert, Badge } from '@/components/scans/ui';
+import { ConfirmationDialog } from '@/components/common/ConfirmationDialog';
 import { NAME_REGEX, NAME_MAX_LENGTH } from '@/lib/auth/nameValidation';
 
 export default function ProfilePage() {
   const t = useTranslations('profile');
+  const tConfirm = useTranslations('common.confirmation');
   const queryClient = useQueryClient();
   const [fullName, setFullName] = React.useState('');
   const [fieldError, setFieldError] = React.useState<string | null>(null);
   const [formMessage, setFormMessage] = React.useState<{ type: 'success' | 'error'; text: string } | null>(null);
+  const [deletePassword, setDeletePassword] = React.useState('');
+  const [deleteError, setDeleteError] = React.useState<string | null>(null);
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = React.useState(false);
 
   const validateName = React.useCallback(
     (value: string): string | null => {
@@ -69,17 +75,33 @@ export default function ProfilePage() {
     onError: (error: any) => {
       const isApiError = error instanceof ApiRequestError;
       const fieldMessage = isApiError ? error.data?.details?.fullName?.[0] : null;
-      const message =
-        fieldMessage ||
-        (isApiError
-          ? error.data?.message || error.data?.detail || error.data?.error || error.message
-          : error?.message || t('messages.saveError'));
+      // ApiRequestError.message already prefers the backend's localized `error`.
+      const message = fieldMessage || error?.message || t('messages.saveError');
 
       if (fieldMessage) {
         setFieldError(fieldMessage);
       }
 
       setFormMessage({ type: 'error', text: message });
+      toast.error(message);
+    },
+  });
+
+  const deleteAccountMutation = useMutation({
+    mutationFn: (password: string) => profileService.deleteAccount(password),
+    onSuccess: (result) => {
+      setIsDeleteDialogOpen(false);
+      setDeletePassword('');
+      setDeleteError(null);
+      toast.success(result?.message || t('danger.deleted'));
+      queryClient.clear();
+      // The session is dead server-side already; this clears tokens and redirects.
+      authService.logout();
+    },
+    onError: (error: any) => {
+      const message = error?.message || t('danger.deleteError');
+      setDeleteError(message);
+      setIsDeleteDialogOpen(false);
       toast.error(message);
     },
   });
@@ -355,6 +377,70 @@ export default function ProfilePage() {
           )}
         </CardContent>
       </Card>
+
+      <Card className="border-status-danger/30">
+        <CardHeader
+          title={t('danger.title')}
+          description={t('danger.subtitle')}
+          icon={TriangleAlert}
+        />
+        <CardContent className="space-y-4">
+          <Alert variant="error" title={t('danger.warningTitle')}>
+            <p className="text-xs leading-relaxed">{t('danger.warningBody')}</p>
+          </Alert>
+
+          <div className="space-y-1.5 sm:max-w-sm">
+            <Label required htmlFor="deletePassword">{t('danger.passwordLabel')}</Label>
+            <Input
+              id="deletePassword"
+              type="password"
+              autoComplete="current-password"
+              maxLength={128}
+              value={deletePassword}
+              onChange={(event) => {
+                setDeletePassword(event.target.value);
+                if (deleteError) setDeleteError(null);
+              }}
+              placeholder={t('danger.passwordPlaceholder')}
+            />
+            {deleteError && (
+              <p className="mt-1 flex items-center gap-1 text-xs text-status-danger">
+                <AlertCircle size={12} />
+                {deleteError}
+              </p>
+            )}
+          </div>
+
+          <div className="flex justify-end">
+            <Button
+              type="button"
+              variant="danger"
+              disabled={!deletePassword.trim() || deleteAccountMutation.isPending}
+              onClick={() => {
+                setDeleteError(null);
+                setIsDeleteDialogOpen(true);
+              }}
+            >
+              {deleteAccountMutation.isPending ? tConfirm('processing') : t('danger.deleteButton')}
+            </Button>
+          </div>
+        </CardContent>
+      </Card>
+
+      <ConfirmationDialog
+        isOpen={isDeleteDialogOpen}
+        title={t('danger.confirmTitle')}
+        description={t('danger.confirmDescription')}
+        warningMessage={t('danger.warningBody')}
+        confirmationKeyword={DELETE_ACCOUNT_CONFIRMATION}
+        confirmationPrompt={t('danger.confirmPrompt', { token: DELETE_ACCOUNT_CONFIRMATION })}
+        confirmationPlaceholder={DELETE_ACCOUNT_CONFIRMATION}
+        confirmLabel={deleteAccountMutation.isPending ? tConfirm('processing') : t('danger.deleteButton')}
+        cancelLabel={tConfirm('cancel')}
+        isPending={deleteAccountMutation.isPending}
+        onConfirm={() => deleteAccountMutation.mutate(deletePassword)}
+        onClose={() => setIsDeleteDialogOpen(false)}
+      />
     </div>
   );
 }

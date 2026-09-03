@@ -7,7 +7,8 @@ import { useLocale, useTranslations } from 'next-intl';
 import { useParams } from 'next/navigation';
 import { AlertTriangle, ArrowLeft, BarChart, CalendarClock, RefreshCw, Search, ShieldAlert, Sparkles, X, Download  } from 'lucide-react';
 import { scansService } from '@/lib/scans/scansService';
-import { normalizeScanStatus, isActiveScanStatus, isTerminalScanStatus, getScanDisplayName, getScanStatusTranslationKey, scanStatusClassMap } from '@/lib/scans/scanStatus';
+import { normalizeScanStatus, isActiveScanStatus, isTerminalScanStatus, hasScanResults, getScanDisplayName, getScanStatusTranslationKey, scanStatusClassMap } from '@/lib/scans/scanStatus';
+import { PartialResultsNotice } from '@/components/scans/PartialResultsNotice';
 import { buildSeverityCounts, getOverallRiskScore, getTotalVulnerabilities, stripHtmlToText } from '@/lib/scans/reportUtils';
 import type { GenerateReportResponse, ReportStatusResponse, Vulnerability } from '@/lib/api/types';
 import { toast } from 'sonner';
@@ -221,10 +222,10 @@ export default function ScanReportPage() {
   const normalizedScanStatus = normalizeScanStatus(scan.status);
   const statusKey = getScanStatusTranslationKey(scan.status);
   const scanDisplayName = getScanDisplayName(scan) || t('title', { id: scan.id.slice(0, 8) });
-  const scanCompleted =
-    normalizedScanStatus === 'Completed' || normalizedScanStatus === 'CompletedWithLimits';
+  // A Failed scan still reports the findings of the tools that succeeded, so it
+  // gets the zero-findings state too rather than a blank screen.
   const showZeroFindings =
-    scanCompleted &&
+    hasScanResults(normalizedScanStatus) &&
     totalVulnerabilities === 0 &&
     (vulnerabilities?.length ?? 0) === 0 &&
     (jsonReport?.vulnerabilities?.length ?? 0) === 0;
@@ -316,6 +317,8 @@ export default function ScanReportPage() {
           ))}
         </div>
       </div>
+
+      <PartialResultsNotice scan={scan} />
 
       {!report && isTerminalScanStatus(normalizedScanStatus) && (
         <div className="rounded-2xl border border-status-warning/30 bg-status-warning/12 p-4 text-sm text-status-warning">

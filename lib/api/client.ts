@@ -12,7 +12,9 @@ export interface ApiError {
 
 export class ApiRequestError extends Error {
   constructor(public status: number, public data: ApiError) {
-    super(data.message || data.detail || data.error || 'API Request Failed');
+    // `error` is the localized, user-facing label; `message` is untranslated
+    // diagnostic detail for backend logs, so it is only ever a last resort.
+    super(data.error || data.detail || data.message || 'API Request Failed');
   }
 }
 
@@ -89,6 +91,15 @@ async function apiFetch(endpoint: string, options: RequestInit = {}, responseTyp
     headers.set('Content-Type', 'application/json');
   }
 
+  // The backend localizes user-facing error labels off Accept-Language. The root
+  // layout renders <html lang={locale}>, so that is our source of truth.
+  if (!headers.has('Accept-Language') && typeof document !== 'undefined') {
+    const documentLanguage = document.documentElement.lang;
+    if (documentLanguage) {
+      headers.set('Accept-Language', documentLanguage);
+    }
+  }
+
   if (tokens?.accessToken) {
     headers.set('Authorization', `Bearer ${tokens.accessToken}`);
   }
@@ -137,6 +148,11 @@ export const client = {
     apiFetch(endpoint, { ...options, method: 'POST', body: JSON.stringify(body) }),
   put: (endpoint: string, body?: any, options?: RequestInit) => 
     apiFetch(endpoint, { ...options, method: 'PUT', body: JSON.stringify(body) }),
-  delete: (endpoint: string, options?: RequestInit) => apiFetch(endpoint, { ...options, method: 'DELETE' }),
+  delete: (endpoint: string, body?: any, options?: RequestInit) =>
+    apiFetch(endpoint, {
+      ...options,
+      method: 'DELETE',
+      ...(body === undefined ? {} : { body: JSON.stringify(body) }),
+    }),
 };
 
