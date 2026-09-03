@@ -10,6 +10,7 @@ import { profileService } from '@/lib/profile/profileService';
 import { plansService } from '@/lib/plans/plansService';
 import { ApiRequestError } from '@/lib/api/client';
 import { Card, CardHeader, CardContent, Input, Label, Button, Alert, Badge } from '@/components/scans/ui';
+import { NAME_REGEX, NAME_MAX_LENGTH } from '@/lib/auth/nameValidation';
 
 export default function ProfilePage() {
   const t = useTranslations('profile');
@@ -17,6 +18,17 @@ export default function ProfilePage() {
   const [fullName, setFullName] = React.useState('');
   const [fieldError, setFieldError] = React.useState<string | null>(null);
   const [formMessage, setFormMessage] = React.useState<{ type: 'success' | 'error'; text: string } | null>(null);
+
+  const validateName = React.useCallback(
+    (value: string): string | null => {
+      const trimmed = value.trim();
+      if (!trimmed) return t('messages.nameRequired');
+      if (trimmed.length > NAME_MAX_LENGTH) return t('messages.nameTooLong');
+      if (!NAME_REGEX.test(trimmed)) return t('messages.nameInvalidChars');
+      return null;
+    },
+    [t]
+  );
 
   const {
     data: profile,
@@ -76,14 +88,14 @@ export default function ProfilePage() {
     event.preventDefault();
     setFormMessage(null);
 
-    const trimmed = fullName.trim();
-    if (!trimmed) {
-      setFieldError(t('messages.nameRequired'));
+    const error = validateName(fullName);
+    if (error) {
+      setFieldError(error);
       return;
     }
 
     setFieldError(null);
-    updateMutation.mutate(trimmed);
+    updateMutation.mutate(fullName.trim());
   };
 
   const formatDate = (value?: string | null) =>
@@ -184,9 +196,11 @@ export default function ProfilePage() {
                     id="fullName"
                     value={fullName}
                     onChange={(event) => {
-                      setFullName(event.target.value);
-                      if (fieldError) setFieldError(null);
+                      const value = event.target.value;
+                      setFullName(value);
+                      setFieldError(value.trim() ? validateName(value) : null);
                     }}
+                    maxLength={NAME_MAX_LENGTH}
                     placeholder={t('placeholders.name')}
                   />
                   {fieldError && (

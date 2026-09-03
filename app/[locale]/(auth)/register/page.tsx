@@ -7,6 +7,7 @@ import { useTranslations, useLocale } from 'next-intl';
 import { useRouter } from 'next/navigation';
 import { authService } from '@/lib/auth/authService';
 import { setOtpFlowState } from '@/lib/auth/otpFlow';
+import { NAME_REGEX, NAME_MAX_LENGTH } from '@/lib/auth/nameValidation';
 import { toast } from 'sonner';
 import { useState } from 'react';
 import { ApiRequestError } from '@/lib/api/client';
@@ -20,9 +21,6 @@ export default function RegisterPage() {
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-
-  // Latin and Arabic letters plus spaces, apostrophes, and hyphens — no digits or other symbols.
-  const nameRegex = /^[A-Za-zÀ-ſ؀-ۿݐ-ݿ\s'-]+$/;
 
   const registerSchema = z.object({
     fullName: z.string().trim().optional().or(z.literal('')),
@@ -71,10 +69,10 @@ export default function RegisterPage() {
 
     const checkNamePart = (value: string | undefined, path: 'fullName' | 'firstName' | 'lastName') => {
       if (!value) return;
-      if (value.length > 60) {
+      if (value.length > NAME_MAX_LENGTH) {
         ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('nameTooLong'), path: [path] });
       }
-      if (!nameRegex.test(value)) {
+      if (!NAME_REGEX.test(value)) {
         ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('nameInvalidChars'), path: [path] });
       }
     };
@@ -93,6 +91,7 @@ export default function RegisterPage() {
     formState: { errors },
   } = useForm<RegisterFormValues>({
     resolver: zodResolver(registerSchema),
+    mode: 'onChange',
   });
 
   const onSubmit = async (data: RegisterFormValues) => {
@@ -161,7 +160,7 @@ export default function RegisterPage() {
                   {...register('fullName')}
                   type="text"
                   inputMode="text"
-                  maxLength={60}
+                  maxLength={NAME_MAX_LENGTH}
                   className="appearance-none relative block w-full rounded-lg border border-cyan-400/18 bg-white/5 px-3 py-2 text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:ring-2 focus:ring-cyan-300/45 focus:border-cyan-300/70"
                 />
                 {errors.fullName && (
@@ -178,7 +177,7 @@ export default function RegisterPage() {
                     {...register('firstName')}
                     type="text"
                     inputMode="text"
-                    maxLength={60}
+                    maxLength={NAME_MAX_LENGTH}
                     className="appearance-none relative block w-full rounded-lg border border-cyan-400/18 bg-white/5 px-3 py-2 text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:ring-2 focus:ring-cyan-300/45 focus:border-cyan-300/70"
                   />
                   {errors.firstName && (
@@ -193,7 +192,7 @@ export default function RegisterPage() {
                     {...register('lastName')}
                     type="text"
                     inputMode="text"
-                    maxLength={60}
+                    maxLength={NAME_MAX_LENGTH}
                     className="appearance-none relative block w-full rounded-lg border border-cyan-400/18 bg-white/5 px-3 py-2 text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:ring-2 focus:ring-cyan-300/45 focus:border-cyan-300/70"
                   />
                   {errors.lastName && (

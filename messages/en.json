@@ -1394,6 +1394,8 @@
       "saveError": "Failed to update profile.",
       "saveErrorTitle": "Update failed",
       "nameRequired": "Name is required.",
+      "nameTooLong": "Name must not exceed 60 characters.",
+      "nameInvalidChars": "Name can only contain letters, without numbers or symbols.",
       "loadError": "Unable to load profile.",
       "loadErrorDesc": "Please try again.",
       "empty": "No profile data available.",
