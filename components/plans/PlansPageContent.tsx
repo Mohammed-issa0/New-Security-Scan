@@ -13,7 +13,7 @@ import type { UserProfile } from '@/lib/api/types';
 import { plansService } from '@/lib/plans/plansService';
 import type { CheckoutSessionResponse, PlanPublicResponse, PurchaseExtraScanResponse, PurchasePlanResponse } from '@/lib/plans/types';
 import { ApiRequestError } from '@/lib/api/client';
-import { findMatchingPlanDefinition, getCreditsUsagePercent, getLocalizedPlanName, getPlanDisplayName } from '@/lib/plans/utils';
+import { findMatchingPlanDefinition, formatPlanPrice, getCreditsUsagePercent, getLocalizedPlanName, getPlanDisplayName } from '@/lib/plans/utils';
 import { Alert, Badge, Button } from '@/components/scans/ui';
 import { toast } from 'sonner';
 
@@ -184,13 +184,7 @@ export function PlansPageContent({
 
   const formatPrice = (plan: PlanPublicResponse) => {
     if (plan.priceCents === 0) return t('plans.free');
-    const currency = (plan.currency || 'USD').toUpperCase();
-    const amount = new Intl.NumberFormat(locale, {
-      style: 'currency',
-      currency,
-      minimumFractionDigits: 0,
-    }).format(plan.priceCents / 100);
-    return amount;
+    return formatPlanPrice(plan.priceCents, plan.currency, locale);
   };
 
   const formatCredits = (value?: number) => new Intl.NumberFormat(locale).format(value ?? 0);

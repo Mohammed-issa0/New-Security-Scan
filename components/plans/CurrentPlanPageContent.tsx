@@ -11,7 +11,7 @@ import { toast } from 'sonner';
 import { ApiRequestError } from '@/lib/api/client';
 import { plansService } from '@/lib/plans/plansService';
 import type { CheckoutSessionResponse, PurchaseExtraScanResponse } from '@/lib/plans/types';
-import { findMatchingPlanDefinition, getCreditsUsagePercent, getLocalizedPlanName } from '@/lib/plans/utils';
+import { findMatchingPlanDefinition, formatPlanPrice, getCreditsUsagePercent, getLocalizedPlanName } from '@/lib/plans/utils';
 import { getPlanMaxConcurrentScans } from '@/lib/scans/concurrency';
 import { Alert, Badge, Button } from '@/components/scans/ui';
 
@@ -124,11 +124,7 @@ export function CurrentPlanPageContent() {
       return t('labels.free');
     }
 
-    return new Intl.NumberFormat(locale, {
-      style: 'currency',
-      currency: (currency || 'USD').toUpperCase(),
-      minimumFractionDigits: 0,
-    }).format(priceCents / 100);
+    return formatPlanPrice(priceCents, currency, locale);
   };
 
   return (

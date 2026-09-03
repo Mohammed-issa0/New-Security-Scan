@@ -47,6 +47,40 @@ export function getLocalizedPlanName(
   return PLAN_TIER_LABELS[tier][locale === 'ar' ? 'ar' : 'en'];
 }
 
+// ICU spells USD as "US$" in Arabic; this pulls the international narrow symbol
+// ("$", "€", ...) so prices read as "45 $" instead of "45 US$". Currencies with no
+// narrow symbol (e.g. SAR) keep their code, which is the correct display for them.
+function getNarrowCurrencySymbol(currency: string) {
+  return (
+    new Intl.NumberFormat('en-US', {
+      style: 'currency',
+      currency,
+      currencyDisplay: 'narrowSymbol',
+    })
+      .formatToParts(0)
+      .find((part) => part.type === 'currency')?.value ?? currency
+  );
+}
+
+export function formatPlanPrice(
+  priceCents: number,
+  currency: string | null | undefined,
+  locale: string
+) {
+  const currencyCode = (currency || 'USD').toUpperCase();
+  const symbol = getNarrowCurrencySymbol(currencyCode);
+
+  // Keep the locale's own grouping and symbol placement, swap only the symbol itself.
+  return new Intl.NumberFormat(locale, {
+    style: 'currency',
+    currency: currencyCode,
+    minimumFractionDigits: 0,
+  })
+    .formatToParts(priceCents / 100)
+    .map((part) => (part.type === 'currency' ? symbol : part.value))
+    .join('');
+}
+
 export function getPlanTools(
   plan?: {
     enabledTools?: string[] | null;

@@ -69,14 +69,36 @@ function safeParseState(raw: string | null): StoredAssistantState | null {
   }
 }
 
+// Backend errors sometimes nest the real text under an `error`/`detail` object
+// (e.g. { error: { message: "..." } }) instead of a flat string field. Drill into
+// one level of nesting so we never fall back to stringifying a raw object.
+function extractMessage(value: unknown): string | undefined {
+  if (typeof value === 'string' && value.trim()) {
+    return value;
+  }
+
+  if (value && typeof value === 'object') {
+    const nested = value as Record<string, unknown>;
+    const nestedMessage = nested.message ?? nested.detail ?? nested.title ?? nested.error;
+    if (typeof nestedMessage === 'string' && nestedMessage.trim()) {
+      return nestedMessage;
+    }
+  }
+
+  return undefined;
+}
+
 function getApiErrorMessage(error: ApiRequestError, fallback: string) {
   const payload = (error.data ?? {}) as Record<string, unknown>;
-  const detail = payload.detail;
-  const title = payload.title;
-  const message = payload.message;
-  const apiError = payload.error;
 
-  return String(message || detail || title || apiError || error.message || fallback);
+  return (
+    extractMessage(payload.message) ||
+    extractMessage(payload.detail) ||
+    extractMessage(payload.title) ||
+    extractMessage(payload.error) ||
+    extractMessage(error.message) ||
+    fallback
+  );
 }
 
 function isPlanGateError(error: ApiRequestError) {
@@ -165,7 +187,7 @@ export function FloatingAssistant() {
 
   React.useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth', block: 'end' });
-  }, [messages]);
+  }, [messages, currentQuestion, recommendation, isBusy]);
 
   React.useEffect(() => {
     if (!isAuthenticated || typeof window === 'undefined') {
@@ -254,7 +276,7 @@ export function FloatingAssistant() {
     }
   }, [appendMessage, initialMessages, persistSessionMeta, targetUrl, t]);
 
-  const submitAnswer = React.useCallback(async (answer: string) => {
+  const submitAnswer = React.useCallback(async (answer: string, displayLabel?: string) => {
     if (!sessionId || !currentQuestion) {
       return;
     }
@@ -267,7 +289,7 @@ export function FloatingAssistant() {
 
     const submittedQuestion = currentQuestion;
     setCurrentQuestion(null);
-    appendMessage('user', trimmedAnswer);
+    appendMessage('user', displayLabel?.trim() || trimmedAnswer);
     setDraftAnswer('');
     setIsBusy(true);
     setUpgradeMessage(null);
@@ -588,7 +610,7 @@ export function FloatingAssistant() {
                                 <button
                                   key={`${currentQuestion.question_id}-${choiceValue || index}`}
                                   type="button"
-                                  onClick={() => void submitAnswer(choiceValue || choiceLabel)}
+                                  onClick={() => void submitAnswer(choiceValue || choiceLabel, choiceLabel)}
                                   disabled={isBusy}
                                   className="rounded-2xl border border-cyan-300/18 bg-slate-950/35 px-3 py-2 text-left text-sm font-medium text-text-primary transition-colors hover:border-cyan-300/40 hover:bg-cyan-300/10 disabled:cursor-not-allowed disabled:opacity-50"
                                 >
