@@ -146,7 +146,7 @@ export function Navbar() {
             <div className="flex h-11 w-11 items-center justify-center overflow-hidden rounded-xl border border-white/10 bg-white/6 shadow-[0_0_24px_rgba(0,209,255,0.16)] ring-1 ring-cyan-300/12">
               <Image
                 src={logo}
-                alt="Black Brains"
+                alt={t('brandName')}
                 width={44}
                 height={44}
                 className="h-full w-full object-contain p-1"
@@ -154,8 +154,8 @@ export function Navbar() {
               />
             </div>
             <div className="hidden sm:block">
-              <div className="text-sm font-semibold uppercase tracking-[0.32em] text-text-primary">Black Brains</div>
-              <div className="text-xs text-text-secondary">AI Security Testing</div>
+              <div className="text-sm font-semibold uppercase tracking-[0.32em] text-text-primary">{t('brandName')}</div>
+              <div className="text-xs text-text-secondary">{t('tagline')}</div>
             </div>
           </Link>
 

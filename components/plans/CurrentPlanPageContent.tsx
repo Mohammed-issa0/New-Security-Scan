@@ -11,7 +11,7 @@ import { toast } from 'sonner';
 import { ApiRequestError } from '@/lib/api/client';
 import { plansService } from '@/lib/plans/plansService';
 import type { CheckoutSessionResponse, PurchaseExtraScanResponse } from '@/lib/plans/types';
-import { findMatchingPlanDefinition, getCreditsUsagePercent, getPlanDisplayName } from '@/lib/plans/utils';
+import { findMatchingPlanDefinition, getCreditsUsagePercent, getLocalizedPlanName } from '@/lib/plans/utils';
 import { getPlanMaxConcurrentScans } from '@/lib/scans/concurrency';
 import { Alert, Badge, Button } from '@/components/scans/ui';
 
@@ -205,7 +205,7 @@ export function CurrentPlanPageContent() {
                 <span>{t('summary.currentPlan')}</span>
                 <CreditCard size={16} className="text-cyan-300" />
               </div>
-              <div className="mt-4 text-2xl font-bold text-text-primary">{getPlanDisplayName(matchingPlan || activePlan)}</div>
+              <div className="mt-4 text-2xl font-bold text-text-primary">{getLocalizedPlanName(matchingPlan || activePlan, locale)}</div>
               <p className="mt-2 text-sm text-text-secondary">{t('summary.planId', { id: activePlan.userPlanId.slice(0, 8) })}</p>
             </div>
 

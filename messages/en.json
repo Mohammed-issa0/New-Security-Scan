@@ -1,6 +1,9 @@
 {
   "common": {
     "title": "SecurityScan",
+    "brandName": "Black Brains",
+    "tagline": "AI Security Testing",
+    "metaDescription": "Premium AI-driven cybersecurity platform for automated website security testing and reporting.",
     "states": {
       "loading": "Loading...",
       "empty": "No data available.",

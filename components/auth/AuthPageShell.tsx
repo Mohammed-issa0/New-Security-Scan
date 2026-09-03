@@ -4,7 +4,7 @@ import type { ReactNode } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { useLocale } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 import { LandingAtmosphere } from '@/components/landing/Atmosphere';
 import logo from '/public/imgs/logo1234.png';
 
@@ -27,6 +27,7 @@ export function AuthPageShell({
 }: AuthPageShellProps) {
   const locale = useLocale();
   const isRtl = locale === 'ar';
+  const t = useTranslations('common');
 
   return (
     <div className="relative min-h-screen overflow-hidden bg-cyber-bg text-text-primary">
@@ -43,10 +44,10 @@ export function AuthPageShell({
         >
           <div className="flex items-start gap-4 border-b border-white/8 pb-6">
             <div className="flex h-14 w-14 items-center justify-center rounded-2xl border border-white/10 bg-white/6 shadow-[0_0_24px_rgba(0,209,255,0.16)]">
-              <Image src={logo} alt="Black Brains" width={56} height={56} className="h-full w-full object-contain p-2" priority />
+              <Image src={logo} alt={t('brandName')} width={56} height={56} className="h-full w-full object-contain p-2" priority />
             </div>
             <div className="min-w-0">
-              <p className="text-xs font-semibold uppercase tracking-[0.26em] text-cyan-300">Black Brains</p>
+              <p className="text-xs font-semibold uppercase tracking-[0.26em] text-cyan-300">{t('brandName')}</p>
               <h2 className="mt-2 text-3xl font-bold text-text-primary sm:text-4xl">{title}</h2>
               <p className="mt-2 max-w-lg text-sm leading-7 text-text-secondary sm:text-base">{subtitle}</p>
             </div>

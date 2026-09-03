@@ -13,7 +13,7 @@ import type { UserProfile } from '@/lib/api/types';
 import { plansService } from '@/lib/plans/plansService';
 import type { CheckoutSessionResponse, PlanPublicResponse, PurchaseExtraScanResponse, PurchasePlanResponse } from '@/lib/plans/types';
 import { ApiRequestError } from '@/lib/api/client';
-import { findMatchingPlanDefinition, getCreditsUsagePercent, getPlanDisplayName } from '@/lib/plans/utils';
+import { findMatchingPlanDefinition, getCreditsUsagePercent, getLocalizedPlanName, getPlanDisplayName } from '@/lib/plans/utils';
 import { Alert, Badge, Button } from '@/components/scans/ui';
 import { toast } from 'sonner';
 
@@ -322,7 +322,7 @@ export function PlansPageContent({
                   ) : (
                     <div className="space-y-3">
                       <div className="flex flex-wrap items-center gap-2 text-sm text-text-secondary">
-                        <Badge variant="outline">{getPlanDisplayName(matchedActivePlan || activePlan) || t('current.unknownPlan')}</Badge>
+                        <Badge variant="outline">{getLocalizedPlanName(matchedActivePlan || activePlan, locale) || t('current.unknownPlan')}</Badge>
                         <span>{t('current.expiresAt', { date: new Date(activePlan.expiresAt).toLocaleDateString(locale) })}</span>
                       </div>
                       <div className="space-y-2">
@@ -443,10 +443,10 @@ export function PlansPageContent({
                   )}
                   <div className="space-y-3">
                     <div className="text-sm font-semibold uppercase tracking-widest text-cyan-300">
-                      {getPlanDisplayName(plan) || t('plansSection.planFallback')}
+                      {getLocalizedPlanName(plan, locale) || t('plansSection.planFallback')}
                     </div>
                     <div className="text-2xl font-bold text-text-primary">
-                      {getPlanDisplayName(plan) || t('plansSection.planFallback')}
+                      {getLocalizedPlanName(plan, locale) || t('plansSection.planFallback')}
                     </div>
                     <p className="text-sm text-text-secondary">
                       {t('plansSection.description', { credits: formatCredits(plan.includedScanCredits) })}
@@ -517,7 +517,7 @@ export function PlansPageContent({
                     {sortedPlans.map((plan) => (
                       <th key={plan.planName || getPlanDisplayName(plan) || 'plan'} className="px-6 py-4 text-left font-semibold text-text-primary">
                         <div className="space-y-1">
-                          <div>{getPlanDisplayName(plan) || t('plansSection.planFallback')}</div>
+                          <div>{getLocalizedPlanName(plan, locale) || t('plansSection.planFallback')}</div>
                           <div className={`text-xs font-medium text-text-muted ${shouldBlurPrice ? 'blur-sm select-none' : ''}`}>{formatPrice(plan)}</div>
                         </div>
                       </th>

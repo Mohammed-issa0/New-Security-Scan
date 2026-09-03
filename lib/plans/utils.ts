@@ -14,6 +14,39 @@ export function getPlanDisplayName(plan?: { planName?: string | null; displayNam
   return plan?.displayName || plan?.planName || null;
 }
 
+const PLAN_TIER_LABELS = {
+  free: { en: 'Free', ar: 'مجاني' },
+  basic: { en: 'Basic', ar: 'أساسي' },
+  professional: { en: 'Professional', ar: 'احترافي' },
+  advanced: { en: 'Advanced', ar: 'متقدم' },
+} as const;
+
+type PlanTier = keyof typeof PLAN_TIER_LABELS;
+
+// The backend only sends plan names/display names in English. Recognized tiers
+// get a localized label; anything unrecognized falls back to the raw API text.
+function detectPlanTier(name: string): PlanTier | null {
+  const key = name.trim().toLowerCase();
+  if (key.includes('advanced')) return 'advanced';
+  if (key.includes('professional') || key.includes('pro')) return 'professional';
+  if (key.includes('basic')) return 'basic';
+  if (key.includes('free')) return 'free';
+  return null;
+}
+
+export function getLocalizedPlanName(
+  plan: { planName?: string | null; displayName?: string | null } | null | undefined,
+  locale: string
+) {
+  const rawName = getPlanDisplayName(plan);
+  if (!rawName) return null;
+
+  const tier = detectPlanTier(rawName);
+  if (!tier) return rawName;
+
+  return PLAN_TIER_LABELS[tier][locale === 'ar' ? 'ar' : 'en'];
+}
+
 export function getPlanTools(
   plan?: {
     enabledTools?: string[] | null;
