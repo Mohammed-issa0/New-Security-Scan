@@ -65,22 +65,22 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                   type="button"
                   onClick={() => setIsMobileNavOpen((prev) => !prev)}
                   className="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-white/12 text-text-secondary hover:bg-white/8 lg:hidden"
-                  aria-label={isMobileNavOpen ? 'Close admin navigation' : 'Open admin navigation'}
+                  aria-label={isMobileNavOpen ? t('closeNav') : t('openNav')}
                 >
                   {isMobileNavOpen ? <X size={18} /> : <Menu size={18} />}
                 </button>
                 <div>
-                  <p className="text-[11px] font-semibold uppercase tracking-[0.12em] text-text-muted">Control Center</p>
+                  <p className="text-[11px] font-semibold uppercase tracking-[0.12em] text-text-muted">{t('eyebrow')}</p>
                   <h1 className="text-sm font-semibold text-text-primary">{t('title')}</h1>
                 </div>
               </div>
 
               <Link
-                href={`/${locale}/scans`}
+                href={`/${locale}`}
                 className="inline-flex items-center gap-1.5 rounded-lg border border-cyan-400/24 bg-white/5 px-3 py-1.5 text-sm font-medium text-text-primary hover:bg-white/10"
               >
                 <ArrowLeft size={16} />
-                App
+                {t('backToHome')}
               </Link>
             </div>
           </header>

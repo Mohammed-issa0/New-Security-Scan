@@ -129,25 +129,25 @@ export default function AdminScansPage() {
           <table className="min-w-full divide-y divide-white/10">
             <thead className="bg-white/8">
               <tr>
-                <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-text-muted">
+                <th className="px-6 py-3 text-start text-xs font-semibold uppercase tracking-wider text-text-muted">
                   {t('columns.id')}
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-text-muted">
+                <th className="px-6 py-3 text-start text-xs font-semibold uppercase tracking-wider text-text-muted">
                   {t('columns.status')}
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-text-muted">
+                <th className="px-6 py-3 text-start text-xs font-semibold uppercase tracking-wider text-text-muted">
                   {t('columns.targetId')}
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-text-muted">
+                <th className="px-6 py-3 text-start text-xs font-semibold uppercase tracking-wider text-text-muted">
                   {t('columns.requestedAt')}
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-text-muted">
+                <th className="px-6 py-3 text-start text-xs font-semibold uppercase tracking-wider text-text-muted">
                   {t('columns.startedAt')}
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-text-muted">
+                <th className="px-6 py-3 text-start text-xs font-semibold uppercase tracking-wider text-text-muted">
                   {t('columns.finishedAt')}
                 </th>
-                <th className="px-6 py-3 text-right text-xs font-semibold uppercase tracking-wider text-text-muted">
+                <th className="px-6 py-3 text-end text-xs font-semibold uppercase tracking-wider text-text-muted">
                   {t('columns.actions')}
                 </th>
               </tr>
@@ -183,7 +183,7 @@ export default function AdminScansPage() {
                     <td className="px-6 py-4 text-sm text-text-muted">
                       {scan.finishedAt ? new Date(scan.finishedAt).toLocaleString() : '-'}
                     </td>
-                    <td className="px-6 py-4 text-right text-sm">
+                    <td className="px-6 py-4 text-end text-sm">
                       <div className="inline-flex items-center gap-3">
                         <Link
                           href={`/${locale}/admin/scans/${scan.id}`}

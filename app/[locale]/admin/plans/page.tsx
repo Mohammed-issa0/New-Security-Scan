@@ -365,13 +365,13 @@ export default function AdminPlansPage() {
             <table className="min-w-full divide-y divide-white/10">
               <thead className="bg-white/8">
                 <tr>
-                  <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-text-muted">
+                  <th className="px-6 py-3 text-start text-xs font-semibold uppercase tracking-wider text-text-muted">
                     {t('definitions.columns.name')}
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-text-muted">
+                  <th className="px-6 py-3 text-start text-xs font-semibold uppercase tracking-wider text-text-muted">
                     {t('definitions.columns.updatedAt')}
                   </th>
-                  <th className="px-6 py-3 text-right text-xs font-semibold uppercase tracking-wider text-text-muted">
+                  <th className="px-6 py-3 text-end text-xs font-semibold uppercase tracking-wider text-text-muted">
                     {t('definitions.columns.actions')}
                   </th>
                 </tr>
@@ -397,7 +397,7 @@ export default function AdminPlansPage() {
                       <td className="px-6 py-4 text-sm text-text-muted">
                         {plan.updatedAt ? new Date(plan.updatedAt).toLocaleString() : '-'}
                       </td>
-                      <td className="px-6 py-4 text-right text-sm">
+                      <td className="px-6 py-4 text-end text-sm">
                         <div className="flex items-center justify-end gap-2">
                           <Button type="button" size="sm" variant="outline" onClick={() => setViewPlan(plan)} className="gap-1">
                             <Eye className="h-4 w-4" />
@@ -464,22 +464,22 @@ export default function AdminPlansPage() {
             <table className="min-w-full divide-y divide-white/10">
               <thead className="bg-white/8">
                 <tr>
-                  <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-text-muted">
+                  <th className="px-6 py-3 text-start text-xs font-semibold uppercase tracking-wider text-text-muted">
                     {t('userPlans.columns.user')}
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-text-muted">
+                  <th className="px-6 py-3 text-start text-xs font-semibold uppercase tracking-wider text-text-muted">
                     {t('userPlans.columns.plan')}
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-text-muted">
+                  <th className="px-6 py-3 text-start text-xs font-semibold uppercase tracking-wider text-text-muted">
                     {t('userPlans.columns.status')}
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-text-muted">
+                  <th className="px-6 py-3 text-start text-xs font-semibold uppercase tracking-wider text-text-muted">
                     {t('userPlans.columns.expiresAt')}
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-text-muted">
+                  <th className="px-6 py-3 text-start text-xs font-semibold uppercase tracking-wider text-text-muted">
                     {t('userPlans.columns.credits')}
                   </th>
-                  <th className="px-6 py-3 text-right text-xs font-semibold uppercase tracking-wider text-text-muted">
+                  <th className="px-6 py-3 text-end text-xs font-semibold uppercase tracking-wider text-text-muted">
                     {t('userPlans.columns.actions')}
                   </th>
                 </tr>
@@ -514,7 +514,7 @@ export default function AdminPlansPage() {
                       <td className="px-6 py-4 text-sm text-text-muted">
                         {plan.includedCreditsUsed ?? 0}/{plan.includedCredits ?? 0}
                       </td>
-                      <td className="px-6 py-4 text-right text-sm">
+                      <td className="px-6 py-4 text-end text-sm">
                         <div className="flex items-center justify-end gap-2">
                           <Button
                             type="button"

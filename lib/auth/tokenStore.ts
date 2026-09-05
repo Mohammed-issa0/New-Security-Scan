@@ -21,7 +21,14 @@ class TokenStore {
       return;
     }
 
-    const maxAgeSeconds = Math.max(0, Math.floor((tokens.accessTokenExpiresAt - Date.now()) / 1000));
+    // The admin-route middleware only decodes this cookie's JWT to read the role
+    // claim for page-routing purposes; it does not use it as a bearer token, so
+    // it's safe (and necessary) to keep it alive for the whole refresh-token
+    // session instead of the short-lived access token, otherwise the browser
+    // drops the cookie the moment the access token expires and every admin page
+    // navigation gets redirected to /login even though the session is still
+    // valid and would have silently refreshed via tokenStore/client.ts.
+    const maxAgeSeconds = Math.max(0, Math.floor((tokens.refreshTokenExpiresAt - Date.now()) / 1000));
     document.cookie = `auth_access_token=${encodeURIComponent(tokens.accessToken)}; Path=/; Max-Age=${maxAgeSeconds}; SameSite=Lax`;
   }
 
@@ -38,11 +45,12 @@ class TokenStore {
             throw new Error('Refresh token expired');
           }
           this.tokens = parsed;
-          // Only sync cookie when access token is still valid; avoid Max-Age=0
-          // while refresh remains usable (cookie will sync after refresh).
-          if (Date.now() < parsed.accessTokenExpiresAt) {
-            this.syncAuthCookies(parsed);
-          }
+          // Refresh token expiry was already checked above, so the session is
+          // still valid here even if the access token itself has expired —
+          // sync the cookie so admin-route middleware sees it (see
+          // syncAuthCookies for why Max-Age tracks the refresh token, not the
+          // access token).
+          this.syncAuthCookies(parsed);
         } catch (e) {
           localStorage.removeItem('auth_tokens');
         }

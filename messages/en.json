@@ -1454,13 +1454,17 @@
     },
     "nav": {
       "title": "Administration",
+      "eyebrow": "Control Center",
       "overview": "Overview",
       "users": "Users",
       "scans": "Scans",
       "plans": "Plans",
       "auditLogs": "Audit Logs",
       "queue": "Queue",
-      "billing": "Billing"
+      "billing": "Billing",
+      "backToHome": "Home",
+      "openNav": "Open admin navigation",
+      "closeNav": "Close admin navigation"
     },
     "overview": {
       "title": "Overview",

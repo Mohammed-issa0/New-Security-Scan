@@ -115,19 +115,19 @@ export default function AdminAuditLogsPage() {
           <table className="min-w-full divide-y divide-white/10">
             <thead className="bg-white/8">
               <tr>
-                <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-text-muted">
+                <th className="px-6 py-3 text-start text-xs font-semibold uppercase tracking-wider text-text-muted">
                   {t('columns.action')}
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-text-muted">
+                <th className="px-6 py-3 text-start text-xs font-semibold uppercase tracking-wider text-text-muted">
                   {t('columns.entity')}
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-text-muted">
+                <th className="px-6 py-3 text-start text-xs font-semibold uppercase tracking-wider text-text-muted">
                   {t('columns.user')}
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-text-muted">
+                <th className="px-6 py-3 text-start text-xs font-semibold uppercase tracking-wider text-text-muted">
                   {t('columns.ip')}
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-text-muted">
+                <th className="px-6 py-3 text-start text-xs font-semibold uppercase tracking-wider text-text-muted">
                   {t('columns.timestamp')}
                 </th>
               </tr>

@@ -329,28 +329,28 @@ export default function AdminUsersPage() {
             <table className="min-w-full divide-y divide-white/10">
               <thead className="bg-white/8">
                 <tr>
-                  <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-text-muted">
+                  <th className="px-6 py-3 text-start text-xs font-semibold uppercase tracking-wider text-text-muted">
                     {t('columns.id')}
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-text-muted">
+                  <th className="px-6 py-3 text-start text-xs font-semibold uppercase tracking-wider text-text-muted">
                     {t('columns.name')}
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-text-muted">
+                  <th className="px-6 py-3 text-start text-xs font-semibold uppercase tracking-wider text-text-muted">
                     {t('columns.email')}
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-text-muted">
+                  <th className="px-6 py-3 text-start text-xs font-semibold uppercase tracking-wider text-text-muted">
                     {t('columns.roles')}
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-text-muted">
+                  <th className="px-6 py-3 text-start text-xs font-semibold uppercase tracking-wider text-text-muted">
                     {t('columns.status')}
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-text-muted">
+                  <th className="px-6 py-3 text-start text-xs font-semibold uppercase tracking-wider text-text-muted">
                     {t('columns.createdAt')}
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-text-muted">
+                  <th className="px-6 py-3 text-start text-xs font-semibold uppercase tracking-wider text-text-muted">
                     {t('columns.lastLogin')}
                   </th>
-                  <th className="px-6 py-3 text-right text-xs font-semibold uppercase tracking-wider text-text-muted">
+                  <th className="px-6 py-3 text-end text-xs font-semibold uppercase tracking-wider text-text-muted">
                     {t('columns.actions')}
                   </th>
                 </tr>
@@ -403,7 +403,7 @@ export default function AdminUsersPage() {
                       <td className="px-6 py-4 text-sm text-text-muted">
                         {user.lastLoginAt ? new Date(user.lastLoginAt).toLocaleString() : '-'}
                       </td>
-                      <td className="px-6 py-4 text-right text-sm font-medium">
+                      <td className="px-6 py-4 text-end text-sm font-medium">
                         <Link
                           href={`/${locale}/admin/users/${user.id}`}
                           className="inline-flex items-center gap-1 text-cyan-300 hover:text-cyan-200"

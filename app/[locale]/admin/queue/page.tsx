@@ -148,25 +148,25 @@ export default function AdminQueuePage() {
           <table className="min-w-full divide-y divide-white/10">
             <thead className="bg-white/8">
               <tr>
-                <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-text-muted">
+                <th className="px-6 py-3 text-start text-xs font-semibold uppercase tracking-wider text-text-muted">
                   {t('columns.scanId')}
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-text-muted">
+                <th className="px-6 py-3 text-start text-xs font-semibold uppercase tracking-wider text-text-muted">
                   {t('columns.tool')}
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-text-muted">
+                <th className="px-6 py-3 text-start text-xs font-semibold uppercase tracking-wider text-text-muted">
                   {t('columns.position')}
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-text-muted">
+                <th className="px-6 py-3 text-start text-xs font-semibold uppercase tracking-wider text-text-muted">
                   {t('columns.jobsAhead')}
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-text-muted">
+                <th className="px-6 py-3 text-start text-xs font-semibold uppercase tracking-wider text-text-muted">
                   {t('columns.user')}
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-text-muted">
+                <th className="px-6 py-3 text-start text-xs font-semibold uppercase tracking-wider text-text-muted">
                   {t('columns.estimate')}
                 </th>
-                <th className="px-6 py-3 text-right text-xs font-semibold uppercase tracking-wider text-text-muted">
+                <th className="px-6 py-3 text-end text-xs font-semibold uppercase tracking-wider text-text-muted">
                   {t('columns.actions')}
                 </th>
               </tr>
@@ -194,7 +194,7 @@ export default function AdminQueuePage() {
                     <td className="px-6 py-4 text-sm text-text-muted">
                       {job.estimatedFinishAt ? new Date(job.estimatedFinishAt).toLocaleString() : '-'}
                     </td>
-                    <td className="px-6 py-4 text-right text-sm">
+                    <td className="px-6 py-4 text-end text-sm">
                       <div className="inline-flex items-center gap-2">
                         <button
                           type="button"
