@@ -21,7 +21,14 @@ export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
 
   const loginSchema = z.object({
-    email: z.string().trim().min(1, t('emailRequired')).email(t('emailInvalid')),
+    email: z
+      .string()
+      .trim()
+      .min(1, t('emailRequired'))
+      .refine(
+        (value) => value === 'admin@local' || z.string().email().safeParse(value).success,
+        { message: t('emailInvalid') }
+      ),
     password: z.string().min(6, t('passwordTooShort')).max(128, t('passwordTooLong')),
   });
 
