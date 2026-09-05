@@ -106,7 +106,7 @@
       "badge": "Unified scanning platform",
       "headlinePrefix": "Continuous Security",
       "headlineGradient": "for Web & API Teams",
-      "subheadline": "Run ZAP, FFUF, Nmap, WPScan, and SQLMap from one cloud workspace with queued execution, plan-based limits, and audit-ready reports."
+      "subheadline": "Run every scan type from one cloud workspace with queued execution, plan-based limits, and audit-ready reports."
     },
     "features": {
       "title": "Everything you need to operationalize scans",
@@ -849,7 +849,6 @@
           "sections": {
             "description": "Description",
             "resource": "Affected resource",
-            "identifier": "Vulnerability ID",
             "recommendation": "Recommendation",
             "evidence": "Evidence"
           }

@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { useState } from 'react';
+import { AnimatePresence, motion } from 'framer-motion';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { useLocale, useTranslations } from 'next-intl';
 import { useParams } from 'next/navigation';
@@ -781,14 +782,26 @@ export default function ScanReportPage() {
         </div>
       </div>
 
+      <AnimatePresence>
       {selectedVulnerability && (
-        <div className="fixed inset-0 z-50 flex justify-end bg-cyber-bg/80" onClick={() => setSelectedVulnerability(null)}>
-          <div
-            className="h-full w-full max-w-xl overflow-y-auto border-l border-white/14 bg-cyber-bg text-text-primary shadow-2xl"
+        <motion.div
+          className="fixed inset-0 z-50 flex justify-end bg-black/60"
+          onClick={() => setSelectedVulnerability(null)}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.2 }}
+        >
+          <motion.div
+            className="h-full w-full max-w-md overflow-y-auto border-l border-white/14 bg-cyber-bg text-text-primary shadow-2xl"
             onClick={(event) => event.stopPropagation()}
             role="dialog"
             aria-modal="true"
             aria-labelledby="vulnerability-details-title"
+            initial={{ x: '100%' }}
+            animate={{ x: 0 }}
+            exit={{ x: '100%' }}
+            transition={{ type: 'tween', duration: 0.25, ease: 'easeOut' }}
           >
             <div className="sticky top-0 flex items-center justify-between border-b border-white/12 bg-cyber-bg/95 px-6 py-4 backdrop-blur">
               <div>
@@ -827,15 +840,9 @@ export default function ScanReportPage() {
                 <p className="mt-2 whitespace-pre-line text-sm leading-7 text-text-secondary">{stripHtmlToText(selectedVulnerability.description) || '-'}</p>
               </div>
 
-              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                <div>
-                  <p className="text-xs font-semibold uppercase tracking-wide text-text-muted">{t('vulnerabilities.sections.resource')}</p>
-                  <p className="mt-2 break-all text-sm text-text-secondary">{selectedVulnerability.affectedResource || '-'}</p>
-                </div>
-                <div>
-                  <p className="text-xs font-semibold uppercase tracking-wide text-text-muted">{t('vulnerabilities.sections.identifier')}</p>
-                  <p className="mt-2 break-all text-sm text-text-secondary">{selectedVulnerability.id}</p>
-                </div>
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-wide text-text-muted">{t('vulnerabilities.sections.resource')}</p>
+                <p className="mt-2 break-all text-sm text-text-secondary">{selectedVulnerability.affectedResource || '-'}</p>
               </div>
 
               <div>
@@ -848,9 +855,10 @@ export default function ScanReportPage() {
                 <p className="mt-2 whitespace-pre-wrap break-words rounded-xl border border-white/10 bg-white/8 p-4 text-sm text-text-secondary">{selectedVulnerability.evidence || '-'}</p>
               </div>
             </div>
-          </div>
-        </div>
+          </motion.div>
+        </motion.div>
       )}
+      </AnimatePresence>
     </div>
   );
 }

@@ -4,7 +4,7 @@ import type { ReactNode } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { useLocale, useTranslations } from 'next-intl';
+import { useTranslations } from 'next-intl';
 import { LandingAtmosphere } from '@/components/landing/Atmosphere';
 import logo from '/public/imgs/logo1234.png';
 
@@ -25,12 +25,10 @@ export function AuthPageShell({
   footerHref,
   formChildren,
 }: AuthPageShellProps) {
-  const locale = useLocale();
-  const isRtl = locale === 'ar';
   const t = useTranslations('common');
 
   return (
-    <div className="relative min-h-screen overflow-hidden bg-cyber-bg text-text-primary">
+    <div dir="ltr" className="relative min-h-screen overflow-hidden bg-cyber-bg text-text-primary">
       <LandingAtmosphere />
 
       <div className="absolute inset-0 z-[1] bg-[radial-gradient(circle_at_top,rgba(0,209,255,0.08),transparent_32%),linear-gradient(180deg,rgba(6,11,20,0.58),rgba(6,11,20,0.82))]" />

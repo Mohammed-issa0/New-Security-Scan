@@ -609,7 +609,11 @@ export function FloatingAssistant() {
                             {t('createScan')}
                           </Button>
 
-                          <Link href={`/${locale}/scans/new`} className="rounded-full border border-white/12 bg-white/6 px-4 py-2.5 text-sm font-semibold text-text-primary transition-colors hover:bg-white/10">
+                          <Link
+                            href={`/${locale}/scans/new`}
+                            onClick={() => setIsOpen(false)}
+                            className="rounded-full border border-white/12 bg-white/6 px-4 py-2.5 text-sm font-semibold text-text-primary transition-colors hover:bg-white/10"
+                          >
                             {t('openFullForm')}
                           </Link>
 
