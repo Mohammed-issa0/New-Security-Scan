@@ -1,18 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-
-const DEFAULT_BACKEND_BASE = 'https://backend.blackbrains.tech';
-
-function safeJsonParse(text: string, fallback: unknown) {
-  if (!text) {
-    return fallback;
-  }
-
-  try {
-    return JSON.parse(text);
-  } catch {
-    return fallback;
-  }
-}
+import { createBackendHeaders, getBackendBase, safeJsonParse } from '@/app/api/v1/_backend-proxy';
 
 export async function DELETE(
   request: NextRequest,
@@ -27,20 +14,16 @@ export async function DELETE(
   const incomingUrl = new URL(request.url);
   const softDelete = incomingUrl.searchParams.get('softDelete') ?? 'true';
 
-  const backendBase = process.env.API_BASE_URL || DEFAULT_BACKEND_BASE;
   const backendUrl = new URL(
     `/api/v1/jira/oauth/developers/${encodeURIComponent(jiraAccountId)}`,
-    backendBase
+    getBackendBase()
   );
   backendUrl.searchParams.set('softDelete', softDelete);
 
   try {
     const backendResponse = await fetch(backendUrl.toString(), {
       method: 'DELETE',
-      headers: {
-        Authorization: request.headers.get('authorization') || '',
-        Accept: 'application/json',
-      },
+      headers: createBackendHeaders(request),
       cache: 'no-store',
     });
 

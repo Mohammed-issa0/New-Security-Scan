@@ -650,9 +650,9 @@ export default function JiraProjectsPage() {
                 </thead>
                 <tbody className="divide-y divide-white/10 bg-cyber-panel/75">
                   {(searchDevelopers || []).map((developer) => (
-                    <tr key={developer.jiraAccountId}>
-                      <td className="px-4 py-2 text-sm font-medium text-text-primary">{developer.jiraDisplayName}</td>
-                      <td className="px-4 py-2 text-sm text-text-secondary">{developer.jiraEmail || '-'}</td>
+                    <tr key={developer.accountId}>
+                      <td className="px-4 py-2 text-sm font-medium text-text-primary">{developer.displayName}</td>
+                      <td className="px-4 py-2 text-sm text-text-secondary">{developer.emailAddress || '-'}</td>
                       <td className="px-4 py-2 text-sm text-text-secondary">{developer.accountType || '-'}</td>
                       <td className="px-4 py-2 text-right">
                         <button
@@ -660,12 +660,12 @@ export default function JiraProjectsPage() {
                           onClick={() =>
                             verifyDeveloperMutation.mutate({
                               cloudId: selectedCloudId,
-                              jiraAccountId: developer.jiraAccountId,
+                              jiraAccountId: developer.accountId,
                               customRole: verifyCustomRole.trim() || undefined,
                             })
                           }
                           disabled={!selectedCloudId || verifyDeveloperMutation.isPending}
-                          data-testid={`jira-dev-verify-${developer.jiraAccountId}`}
+                          data-testid={`jira-dev-verify-${developer.accountId}`}
                           className="rounded-md border border-cyan-300/32 px-3 py-1.5 text-xs font-medium text-cyan-200 hover:border-cyan-300/45 hover:bg-cyan-400/12 disabled:cursor-not-allowed disabled:opacity-50"
                         >
                           {verifyDeveloperMutation.isPending ? t('developers.verifying') : t('developers.verify')}

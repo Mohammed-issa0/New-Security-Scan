@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-
-const DEFAULT_BACKEND_BASE = 'https://backend.blackbrains.tech';
+import { getBackendBase } from '@/app/api/v1/_backend-proxy';
 
 function buildFrontendSettingsRedirect(options: {
   incomingUrl: URL;
@@ -50,8 +49,7 @@ export async function GET(request: NextRequest) {
     );
   }
 
-  const backendBase = process.env.API_BASE_URL || DEFAULT_BACKEND_BASE;
-  const backendCallbackUrl = new URL('/api/v1/jira/oauth/callback', backendBase);
+  const backendCallbackUrl = new URL('/api/v1/jira/oauth/callback', getBackendBase());
   backendCallbackUrl.search = query.toString();
 
   try {

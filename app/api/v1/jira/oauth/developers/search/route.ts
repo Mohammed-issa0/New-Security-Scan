@@ -1,18 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-
-const DEFAULT_BACKEND_BASE = 'https://backend.blackbrains.tech';
-
-function safeJsonParse(text: string, fallback: unknown) {
-  if (!text) {
-    return fallback;
-  }
-
-  try {
-    return JSON.parse(text);
-  } catch {
-    return fallback;
-  }
-}
+import { createBackendHeaders, getBackendBase, safeJsonParse } from '@/app/api/v1/_backend-proxy';
 
 export async function GET(request: NextRequest) {
   const incomingUrl = new URL(request.url);
@@ -27,18 +14,14 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ error: 'q is required' }, { status: 400 });
   }
 
-  const backendBase = process.env.API_BASE_URL || DEFAULT_BACKEND_BASE;
-  const backendUrl = new URL('/api/v1/jira/oauth/developers/search', backendBase);
+  const backendUrl = new URL('/api/v1/jira/oauth/developers/search', getBackendBase());
   backendUrl.searchParams.set('cloudId', cloudId);
   backendUrl.searchParams.set('q', q);
 
   try {
     const backendResponse = await fetch(backendUrl.toString(), {
       method: 'GET',
-      headers: {
-        Authorization: request.headers.get('authorization') || '',
-        Accept: 'application/json',
-      },
+      headers: createBackendHeaders(request),
       cache: 'no-store',
     });
 

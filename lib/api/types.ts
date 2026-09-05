@@ -261,15 +261,13 @@ export interface JiraConnectionTestResult {
 }
 
 export interface JiraDeveloperSearchResult {
-  jiraAccountId: string;
-  jiraDisplayName: string;
-  jiraEmail?: string | null;
+  accountId: string;
+  displayName: string;
+  emailAddress?: string | null;
   accountType?: string | null;
   avatarUrl?: string | null;
-  customRole?: string | null;
-  isMapped?: boolean;
-  isDeleted?: boolean;
-  lastVerifiedAt?: string | null;
+  alreadyMapped?: boolean;
+  existingCustomRole?: string | null;
 }
 
 export interface VerifyDeveloperRequest {

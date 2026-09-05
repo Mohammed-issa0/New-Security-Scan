@@ -94,12 +94,11 @@ test.describe('End-to-end smoke scenarios', () => {
         contentType: 'application/json',
         body: JSON.stringify([
           {
-            jiraAccountId: 'acc-2',
-            jiraDisplayName: 'Ali New',
-            jiraEmail: 'ali.new@example.com',
+            accountId: 'acc-2',
+            displayName: 'Ali New',
+            emailAddress: 'ali.new@example.com',
             accountType: 'atlassian',
-            isMapped: false,
-            isDeleted: false,
+            alreadyMapped: false,
           },
         ]),
       });
